@@ -19,8 +19,11 @@ bool OTAService::checkForUpdate() {
 
     HTTPClient http;
     http.begin(versionURL);
-
+    Serial.print("versionURL: ");
+    Serial.println(versionURL);
     int code = http.GET();
+    Serial.print("Code: ");
+    Serial.println(code);
     if (code != 200) {
         http.end();
         return false;
@@ -31,11 +34,14 @@ bool OTAService::checkForUpdate() {
 
     StaticJsonDocument<512> doc;
     DeserializationError err = deserializeJson(doc, payload);
-
+    Serial.println(err);
     if (err) return false;
 
     remoteVersion = doc["version"].as<String>();
     firmwareURL = doc["url"].as<String>();
+    Serial.print("url: ");
+    Serial.println(firmwareURL);
+
     Serial.println("----- OTA VERSION CHECK -----");
     Serial.print("Current: ");
     Serial.println(currentVersion);
