@@ -90,31 +90,33 @@ bool OTAHandler::startUpdate(const String& url) {
     WiFiClient* stream = http.getStreamPtr();
     size_t written = 0;
     uint8_t buff[1024];
-    unsigned long lastYield = millis(); // زمان آخرین yield
+    unsigned long lastYield = millis();
     
     while (http.connected() && written < contentLength) {
-        size_t available = stream->available();
-        if (available > 0) {
-            size_t toRead = min(available, sizeof(buff));
-            size_t read = stream->readBytes(buff, toRead);
-            
-            if (read > 0) {
-                size_t wrote = Update.write(buff, read);
-                if (wrote != read) {
-                    m_status = "Write error: wrote " + String(wrote) + " of " + String(read);
-                    m_progress = 100;
-                    http.end();
-                    return false;
-                }
-                written += wrote;
-                m_progress = 20 + (70 * written / contentLength);
-                m_status = "Updating... " + String(100 * written / contentLength) + "%";
-            }
+        // 🔥 مهم: هر بار که داده‌ای وجود ندارد، کمی تاخیر بگذار
+        if (stream->available() == 0) {
+            delay(1);  // تاخیر کوتاه
+            continue;
         }
         
-        // 🔥 مهم: هر 10 میلی‌ثانیه یکبار yield را صدا بزن
-        // این کار به سیستم اجازه می‌دهد تا وظایف دیگر را اجرا کند
-        if (millis() - lastYield > 10) {
+        size_t toRead = min((size_t)stream->available(), sizeof(buff));
+        size_t read = stream->readBytes(buff, toRead);
+        
+        if (read > 0) {
+            size_t wrote = Update.write(buff, read);
+            if (wrote != read) {
+                m_status = "Write error: wrote " + String(wrote) + " of " + String(read);
+                m_progress = 100;
+                http.end();
+                return false;
+            }
+            written += wrote;
+            m_progress = 20 + (70 * written / contentLength);
+            m_status = "Updating... " + String(100 * written / contentLength) + "%";
+        }
+        
+        // هر 5 میلی‌ثانیه یکبار yield را صدا بزن
+        if (millis() - lastYield > 5) {
             yield();
             lastYield = millis();
         }
