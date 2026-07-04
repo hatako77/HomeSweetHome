@@ -215,6 +215,15 @@ void setup() {
   });
   server.on("/ota-version", handleOtaVersion);
   server.on("/ota-status", handleOTAStatus);
+  ioManager.begin();
+  Serial.println(ioManager.get(0).pcf);
+  Serial.println(ioManager.get(0).pin);
+  
+  Serial.println(ioManager.get(15).pcf);
+  Serial.println(ioManager.get(15).pin);
+  
+  Serial.println(ioManager.get(63).pcf);
+  Serial.println(ioManager.get(63).pin);
   server.begin();
   Serial.println("HTTP server started");
 }
