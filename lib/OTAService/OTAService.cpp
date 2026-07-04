@@ -86,6 +86,8 @@ bool OTAService::downloadAndUpdate(const String& url)
     {
         status.error = "HTTP Error " + String(code);
         status.running = false;
+        status.finished = true;
+        status.success = false;
         return false;
     }
 
@@ -98,6 +100,8 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.error = "Not enough flash";
         status.running = false;
         http.end();
+        status.finished = true;
+        status.success = false;
         return false;
     }
 
@@ -121,7 +125,19 @@ bool OTAService::downloadAndUpdate(const String& url)
 
             if(len>0)
             {
-                Update.write(buffer,len);
+                size_t written = Update.write(buffer, len);
+
+                    if (written != (size_t)len)
+                    {
+                        status.error = Update.errorString();
+                    
+                        status.running = false;
+                    
+                        http.end();
+                        status.finished = true;
+                        status.success = false;
+                        return false;
+                    }
 
                 status.downloaded += len;
 
@@ -161,7 +177,8 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.running=false;
 
         http.end();
-
+        status.finished = true;
+        status.success = false;
         return false;
     }
 
@@ -172,7 +189,8 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.running=false;
 
         http.end();
-
+        status.finished = true;
+        status.success = false;
         return false;
     }
 
@@ -185,7 +203,8 @@ bool OTAService::downloadAndUpdate(const String& url)
     status.finished=true;
 
     status.running=false;
-
+    status.speedKB = 0;
+    status.eta = 0;
     status.state="Completed";
 
     return true;
