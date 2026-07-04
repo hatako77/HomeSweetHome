@@ -20,6 +20,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
       <h2>Status</h2>
       <p>Device is running...</p>
       <p id="version"></p>
+<a href="/ota">Firmware Update</a>
     </div>
 
     <div class="card">
