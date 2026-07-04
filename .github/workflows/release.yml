@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       # =========================
       # Checkout
       # =========================
@@ -46,21 +47,21 @@ jobs:
           pio run
 
       # =========================
-      # Bump version (major/minor/patch)
+      # Bump version (patch/minor/major)
       # =========================
       - name: Bump version
         run: |
           python scripts/bump_version.py ${{ inputs.bump_type }}
 
       # =========================
-      # Generate version.json (with sha + url)
+      # Generate version.json
       # =========================
-      - name: Generate version file
+      - name: Generate version.json
         run: |
           python scripts/generate_version.py
 
       # =========================
-      # Read version
+      # Read version from file
       # =========================
       - name: Read version
         id: ver
