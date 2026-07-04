@@ -118,19 +118,18 @@ void setup() {
   ota.setCurrentVersion(APP_VERSION);
   ota.setVersionURL("https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.json");
 
-  Serial.println("Checking OTA update...");
 
-  if (ota.checkForUpdate()) {
-    Serial.println("Update available! Installing...");
+  //if (ota.checkForUpdate()) {
+  //  Serial.println("Update available! Installing...");
 
-    if (ota.updateFirmware()) {
-      Serial.println("Update OK. Restarting...");
-      delay(2000);
-      ESP.restart();
-    } else {
-      Serial.println("Update failed!");
-    }
-  }
+  //  if (ota.updateFirmware()) {
+  //    Serial.println("Update OK. Restarting...");
+  //    delay(2000);
+  //    ESP.restart();
+  //  } else {
+  //    Serial.println("Update failed!");
+  //  }
+  //}
   // Routes
   server.on("/", handleRoot);
   server.on("/style.css", handleCSS);
