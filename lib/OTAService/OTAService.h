@@ -13,6 +13,13 @@ public:
 
     void setVersionURL(const String& url);
     void setCurrentVersion(const String& version);
+    String getRemoteVersion() const {
+    return remoteVersion;
+    }
+
+    String getCurrentVersion() const {
+    return currentVersion;
+    }
 
 private:
     String versionURL;
