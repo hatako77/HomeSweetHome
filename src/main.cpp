@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
@@ -48,8 +47,9 @@ void setup() {
     }
     
     // ===== راه‌اندازی سرور وب =====
+    // استفاده از روش جدید (بدون _P)
     server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
-        request->send_P(200, "text/html", INDEX_HTML);
+        request->send(200, "text/html", INDEX_HTML);
     });
     
     server.on("/api/version", HTTP_GET, [](AsyncWebServerRequest* request) {
