@@ -217,6 +217,10 @@ void setup() {
   server.on("/ota-version", handleOtaVersion);
   server.on("/ota-status", handleOTAStatus);
   ioManager.begin();
+  ioManager.setState(0, true);
+  delay(1000);  
+  ioManager.setState(0, false);
+  
   Serial.println(ioManager.get(0).pcf);
   Serial.println(ioManager.get(0).pin);
   
