@@ -5,6 +5,7 @@ OTAHandler::OTAHandler() {
     m_updateAvailable = false;
     m_progress = 0;
     m_status = "Idle";
+    m_downloading = false;
 }
 
 bool OTAHandler::checkForUpdate(const String& currentVersion) {
@@ -53,14 +54,21 @@ bool OTAHandler::checkForUpdate(const String& currentVersion) {
 }
 
 bool OTAHandler::startUpdate(const String& url) {
+    if (m_downloading) {
+        Serial.println("⚠️ Download already in progress");
+        return false;
+    }
+    
     Serial.println("🚀 Starting OTA update...");
     Serial.println("📥 URL: " + url);
     
+    m_downloading = true;
     m_status = "Downloading firmware...";
     m_progress = 10;
     
+    WiFiClient client;
     HTTPClient http;
-    http.begin(url);
+    http.begin(client, url);
     http.setTimeout(30000);
     http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     
@@ -74,6 +82,7 @@ bool OTAHandler::startUpdate(const String& url) {
         m_status = errorMsg;
         m_progress = 100;
         http.end();
+        m_downloading = false;
         Serial.println("❌ " + errorMsg);
         return false;
     }
@@ -85,6 +94,7 @@ bool OTAHandler::startUpdate(const String& url) {
         m_status = "Invalid content size: " + String(contentLength);
         m_progress = 100;
         http.end();
+        m_downloading = false;
         return false;
     }
     
@@ -95,6 +105,7 @@ bool OTAHandler::startUpdate(const String& url) {
         m_status = "Not enough space";
         m_progress = 100;
         http.end();
+        m_downloading = false;
         return false;
     }
     
@@ -107,6 +118,7 @@ bool OTAHandler::startUpdate(const String& url) {
         m_status = error;
         m_progress = 100;
         http.end();
+        m_downloading = false;
         Serial.println("❌ " + error);
         return false;
     }
@@ -114,19 +126,20 @@ bool OTAHandler::startUpdate(const String& url) {
     
     WiFiClient* stream = http.getStreamPtr();
     size_t written = 0;
-    uint8_t buff[1024];
+    uint8_t buff[512];  // کاهش سایز بافر
     unsigned long lastYield = millis();
-    int emptyReads = 0;  // شمارنده برای تاخیر بیشتر
+    int emptyReads = 0;
     
     while (http.connected() && written < contentLength) {
-        // 🔥 مهم: هر بار که داده‌ای نیست، تاخیر بیشتری بذار
+        // 🔥 مهم: اگر داده‌ای نیست، تاخیر بذار و yield کن
         if (stream->available() == 0) {
             emptyReads++;
-            if (emptyReads > 10) {
-                delay(5);  // تاخیر بیشتر
+            delay(10);  // تاخیر بیشتر
+            yield();
+            if (emptyReads > 50) {
+                // اگر خیلی طول کشید، شاید دانلود قطع شده
+                Serial.println("⚠️ No data received, continuing...");
                 emptyReads = 0;
-            } else {
-                delay(1);
             }
             continue;
         }
@@ -141,6 +154,7 @@ bool OTAHandler::startUpdate(const String& url) {
                 m_status = "Write error: wrote " + String(wrote) + " of " + String(read);
                 m_progress = 100;
                 http.end();
+                m_downloading = false;
                 Serial.println("❌ " + m_status);
                 return false;
             }
@@ -148,18 +162,19 @@ bool OTAHandler::startUpdate(const String& url) {
             m_progress = 20 + (70 * written / contentLength);
             m_status = "Updating... " + String(100 * written / contentLength) + "%";
             
-            // 🔥 هر بار که داده نوشته میشه، yield رو صدا بزن
+            // 🔥 هر بار که داده نوشته میشه، yield کن
             yield();
         }
         
-        // 🔥 هر 5 میلی‌ثانیه یکبار yield رو صدا بزن
-        if (millis() - lastYield > 5) {
+        // 🔥 هر 2 میلی‌ثانیه یکبار yield کن
+        if (millis() - lastYield > 2) {
             yield();
             lastYield = millis();
         }
     }
     
     http.end();
+    m_downloading = false;
     Serial.println("📦 Download complete. Written: " + String(written) + "/" + String(contentLength));
     
     if (written != contentLength) {
