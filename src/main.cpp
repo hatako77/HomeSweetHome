@@ -43,6 +43,8 @@ void otaTask(void *parameter)
 
     if(result)
     {
+              ota.getStatus().state = "Rebooting";
+
         delay(2000);
         ESP.restart();
     }
