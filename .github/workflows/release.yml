@@ -1,45 +1,88 @@
-name: Release HomeSweetHome
+name: Manual Release HomeSweetHome
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: "Version bump type (patch / minor / major)"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 jobs:
   release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # =========================
+      # Checkout
+      # =========================
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # =========================
+      # Setup Python
+      # =========================
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install PlatformIO
-        run: pip install platformio
+      # =========================
+      # Install dependencies
+      # =========================
+      - name: Install dependencies
+        run: |
+          pip install platformio jq
 
+      # =========================
+      # Build firmware
+      # =========================
       - name: Build firmware
-        run: pio run
+        run: |
+          pio run
 
+      # =========================
+      # Bump version (major/minor/patch)
+      # =========================
+      - name: Bump version
+        run: |
+          python scripts/bump_version.py ${{ inputs.bump_type }}
+
+      # =========================
+      # Generate version.json (with sha + url)
+      # =========================
       - name: Generate version file
-        run: python scripts/generate_version.py
+        run: |
+          python scripts/generate_version.py
 
+      # =========================
+      # Read version
+      # =========================
       - name: Read version
         id: ver
         run: |
           VERSION=$(cat version.json | jq -r '.version')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      # =========================
+      # Rename firmware
+      # =========================
       - name: Rename firmware
         run: |
           cp .pio/build/esp32dev/firmware.bin HomeSweetHome_v${{ steps.ver.outputs.version }}.bin
 
+      # =========================
+      # Create GitHub Release
+      # =========================
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.ver.outputs.version }}
+          name: HomeSweetHome v${{ steps.ver.outputs.version }}
           files: |
             HomeSweetHome_v${{ steps.ver.outputs.version }}.bin
             version.json
