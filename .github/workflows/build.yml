@@ -36,7 +36,6 @@ jobs:
         echo "MAJOR=$MAJOR" >> $GITHUB_ENV
         echo "MINOR=$MINOR" >> $GITHUB_ENV
         echo "PATCH=$PATCH" >> $GITHUB_ENV
-        
         echo "📦 Current version: $MAJOR.$MINOR.$PATCH"
 
     - name: Calculate new version
@@ -75,6 +74,11 @@ jobs:
         sed -i "s/#define VERSION_MINOR .*/#define VERSION_MINOR ${{ env.NEW_MINOR }}/" src/version.h
         sed -i "s/#define VERSION_PATCH .*/#define VERSION_PATCH ${{ env.NEW_PATCH }}/" src/version.h
 
+    - name: Update version.txt
+      run: |
+        echo "${{ env.VERSION }}" > version.txt
+        echo "✅ version.txt updated to ${{ env.VERSION }}"
+
     - name: Build firmware
       run: pio run -e esp32dev
 
@@ -84,7 +88,7 @@ jobs:
         cp .pio/build/esp32dev/firmware.bin release/firmware.bin
         cp .pio/build/esp32dev/partition_table.bin release/partition.bin || echo "⚠️ partition.bin not found"
         cp .pio/build/esp32dev/bootloader.bin release/bootloader.bin || echo "⚠️ bootloader.bin not found"
-        echo "${{ env.VERSION }}" > release/version.txt
+        cp version.txt release/version.txt
         echo "✅ Release files created:"
         ls -la release/
 
@@ -100,22 +104,12 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         
-        # ذخیره تغییرات فعلی
-        echo "📦 Stashing changes..."
         git stash || true
-        
-        # دریافت تغییرات remote
-        echo "📥 Pulling latest changes..."
         git pull origin ${{ github.ref_name }} --rebase || true
-        
-        # برگرداندن تغییرات ذخیره شده
-        echo "📦 Applying stashed changes..."
         git stash pop || true
         
-        # فایل تغییر کرده را add کن
-        git add src/version.h
+        git add src/version.h version.txt
         
-        # اگر تغییری وجود داشت commit و push کن
         if ! git diff --staged --quiet; then
           echo "📝 Changes detected, committing..."
           git commit -m "Bump version to ${{ env.VERSION }} [skip ci]"
