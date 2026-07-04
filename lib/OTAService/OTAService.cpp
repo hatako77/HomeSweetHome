@@ -36,7 +36,12 @@ bool OTAService::checkForUpdate() {
 
     remoteVersion = doc["version"].as<String>();
     firmwareURL = doc["url"].as<String>();
-
+    Serial.println("----- OTA VERSION CHECK -----");
+    Serial.print("Current: ");
+    Serial.println(currentVersion);
+    Serial.print("Remote: ");
+    Serial.println(remoteVersion);
+    Serial.println("-----------------------------");
     return isNewVersion(remoteVersion, currentVersion);
 }
 
