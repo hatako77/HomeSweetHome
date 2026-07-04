@@ -83,10 +83,43 @@ jobs:
     - name: Create release files
       run: |
         mkdir -p release
-        cp .pio/build/esp32dev/firmware.bin release/firmware.bin
-        cp .pio/build/esp32dev/partition_table.bin release/partition.bin || echo "⚠️ partition.bin not found"
-        cp .pio/build/esp32dev/bootloader.bin release/bootloader.bin || echo "⚠️ bootloader.bin not found"
+        
+        # کپی firmware.bin
+        if [ -f ".pio/build/esp32dev/firmware.bin" ]; then
+          cp .pio/build/esp32dev/firmware.bin release/firmware.bin
+          echo "✅ firmware.bin copied"
+        else
+          echo "⚠️ firmware.bin not found"
+        fi
+        
+        # کپی partition_table.bin
+        if [ -f ".pio/build/esp32dev/partition_table.bin" ]; then
+          cp .pio/build/esp32dev/partition_table.bin release/partition.bin
+          echo "✅ partition.bin copied"
+        else
+          echo "⚠️ partition.bin not found"
+        fi
+        
+        # کپی partitions.bin (بعضی مواقع با این نام ساخته می‌شود)
+        if [ -f ".pio/build/esp32dev/partitions.bin" ]; then
+          cp .pio/build/esp32dev/partitions.bin release/partition.bin
+          echo "✅ partitions.bin copied as partition.bin"
+        fi
+        
+        # کپی bootloader.bin
+        if [ -f ".pio/build/esp32dev/bootloader.bin" ]; then
+          cp .pio/build/esp32dev/bootloader.bin release/bootloader.bin
+          echo "✅ bootloader.bin copied"
+        else
+          echo "⚠️ bootloader.bin not found"
+        fi
+        
+        # ذخیره نسخه
         echo "${{ env.VERSION }}" > release/version.txt
+        
+        # نمایش لیست فایل‌های ساخته شده
+        echo "📁 Files in release directory:"
+        ls -la release/
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
