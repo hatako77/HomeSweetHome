@@ -76,6 +76,15 @@ jobs:
         run: |
           cp .pio/build/esp32dev/firmware.bin HomeSweetHome_v${{ steps.ver.outputs.version }}.bin
 
+
+
+      - name: Commit version.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add version.json
+          git commit -m "Bump version ${{ inputs.bump_type }}" || echo "No changes"
+          git push
       # =========================
       # Create GitHub Release
       # =========================
