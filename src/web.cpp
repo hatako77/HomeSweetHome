@@ -1,6 +1,10 @@
 #include "web.h"
 #include "version.h"
 #include "webpages.h"
+#include "webpages/index.h"
+#include "webpages/ota.h"
+#include "webpages/style.h"
+#include "webpages/script.h"
 
 Web::Web() :
 server(80)
@@ -32,6 +36,24 @@ void Web::setupRoutes()
         apiInfo();
     });
 
+    server.on("/app.css", HTTP_GET, [this]()
+    {
+        server.send_P(
+            200,
+            "text/css",
+            STYLE_CSS
+        );
+    });
+    
+    server.on("/app.js", HTTP_GET, [this]()
+    {
+        server.send_P(
+            200,
+            "application/javascript",
+            SCRIPT_JS
+        );
+    });
+    
     server.on("/api/check", HTTP_GET,
     [this]()
     {
