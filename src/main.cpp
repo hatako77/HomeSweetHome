@@ -3,6 +3,7 @@
 #include <ArduinoJson.h>
 #include "Core/Version.h"
 #include "Services/OTAService.h"
+#include "IO/IOManager.h"
 
 // Web UI (PROGMEM)
 #include "WebUI/index_html.h"
@@ -17,6 +18,7 @@ const char* password = "2150068486";
 // ===== Web Server =====
 WebServer server(80);
 OTAService ota;
+IOManager ioManager;
 TaskHandle_t otaTaskHandle = nullptr;
 // ===== Relay pins =====
 const int relayPins[] = {16, 17};
