@@ -60,14 +60,20 @@ bool OTAService::downloadAndUpdate(const String& url) {
 
     HTTPClient http;
     http.begin(url);
-
+    Serial.print("ur;: ");
+    Serial.println(url);
     int code = http.GET();
+    Serial.print("Code: ");
+    Serial.println(code);
+
     if (code != HTTP_CODE_OK) {
         http.end();
         return false;
     }
 
     int len = http.getSize();
+    Serial.print("len: ");
+    Serial.println(len);
 
     if (!Update.begin(len)) {
         http.end();
