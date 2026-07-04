@@ -46,7 +46,7 @@ bool OTAService::downloadAndUpdate(const String& url) {
     http.begin(url);
 
     int code = http.GET();
-    if (code != 200) {
+    if (code != HTTP_CODE_OK) {
         http.end();
         return false;
     }
@@ -60,11 +60,24 @@ bool OTAService::downloadAndUpdate(const String& url) {
 
     WiFiClient* stream = http.getStreamPtr();
 
-    size_t written = Update.writeStream(*stream);
+    size_t written = 0;
+    uint8_t buff[128];
 
-    if (written != len) {
-        http.end();
-        return false;
+    while (http.connected() && (len > 0 || len == -1)) {
+
+        size_t size = stream->available();
+        if (size) {
+            int c = stream->readBytes(buff, ((size > sizeof(buff)) ? sizeof(buff) : size));
+
+            Update.write(buff, c);
+            written += c;
+
+            if (len > 0) len -= c;
+
+            yield();   // 💥 مهم
+        }
+
+        delay(1);
     }
 
     if (!Update.end()) {
@@ -72,9 +85,10 @@ bool OTAService::downloadAndUpdate(const String& url) {
         return false;
     }
 
+    http.end();
+
     return Update.isFinished();
 }
-
 bool OTAService::updateFirmware() {
 
     if (firmwareURL == "") return false;
