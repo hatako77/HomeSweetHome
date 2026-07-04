@@ -36,6 +36,16 @@ void setRelay(int ch, bool state) {
 // =========================
 // Handlers
 // =========================
+void handleOtaVersion() {
+  StaticJsonDocument<256> doc;
+  doc["version"] = ota.getRemoteVersion();
+
+  String out;
+  serializeJson(doc, out);
+
+  server.send(200, "application/json", out);
+}
+
 void handleRoot() {
   server.send_P(200, "text/html", INDEX_HTML);
 }
@@ -142,7 +152,7 @@ void setup() {
   server.on("/ota", []() {
     server.send_P(200, "text/html", OTA_HTML);
   });
-
+  server.on("/ota-version", handleOtaVersion);
   
   server.begin();
   Serial.println("HTTP server started");
