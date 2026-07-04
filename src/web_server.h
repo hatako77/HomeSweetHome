@@ -3,11 +3,9 @@
 
 #include <ESPAsyncWebServer.h>
 #include <functional>
-#include "ota_handler.h"
 
 class WebServer {
 public:
-    using UpdateCallback = std::function<void(int progress, const String& status)>;
     using CompleteCallback = std::function<void()>;
 
     WebServer();
@@ -27,7 +25,6 @@ private:
     int m_updateProgress;
     
     void setupRoutes();
-    void serveStaticFiles();
     void handleRoot(AsyncWebServerRequest* request);
     void handleOTA(AsyncWebServerRequest* request);
     void handleVersionCheck(AsyncWebServerRequest* request);
@@ -42,7 +39,6 @@ private:
     void handleNotFound(AsyncWebServerRequest* request);
     void handleEvents(AsyncEventSourceClient* client);
     
-    String getContentType(const String& filename);
     bool isAuthenticated(AsyncWebServerRequest* request);
 };
 
