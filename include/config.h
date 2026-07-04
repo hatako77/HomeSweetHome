@@ -1,10 +1,15 @@
 #pragma once
 
-#define WIFI_SSID      "Ali TT"
-#define WIFI_PASSWORD  "2150068486"
+#define WIFI_SSID          "Ali TT"
 
-#define GITHUB_USER    "hatako77"
-#define GITHUB_REPO    "HomeSweetHome"
+#define WIFI_PASSWORD      "2150068486"
 
-#define VERSION_FILE   "version.json"
-#define FIRMWARE_FILE  "firmware.bin"
+#define GITHUB_OWNER       "hatako77"
+
+#define GITHUB_REPOSITORY  "HomeSweetHome"
+
+#define HTTP_TIMEOUT       10000
+
+#define OTA_BUFFER_SIZE    4096
+
+#define WEB_PORT           80
