@@ -37,7 +37,16 @@ void setRelay(int ch, bool state) {
 // Handlers
 // =========================
 void handleOtaVersion() {
+
+  Serial.println("OTA Version Request");
+
+  bool ok = ota.checkForUpdate();
+
+  Serial.print("checkForUpdate: ");
+  Serial.println(ok);
+
   StaticJsonDocument<256> doc;
+  doc["success"] = ok;
   doc["version"] = ota.getRemoteVersion();
 
   String out;
