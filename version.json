@@ -1,0 +1,9 @@
+{
+  "app": "HomeSweetHome",
+  "version": "1.0.0",
+  "build": 1,
+  "firmware": "HomeSweetHome_v1.0.0.bin",
+  "sha256": "",
+  "url": "https://github.com/YOUR_USERNAME/HomeSweetHome/releases/latest/download/HomeSweetHome.bin",
+  "update_required": false
+}
