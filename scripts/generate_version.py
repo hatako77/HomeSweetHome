@@ -3,10 +3,12 @@ import os
 import hashlib
 from datetime import datetime
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(__file__))
+Import("env")  # مهم برای PlatformIO
+
+PROJECT_DIR = env["PROJECT_DIR"] if "PROJECT_DIR" in env else os.getcwd()
+
 VERSION_FILE = os.path.join(PROJECT_DIR, "version.json")
 BUILD_DIR = os.path.join(PROJECT_DIR, ".pio", "build", "esp32dev")
-
 def load_version():
     if not os.path.exists(VERSION_FILE):
         return {
