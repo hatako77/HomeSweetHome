@@ -18,6 +18,8 @@ bool OTAService::checkForUpdate() {
     if (WiFi.status() != WL_CONNECTED) return false;
     String url = versionURL + "?ts=" + String(esp_random());
     HTTPClient http;
+    http.setReuse(false);
+    http.useHTTP10(true);
     http.setFollowRedirects(HTTPC_FORCE_FOLLOW_REDIRECTS);
     http.addHeader("Cache-Control", "no-cache");
     http.addHeader("Pragma", "no-cache");
