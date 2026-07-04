@@ -16,6 +16,7 @@ bool OTAHandler::checkForUpdate(const String& currentVersion) {
     HTTPClient http;
     http.begin(url);
     http.setTimeout(5000);
+    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS); // ← دنبال کردن هدایت
     
     int httpCode = http.GET();
     if (httpCode == 200) {
@@ -41,16 +42,17 @@ bool OTAHandler::checkForUpdate(const String& currentVersion) {
         return false;
     }
     http.end();
+    return false;
 }
 
 bool OTAHandler::startUpdate(const String& url) {
     m_status = "Downloading firmware...";
     m_progress = 10;
     
-    // ===== شروع دانلود =====
     HTTPClient http;
     http.begin(url);
     http.setTimeout(30000);
+    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS); // ← دنبال کردن هدایت
     
     int httpCode = http.GET();
     if (httpCode != 200) {
@@ -68,7 +70,6 @@ bool OTAHandler::startUpdate(const String& url) {
         return false;
     }
     
-    // ===== بررسی فضای کافی =====
     if (contentLength > (ESP.getFreeSketchSpace() - 0x1000)) {
         m_status = "Not enough space: " + String(contentLength) + " > " + String(ESP.getFreeSketchSpace());
         m_progress = 100;
@@ -79,7 +80,6 @@ bool OTAHandler::startUpdate(const String& url) {
     m_status = "Starting OTA update... Size: " + String(contentLength / 1024) + " KB";
     m_progress = 20;
     
-    // ===== شروع آپدیت =====
     if (!Update.begin(contentLength)) {
         m_status = "OTA begin failed: " + String(Update.getError());
         m_progress = 100;
@@ -87,7 +87,6 @@ bool OTAHandler::startUpdate(const String& url) {
         return false;
     }
     
-    // ===== دانلود و نوشتن =====
     WiFiClient* stream = http.getStreamPtr();
     size_t written = 0;
     uint8_t buff[1024];
@@ -116,7 +115,6 @@ bool OTAHandler::startUpdate(const String& url) {
     
     http.end();
     
-    // ===== پایان آپدیت =====
     if (written != contentLength) {
         m_status = "Incomplete: " + String(written) + "/" + String(contentLength);
         m_progress = 100;
