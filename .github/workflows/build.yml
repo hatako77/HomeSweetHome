@@ -1,139 +1,80 @@
-name: Build and Release
+name: Build Firmware
 
 on:
   workflow_dispatch:
     inputs:
+
       version_type:
-        description: 'نوع افزایش نسخه'
+        description: "Version Type"
         required: true
-        default: 'patch'
+        default: patch
         type: choice
         options:
-          - patch    # 1.0.0 → 1.0.1
-          - minor    # 1.0.0 → 1.1.0
-          - major    # 1.0.0 → 2.0.0
+          - patch
+          - minor
+          - major
+
+      release_notes:
+        description: "Release Notes"
+        required: true
+        type: string
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
-    - name: Install PlatformIO
-      run: pip install platformio
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Get current version
-      id: current_version
-      run: |
-        MAJOR=$(sed -n 's/#define VERSION_MAJOR \([0-9]*\)/\1/p' src/version.h)
-        MINOR=$(sed -n 's/#define VERSION_MINOR \([0-9]*\)/\1/p' src/version.h)
-        PATCH=$(sed -n 's/#define VERSION_PATCH \([0-9]*\)/\1/p' src/version.h)
-        
-        echo "MAJOR=$MAJOR" >> $GITHUB_ENV
-        echo "MINOR=$MINOR" >> $GITHUB_ENV
-        echo "PATCH=$PATCH" >> $GITHUB_ENV
-        echo "📦 Current version: $MAJOR.$MINOR.$PATCH"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
 
-    - name: Calculate new version
-      id: new_version
-      run: |
-        MAJOR=${{ env.MAJOR }}
-        MINOR=${{ env.MINOR }}
-        PATCH=${{ env.PATCH }}
-        
-        TYPE="${{ github.event.inputs.version_type }}"
-        
-        if [ "$TYPE" = "major" ]; then
-          MAJOR=$((MAJOR + 1))
-          MINOR=0
-          PATCH=0
-        elif [ "$TYPE" = "minor" ]; then
-          MINOR=$((MINOR + 1))
-          PATCH=0
-        else
-          PATCH=$((PATCH + 1))
-        fi
-        
-        VERSION="$MAJOR.$MINOR.$PATCH"
-        
-        echo "NEW_MAJOR=$MAJOR" >> $GITHUB_ENV
-        echo "NEW_MINOR=$MINOR" >> $GITHUB_ENV
-        echo "NEW_PATCH=$PATCH" >> $GITHUB_ENV
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-        
-        echo "📦 New version: $VERSION"
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
 
-    - name: Update version.h
-      run: |
-        sed -i "s/#define VERSION_MAJOR .*/#define VERSION_MAJOR ${{ env.NEW_MAJOR }}/" src/version.h
-        sed -i "s/#define VERSION_MINOR .*/#define VERSION_MINOR ${{ env.NEW_MINOR }}/" src/version.h
-        sed -i "s/#define VERSION_PATCH .*/#define VERSION_PATCH ${{ env.NEW_PATCH }}/" src/version.h
+      - name: Build
+        run: pio run
 
-    - name: Update version files (txt and json)
-      run: |
-        echo "${{ env.VERSION }}" > version.txt
-        echo "{\"version\":\"${{ env.VERSION }}\"}" > version.json
-        echo "✅ Version files updated to ${{ env.VERSION }}"
+      - name: Prepare Output
+        run: |
+          mkdir output
 
-    - name: Build firmware
-      run: pio run -e esp32dev
+          cp .pio/build/esp32dev/firmware.bin output/
+          cp .pio/build/esp32dev/bootloader.bin output/
+          cp .pio/build/esp32dev/partitions.bin output/
 
-    - name: Create release files
-      run: |
-        mkdir -p release
-        cp .pio/build/esp32dev/firmware.bin release/firmware.bin
-        cp .pio/build/esp32dev/partition_table.bin release/partition.bin || echo "⚠️ partition.bin not found"
-        cp .pio/build/esp32dev/bootloader.bin release/bootloader.bin || echo "⚠️ bootloader.bin not found"
-        cp version.txt release/version.txt
-        cp version.json release/version.json
-        echo "✅ Release files created:"
-        ls -la release/
+          echo "Version Type: ${{ github.event.inputs.version_type }}" > output/release_notes.txt
+          echo "" >> output/release_notes.txt
+          echo "${{ github.event.inputs.release_notes }}" >> output/release_notes.txt
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: firmware-v${{ env.VERSION }}
-        path: release/
-        retention-days: 30
+      - name: Upload Firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: output/firmware.bin
 
-    - name: Commit version changes
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        
-        git stash || true
-        git pull origin ${{ github.ref_name }} --rebase || true
-        git stash pop || true
-        
-        git add src/version.h version.txt version.json
-        
-        if ! git diff --staged --quiet; then
-          echo "📝 Changes detected, committing..."
-          git commit -m "Bump version to ${{ env.VERSION }} [skip ci]"
-          git push origin ${{ github.ref_name }}
-        else
-          echo "✅ No changes to commit"
-        fi
+      - name: Upload Bootloader
+        uses: actions/upload-artifact@v4
+        with:
+          name: bootloader
+          path: output/bootloader.bin
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ env.VERSION }}
-        name: Release v${{ env.VERSION }}
-        draft: false
-        prerelease: false
-        generate_release_notes: true
-        files: |
-          release/firmware.bin
-          release/partition.bin
-          release/bootloader.bin
-          release/version.txt
-          release/version.json
-        fail_on_unmatched_files: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Partitions
+        uses: actions/upload-artifact@v4
+        with:
+          name: partitions
+          path: output/partitions.bin
+
+      - name: Upload Release Notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release_notes
+          path: output/release_notes.txt
