@@ -36,15 +36,23 @@ void sendOTAProgress(int progress, const String& status) {
     events.send(json.c_str(), "message", millis());
 }
 
-// ===== بررسی نسخه جدید از version.txt =====
+// ===== بررسی نسخه جدید از version.txt (با شکستن کش) =====
 String checkLatestVersion() {
     Serial.println("🌐 Checking version.txt from GitHub...");
     
-    String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.txt";
+    // پارامتر تصادفی برای شکستن کش
+    String randomParam = "?t=" + String(random(100000, 999999));
+    String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.txt" + randomParam;
+    
     HTTPClient http;
     http.begin(url);
     http.setTimeout(5000);
     http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
+    
+    // هدرهای no-cache
+    http.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    http.addHeader("Pragma", "no-cache");
+    http.addHeader("Expires", "0");
     
     int httpCode = http.GET();
     Serial.println("📡 HTTP Code: " + String(httpCode));
@@ -91,40 +99,29 @@ void setup() {
         Serial.println("\n❌ WiFi Connection Failed!");
     }
     
-    // ===== روت‌های سرور (همه داخل setup) =====
+    // ===== روت‌های سرور =====
     server.addHandler(&events);
     
-    // صفحه اصلی
     server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
-        Serial.println("📄 Root page requested");
         request->send(200, "text/html", INDEX_HTML);
     });
     
-    // صفحه OTA
     server.on("/ota", HTTP_GET, [](AsyncWebServerRequest* request) {
-        Serial.println("📄 OTA page requested");
         request->send(200, "text/html", OTA_HTML);
     });
     
-    // API: دریافت نسخه فعلی
     server.on("/api/version", HTTP_GET, [](AsyncWebServerRequest* request) {
-        Serial.println("📊 Version API called");
         String json = "{\"version\":\"" + getVersion() + "\"}";
         request->send(200, "application/json", json);
     });
     
-    // API: بررسی نسخه جدید
     server.on("/api/check-update", HTTP_GET, [](AsyncWebServerRequest* request) {
         Serial.println("🔍 Check update API called!");
         
         String currentVersion = getVersion();
-        Serial.println("📦 Current version: " + currentVersion);
-        
         String latestVersion = checkLatestVersion();
-        Serial.println("📦 Latest version: " + latestVersion);
         
         bool hasUpdate = (latestVersion != "" && latestVersion != currentVersion);
-        Serial.println("🔍 Has update: " + String(hasUpdate ? "YES" : "NO"));
         
         String json = "{";
         json += "\"current\":\"" + currentVersion + "\",";
@@ -134,10 +131,7 @@ void setup() {
         request->send(200, "application/json", json);
     });
     
-    // API: شروع به‌روزرسانی
     server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
-        Serial.println("🚀 Start update API called!");
-        
         String latestVersion = checkLatestVersion();
         String currentVersion = getVersion();
         
@@ -147,8 +141,6 @@ void setup() {
         }
         
         String url = "https://github.com/hatako77/HomeSweetHome/releases/download/v" + latestVersion + "/firmware.bin";
-        Serial.println("📥 Downloading from: " + url);
-        
         bool success = otaHandler.startUpdate(url);
         
         String json = "{\"success\":" + String(success ? "true" : "false") + "}";
@@ -160,27 +152,8 @@ void setup() {
         }
     });
     
-    // روت تست
-    server.on("/test-version", HTTP_GET, [](AsyncWebServerRequest* request) {
-        String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.txt";
-        HTTPClient http;
-        http.begin(url);
-        http.setTimeout(5000);
-        int httpCode = http.GET();
-        String response = "";
-        if (httpCode == 200) {
-            response = http.getString();
-            response.trim();
-        }
-        http.end();
-        request->send(200, "text/plain", "Version from GitHub: " + response);
-    });
-    
     server.begin();
     Serial.println("✅ Web Server started on port 80");
-    if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("🌐 URL: http://" + WiFi.localIP().toString());
-    }
     Serial.println("=================================\n");
     Serial.println("🚀 System Ready!");
 }
@@ -192,6 +165,5 @@ void loop() {
         lastProgress = progress;
         sendOTAProgress(progress, otaHandler.getStatus());
     }
-    
     delay(100);
 }
