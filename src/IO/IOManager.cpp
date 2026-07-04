@@ -2,6 +2,7 @@
 
 void IOManager::begin()
 {
+    driver.begin();
     for (uint8_t i = 0; i < TOTAL_IO; i++)
     {
         io[i].pcf = i / 8;
@@ -21,7 +22,11 @@ bool IOManager::getState(uint8_t index)
 
 void IOManager::setState(uint8_t index, bool state)
 {
-    io[index].state = state;
+        io[index].state = state;
+
+    driver.write(io[index].pcf,
+                 io[index].pin,
+                 state);
 }
 
 void IOManager::toggle(uint8_t index)
