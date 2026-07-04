@@ -1,0 +1,47 @@
+name: Release HomeSweetHome
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware
+        run: pio run
+
+      - name: Generate version file
+        run: python scripts/generate_version.py
+
+      - name: Read version
+        id: ver
+        run: |
+          VERSION=$(cat version.json | jq -r '.version')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Rename firmware
+        run: |
+          cp .pio/build/esp32dev/firmware.bin HomeSweetHome_v${{ steps.ver.outputs.version }}.bin
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            HomeSweetHome_v${{ steps.ver.outputs.version }}.bin
+            version.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
