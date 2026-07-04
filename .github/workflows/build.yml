@@ -77,7 +77,8 @@ jobs:
     - name: Update version.txt
       run: |
         echo "${{ env.VERSION }}" > version.txt
-        echo "✅ version.txt updated to ${{ env.VERSION }}"
+        echo "{\"version\":\"${{ env.VERSION }}\"}" > version.json
+        echo "✅ Version files updated to ${{ env.VERSION }}"
 
     - name: Build firmware
       run: pio run -e esp32dev
