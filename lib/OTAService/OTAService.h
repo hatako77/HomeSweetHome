@@ -28,7 +28,9 @@ class OTAService {
 public:
     bool checkForUpdate();
     bool updateFirmware();
-
+    OTAStatus& getStatus() {
+        return status;
+    }
     
 void setVersionURL(const String& url);
     void setCurrentVersion(const String& version);
