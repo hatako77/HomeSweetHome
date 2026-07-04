@@ -11,10 +11,7 @@ bool OTAHandler::checkForUpdate(const String& currentVersion) {
     m_status = "Checking for updates...";
     m_progress = 10;
     
-    // آدرس فایل version.txt در GitHub Releases
-    String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/release/version.txt";
-    // یا اگر از GitHub Releases استفاده می‌کنید:
-    // String url = "https://api.github.com/repos/hatako77/HomeSweetHome/releases/latest";
+    String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.txt";
     
     HTTPClient http;
     http.begin(url);
@@ -26,7 +23,6 @@ bool OTAHandler::checkForUpdate(const String& currentVersion) {
         m_latestVersion.trim();
         m_progress = 30;
         
-        // مقایسه نسخه‌ها
         if (m_latestVersion != currentVersion) {
             m_updateAvailable = true;
             m_status = "New version available: " + m_latestVersion;
@@ -51,6 +47,7 @@ bool OTAHandler::startUpdate(const String& url) {
     m_status = "Downloading firmware...";
     m_progress = 10;
     
+    // ===== شروع دانلود =====
     HTTPClient http;
     http.begin(url);
     http.setTimeout(30000);
@@ -65,15 +62,24 @@ bool OTAHandler::startUpdate(const String& url) {
     
     int contentLength = http.getSize();
     if (contentLength <= 0) {
-        m_status = "Invalid content size";
+        m_status = "Invalid content size: " + String(contentLength);
         m_progress = 100;
         http.end();
         return false;
     }
     
-    m_status = "Starting OTA update...";
+    // ===== بررسی فضای کافی =====
+    if (contentLength > (ESP.getFreeSketchSpace() - 0x1000)) {
+        m_status = "Not enough space: " + String(contentLength) + " > " + String(ESP.getFreeSketchSpace());
+        m_progress = 100;
+        http.end();
+        return false;
+    }
+    
+    m_status = "Starting OTA update... Size: " + String(contentLength / 1024) + " KB";
     m_progress = 20;
     
+    // ===== شروع آپدیت =====
     if (!Update.begin(contentLength)) {
         m_status = "OTA begin failed: " + String(Update.getError());
         m_progress = 100;
@@ -81,6 +87,7 @@ bool OTAHandler::startUpdate(const String& url) {
         return false;
     }
     
+    // ===== دانلود و نوشتن =====
     WiFiClient* stream = http.getStreamPtr();
     size_t written = 0;
     uint8_t buff[1024];
@@ -92,13 +99,14 @@ bool OTAHandler::startUpdate(const String& url) {
             size_t read = stream->readBytes(buff, toRead);
             
             if (read > 0) {
-                if (Update.write(buff, read) != read) {
-                    m_status = "Write error";
+                size_t wrote = Update.write(buff, read);
+                if (wrote != read) {
+                    m_status = "Write error: wrote " + String(wrote) + " of " + String(read);
                     m_progress = 100;
                     http.end();
                     return false;
                 }
-                written += read;
+                written += wrote;
                 m_progress = 20 + (70 * written / contentLength);
                 m_status = "Updating... " + String(100 * written / contentLength) + "%";
             }
@@ -108,8 +116,15 @@ bool OTAHandler::startUpdate(const String& url) {
     
     http.end();
     
+    // ===== پایان آپدیت =====
+    if (written != contentLength) {
+        m_status = "Incomplete: " + String(written) + "/" + String(contentLength);
+        m_progress = 100;
+        return false;
+    }
+    
     if (!Update.end(true)) {
-        m_status = "Update failed: " + String(Update.getError());
+        m_status = "Update end failed: " + String(Update.getError());
         m_progress = 100;
         return false;
     }
