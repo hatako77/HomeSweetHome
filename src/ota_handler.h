@@ -21,6 +21,7 @@ private:
     bool m_updateAvailable;
     int m_progress;
     String m_status;
+    bool m_downloading;  // ← این خط رو اضافه کن
 };
 
 #endif
