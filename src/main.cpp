@@ -1,13 +1,14 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
+#include <HTTPClient.h>
 #include "version.h"
 #include "webpage.h"
 #include "ota_handler.h"
 
 // ===== تنظیمات WiFi =====
-const char* WIFI_SSID = "Ali TT";
-const char* WIFI_PASSWORD = "2150068486";
+const char* WIFI_SSID = "نام_وای‌فای_خودت";
+const char* WIFI_PASSWORD = "رمز_وای‌فای_خودت";
 
 // ===== سرور وب =====
 AsyncWebServer server(80);
@@ -35,6 +36,22 @@ void sendOTAProgress(int progress, const String& status) {
     events.send(json.c_str(), "message", millis());
 }
 
+// ===== بررسی نسخه جدید از version.txt =====
+String checkLatestVersion() {
+    String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.txt";
+    HTTPClient http;
+    http.begin(url);
+    http.setTimeout(5000);
+    int httpCode = http.GET();
+    String latestVersion = "";
+    if (httpCode == 200) {
+        latestVersion = http.getString();
+        latestVersion.trim();
+    }
+    http.end();
+    return latestVersion;
+}
+
 // ===== راه‌اندازی =====
 void setup() {
     Serial.begin(115200);
@@ -47,7 +64,7 @@ void setup() {
     Serial.println("=================================\n");
     
     // ===== اتصال به WiFi =====
-    Serial.print("Connecting to WiFi");
+    Serial.print("📶 Connecting to WiFi");
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     
     int attempts = 0;
@@ -65,7 +82,7 @@ void setup() {
         Serial.println("\n❌ WiFi Connection Failed!");
     }
     
-    // ===== روoutes سرور =====
+    // ===== روت‌های سرور =====
     server.addHandler(&events);
     
     // صفحه اصلی
@@ -84,11 +101,11 @@ void setup() {
         request->send(200, "application/json", json);
     });
     
-    // API: بررسی نسخه جدید
+    // API: بررسی نسخه جدید از version.txt
     server.on("/api/check-update", HTTP_GET, [](AsyncWebServerRequest* request) {
         String currentVersion = getVersion();
-        bool hasUpdate = otaHandler.checkForUpdate(currentVersion);
-        String latestVersion = otaHandler.getLatestVersion();
+        String latestVersion = checkLatestVersion();
+        bool hasUpdate = (latestVersion != "" && latestVersion != currentVersion);
         
         String json = "{";
         json += "\"current\":\"" + currentVersion + "\",";
@@ -100,15 +117,13 @@ void setup() {
     
     // API: شروع به‌روزرسانی
     server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
-        if (!otaHandler.isUpdateAvailable()) {
+        String latestVersion = checkLatestVersion();
+        if (latestVersion == "" || latestVersion == getVersion()) {
             request->send(400, "application/json", "{\"success\":false,\"error\":\"No update available\"}");
             return;
         }
         
         String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/release/firmware.bin";
-        // یا از GitHub Releases:
-        // String url = "https://github.com/hatako77/HomeSweetHome/releases/download/v" + String(otaHandler.getLatestVersion()) + "/firmware.bin";
-        
         bool success = otaHandler.startUpdate(url);
         
         String json = "{\"success\":" + String(success ? "true" : "false") + "}";
@@ -122,19 +137,19 @@ void setup() {
     
     server.begin();
     Serial.println("✅ Web Server started on port 80");
-    Serial.println("🌐 URL: http://" + WiFi.localIP().toString());
+    if (WiFi.status() == WL_CONNECTED) {
+        Serial.println("🌐 URL: http://" + WiFi.localIP().toString());
+    }
     Serial.println("=================================\n");
     Serial.println("🚀 System Ready!");
 }
 
 void loop() {
-    // ارسال پیشرفت OTA
     static int lastProgress = -1;
     int progress = otaHandler.getProgress();
     if (progress != lastProgress) {
         lastProgress = progress;
         sendOTAProgress(progress, otaHandler.getStatus());
     }
-    
     delay(100);
 }
