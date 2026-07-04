@@ -3,17 +3,36 @@
 #include <ESPAsyncWebServer.h>
 #include "version.h"
 #include "webpage.h"
+#include "ota_handler.h"
 
 // ===== تنظیمات WiFi =====
-const char* WIFI_SSID = "Ali TT";
+const char* WIFI_SSID = "َAli TT";
 const char* WIFI_PASSWORD = "2150068486";
 
 // ===== سرور وب =====
 AsyncWebServer server(80);
+AsyncEventSource events("/events");
+
+// ===== OTA Handler =====
+OTAHandler otaHandler;
 
 // ===== مدیریت نسخه =====
 String getVersion() {
     return String(FIRMWARE_VERSION);
+}
+
+// ===== ارسال پیشرفت OTA =====
+void sendOTAProgress(int progress, const String& status) {
+    String json = "{";
+    json += "\"type\":\"progress\",";
+    json += "\"progress\":" + String(progress) + ",";
+    json += "\"status\":\"" + status + "\"";
+    if (progress >= 100) {
+        json += ",\"type\":\"complete\"";
+        json += ",\"message\":\"Update completed successfully!\"";
+    }
+    json += "}";
+    events.send(json.c_str(), "message", millis());
 }
 
 // ===== راه‌اندازی =====
@@ -46,15 +65,59 @@ void setup() {
         Serial.println("\n❌ WiFi Connection Failed!");
     }
     
-    // ===== راه‌اندازی سرور وب =====
-    // استفاده از روش جدید (بدون _P)
+    // ===== روoutes سرور =====
+    server.addHandler(&events);
+    
+    // صفحه اصلی
     server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
         request->send(200, "text/html", INDEX_HTML);
     });
     
+    // صفحه OTA
+    server.on("/ota", HTTP_GET, [](AsyncWebServerRequest* request) {
+        request->send(200, "text/html", OTA_HTML);
+    });
+    
+    // API: دریافت نسخه فعلی
     server.on("/api/version", HTTP_GET, [](AsyncWebServerRequest* request) {
         String json = "{\"version\":\"" + getVersion() + "\"}";
         request->send(200, "application/json", json);
+    });
+    
+    // API: بررسی نسخه جدید
+    server.on("/api/check-update", HTTP_GET, [](AsyncWebServerRequest* request) {
+        String currentVersion = getVersion();
+        bool hasUpdate = otaHandler.checkForUpdate(currentVersion);
+        String latestVersion = otaHandler.getLatestVersion();
+        
+        String json = "{";
+        json += "\"current\":\"" + currentVersion + "\",";
+        json += "\"latest\":\"" + latestVersion + "\",";
+        json += "\"updateAvailable\":" + String(hasUpdate ? "true" : "false");
+        json += "}";
+        request->send(200, "application/json", json);
+    });
+    
+    // API: شروع به‌روزرسانی
+    server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
+        if (!otaHandler.isUpdateAvailable()) {
+            request->send(400, "application/json", "{\"success\":false,\"error\":\"No update available\"}");
+            return;
+        }
+        
+        String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/release/firmware.bin";
+        // یا از GitHub Releases:
+        // String url = "https://github.com/hatako77/HomeSweetHome/releases/download/v" + String(otaHandler.getLatestVersion()) + "/firmware.bin";
+        
+        bool success = otaHandler.startUpdate(url);
+        
+        String json = "{\"success\":" + String(success ? "true" : "false") + "}";
+        request->send(200, "application/json", json);
+        
+        if (success) {
+            delay(1000);
+            ESP.restart();
+        }
     });
     
     server.begin();
@@ -65,5 +128,13 @@ void setup() {
 }
 
 void loop() {
-    delay(10);
+    // ارسال پیشرفت OTA
+    static int lastProgress = -1;
+    int progress = otaHandler.getProgress();
+    if (progress != lastProgress) {
+        lastProgress = progress;
+        sendOTAProgress(progress, otaHandler.getStatus());
+    }
+    
+    delay(100);
 }
