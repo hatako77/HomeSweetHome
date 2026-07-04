@@ -23,6 +23,8 @@ jobs:
       # =========================
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # =========================
       # Setup Python
@@ -40,14 +42,7 @@ jobs:
           pip install platformio jq
 
       # =========================
-      # Build firmware
-      # =========================
-      - name: Build firmware
-        run: |
-          pio run
-
-      # =========================
-      # Bump version (patch/minor/major)
+      # Bump version
       # =========================
       - name: Bump version
         run: |
@@ -61,7 +56,39 @@ jobs:
           python scripts/generate_version.py
 
       # =========================
-      # Read version from file
+      # Commit version.json (optional)
+      # =========================
+      - name: Commit version.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add version.json
+          git commit -m "Bump version ${{ inputs.bump_type }}" || echo "No changes"
+          git push
+
+      # =========================
+      # Sync Version.h  ⭐ IMPORTANT (before build)
+      # =========================
+      - name: Sync Version.h
+        run: |
+          VERSION=$(cat version.json | jq -r '.version')
+          mkdir -p include
+          echo "#ifndef VERSION_H" > include/Version.h
+          echo "#define VERSION_H" >> include/Version.h
+          echo "#define APP_NAME \"HomeSweetHome\"" >> include/Version.h
+          echo "#define APP_VERSION \"$VERSION\"" >> include/Version.h
+          echo "#define APP_BUILD \"auto\"" >> include/Version.h
+          echo "#endif" >> include/Version.h
+
+      # =========================
+      # Build firmware
+      # =========================
+      - name: Build firmware
+        run: |
+          pio run
+
+      # =========================
+      # Read version
       # =========================
       - name: Read version
         id: ver
@@ -76,23 +103,6 @@ jobs:
         run: |
           cp .pio/build/esp32dev/firmware.bin HomeSweetHome_v${{ steps.ver.outputs.version }}.bin
 
-
-
-      - name: Commit version.json
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add version.json
-          git commit -m "Bump version ${{ inputs.bump_type }}" || echo "No changes"
-          git push
-
-
-      - name: Sync Version.h
-        run: |
-          VERSION=$(cat version.json | jq -r '.version')
-          echo "#define APP_NAME \"HomeSweetHome\"" > include/Version.h
-          echo "#define APP_VERSION \"$VERSION\"" >> include/Version.h
-          echo "#define APP_BUILD \"auto\"" >> include/Version.h
       # =========================
       # Create GitHub Release
       # =========================
