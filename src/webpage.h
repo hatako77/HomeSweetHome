@@ -78,7 +78,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 </head>
 <body>
     <div class="container">
-        <h1>👋 سلام</h1>
+        <h1>👋 سلامسلامسلام</h1>
         <p style="color:#666;font-size:1.1rem;">ESP32 با موفقیت راه‌اندازی شد!</p>
         <div class="version">نسخه: <span id="version">---</span></div>
         <div class="status">✅ دستگاه آنلاین است</div>
