@@ -23,7 +23,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # مهم برای دسترسی به تاریخچه کامل
+        fetch-depth: 0
 
     - name: Install PlatformIO
       run: pip install platformio
@@ -99,19 +99,18 @@ jobs:
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
+        
+        # ابتدا تغییرات remote را دریافت کن
+        echo "📥 Pulling latest changes..."
+        git pull origin ${{ github.ref_name }} --rebase || true
+        
+        # فایل تغییر کرده را add کن
         git add src/version.h
         
-        # فقط اگر تغییری وجود داشت
+        # اگر تغییری وجود داشت commit و push کن
         if ! git diff --staged --quiet; then
           echo "📝 Changes detected, committing..."
-          
-          # اول pull کن تا با remote هماهنگ شود
-          git pull --rebase origin ${{ github.ref_name }} || git pull --rebase
-          
-          # commit کن
           git commit -m "Bump version to ${{ env.VERSION }} [skip ci]"
-          
-          # push کن
           git push origin ${{ github.ref_name }}
         else
           echo "✅ No changes to commit"
