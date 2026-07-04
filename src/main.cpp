@@ -7,8 +7,8 @@
 #include "ota_handler.h"
 
 // ===== تنظیمات WiFi =====
-const char* WIFI_SSID = "نام_وای‌فای_خودت";
-const char* WIFI_PASSWORD = "رمز_وای‌فای_خودت";
+const char* WIFI_SSID = "Ali TT";
+const char* WIFI_PASSWORD = "2150068486";
 
 // ===== سرور وب =====
 AsyncWebServer server(80);
