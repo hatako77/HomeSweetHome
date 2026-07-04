@@ -71,11 +71,6 @@ bool OTAHandler::checkForUpdate(const String& currentVersion) {
         m_latestVersion = http.getString();
         m_latestVersion.trim();
         
-        DEBUG_PRINT("Current version: ");
-        DEBUG_PRINTLN(currentVersion);
-        DEBUG_PRINT("Latest version: ");
-        DEBUG_PRINTLN(m_latestVersion);
-        
         setStatus(OTAStatus::CHECKING, "Version checked: " + m_latestVersion, 30);
         
         m_updateAvailable = compareVersions(currentVersion, m_latestVersion);
@@ -206,11 +201,9 @@ bool OTAHandler::processManualUpdate(const uint8_t* data, size_t len, bool final
     static size_t totalSize = 0;
     
     if (!updateStarted) {
-        // First chunk - initialize update
         totalSize = 0;
         updateStarted = true;
         
-        // Get total size from header (we don't know it, so use max)
         if (!Update.begin(MAX_SKETCH_SIZE)) {
             String error = "OTA begin failed: " + String(Update.getError());
             setStatus(OTAStatus::ERROR, error, 100);
@@ -223,8 +216,8 @@ bool OTAHandler::processManualUpdate(const uint8_t* data, size_t len, bool final
         DEBUG_PRINTLN("📤 Manual update started");
     }
     
-    // Write data
-    if (Update.write(data, len) != len) {
+    // اصلاح: تبدیل const uint8_t* به uint8_t*
+    if (Update.write((uint8_t*)data, len) != len) {
         String error = "Write error at offset " + String(totalSize);
         setStatus(OTAStatus::ERROR, error, 100);
         DEBUG_PRINTLN("❌ " + error);
@@ -235,12 +228,11 @@ bool OTAHandler::processManualUpdate(const uint8_t* data, size_t len, bool final
     
     totalSize += len;
     int progress = 10 + (70 * totalSize / MAX_SKETCH_SIZE);
-    if (progress > 90) progress = 90; // Cap at 90% until final
+    if (progress > 90) progress = 90;
     String status = "Uploading... " + String(100 * totalSize / MAX_SKETCH_SIZE) + "%";
     setStatus(OTAStatus::UPDATING, status, progress);
     
     if (final) {
-        // Final chunk - finish update
         if (!Update.end(true)) {
             String error = "Update end failed: " + String(Update.getError());
             setStatus(OTAStatus::ERROR, error, 100);
@@ -288,14 +280,16 @@ void OTAHandler::sendProgress(int progress, const String& status) {
     if (m_progressCallback) {
         m_progressCallback(progress, status);
     }
-    DEBUG_PRINTF("[%d%%] %s\n", progress, status.c_str());
+    // اصلاح: استفاده از DEBUG_PRINT به جای DEBUG_PRINTF
+    DEBUG_PRINT("[");
+    DEBUG_PRINT(progress);
+    DEBUG_PRINT("%] ");
+    DEBUG_PRINTLN(status);
 }
 
 bool OTAHandler::compareVersions(const String& v1, const String& v2) {
-    // Simple version comparison
     if (v1 == v2) return false;
     
-    // Parse version strings
     int v1Major = 0, v1Minor = 0, v1Patch = 0, v1Build = 0;
     int v2Major = 0, v2Minor = 0, v2Patch = 0, v2Build = 0;
     
