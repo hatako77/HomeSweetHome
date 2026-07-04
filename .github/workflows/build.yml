@@ -74,7 +74,7 @@ jobs:
         sed -i "s/#define VERSION_MINOR .*/#define VERSION_MINOR ${{ env.NEW_MINOR }}/" src/version.h
         sed -i "s/#define VERSION_PATCH .*/#define VERSION_PATCH ${{ env.NEW_PATCH }}/" src/version.h
 
-    - name: Update version.txt
+    - name: Update version files (txt and json)
       run: |
         echo "${{ env.VERSION }}" > version.txt
         echo "{\"version\":\"${{ env.VERSION }}\"}" > version.json
@@ -90,6 +90,7 @@ jobs:
         cp .pio/build/esp32dev/partition_table.bin release/partition.bin || echo "⚠️ partition.bin not found"
         cp .pio/build/esp32dev/bootloader.bin release/bootloader.bin || echo "⚠️ bootloader.bin not found"
         cp version.txt release/version.txt
+        cp version.json release/version.json
         echo "✅ Release files created:"
         ls -la release/
 
@@ -109,7 +110,7 @@ jobs:
         git pull origin ${{ github.ref_name }} --rebase || true
         git stash pop || true
         
-        git add src/version.h version.txt
+        git add src/version.h version.txt version.json
         
         if ! git diff --staged --quiet; then
           echo "📝 Changes detected, committing..."
@@ -132,6 +133,7 @@ jobs:
           release/partition.bin
           release/bootloader.bin
           release/version.txt
+          release/version.json
         fail_on_unmatched_files: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
