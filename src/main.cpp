@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ArduinoJson.h>
-#include "Version.h"
-#include "OTAService.h"
+#include "Core/Version.h"
+#include "Services/OTAService.h"
 
 // Web UI (PROGMEM)
 #include "WebUI/index_html.h"
