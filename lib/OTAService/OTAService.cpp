@@ -58,42 +58,137 @@ bool OTAService::checkForUpdate() {
     return isNewVersion(remoteVersion, currentVersion);
 }
 
-bool OTAService::downloadAndUpdate(const String& url) {
+bool OTAService::downloadAndUpdate(const String& url)
+{
+    status.running = true;
+    status.finished = false;
+    status.success = false;
+
+    status.downloaded = 0;
+    status.total = 0;
+    status.percent = 0;
+
+    status.speedKB = 0;
+    status.eta = 0;
+
+    status.error = "";
+    status.state = "Connecting";
 
     HTTPClient http;
 
-    http.setFollowRedirects(HTTPC_FORCE_FOLLOW_REDIRECTS);  // ⭐ مهم
+    http.setFollowRedirects(HTTPC_FORCE_FOLLOW_REDIRECTS);
 
     http.begin(url);
 
     int code = http.GET();
-    if (code != HTTP_CODE_OK) {
+
+    if(code != HTTP_CODE_OK)
+    {
+        status.error = "HTTP Error " + String(code);
+        status.running = false;
+        return false;
+    }
+
+    int total = http.getSize();
+
+    status.total = total;
+
+    if(!Update.begin(total))
+    {
+        status.error = "Not enough flash";
+        status.running = false;
         http.end();
         return false;
     }
 
-    int len = http.getSize();
+    WiFiClient *stream = http.getStreamPtr();
 
-    if (!Update.begin(len)) {
+    uint8_t buffer[1024];
+
+    uint32_t lastMillis = millis();
+    uint32_t lastBytes = 0;
+
+    status.state = "Downloading";
+
+    while(http.connected() && status.downloaded < status.total)
+    {
+        size_t available = stream->available();
+
+        if(available)
+        {
+            int len = stream->readBytes(buffer,
+                                       min((size_t)1024,available));
+
+            if(len>0)
+            {
+                Update.write(buffer,len);
+
+                status.downloaded += len;
+
+                status.percent =
+                    (status.downloaded*100)/status.total;
+            }
+        }
+
+        if(millis()-lastMillis>1000)
+        {
+            uint32_t diff =
+                status.downloaded-lastBytes;
+
+            status.speedKB = diff/1024.0;
+
+            if(status.speedKB>0)
+            {
+                status.eta =
+                ((status.total-status.downloaded)/1024.0)
+                /status.speedKB;
+            }
+
+            lastBytes=status.downloaded;
+
+            lastMillis=millis();
+        }
+
+        delay(1);
+    }
+
+    status.state="Verifying";
+
+    if(!Update.end())
+    {
+        status.error="Verification failed";
+
+        status.running=false;
+
         http.end();
+
         return false;
     }
 
-    WiFiClient* stream = http.getStreamPtr();
+    if(!Update.isFinished())
+    {
+        status.error="Update not finished";
 
-    size_t written = Update.writeStream(*stream);
+        status.running=false;
 
-    if (written != len) {
         http.end();
+
         return false;
     }
 
-    if (!Update.end()) {
-        http.end();
-        return false;
-    }
+    http.end();
 
-    return Update.isFinished();
+    status.percent=100;
+
+    status.success=true;
+
+    status.finished=true;
+
+    status.running=false;
+
+    status.state="Completed";
+
+    return true;
 }
 
 bool OTAService::updateFirmware() {
