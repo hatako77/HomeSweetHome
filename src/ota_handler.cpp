@@ -5,7 +5,7 @@ OTAHandler::OTAHandler() {
     m_updateAvailable = false;
     m_progress = 0;
     m_status = "Idle";
-    m_downloading = false;  // ← مقداردهی اولیه
+    m_downloading = false;
 }
 
 bool OTAHandler::checkForUpdate(const String& currentVersion) {
@@ -66,10 +66,10 @@ bool OTAHandler::startUpdate(const String& url) {
     m_status = "Downloading firmware...";
     m_progress = 10;
     
-    WiFiClient client;
+    // 🔥 برگشت به HTTPClient استاندارد (نه WiFiClient جداگانه)
     HTTPClient http;
-    http.begin(client, url);
-    http.setTimeout(30000);
+    http.begin(url);
+    http.setTimeout(60000);  // تایم‌اوت بیشتر
     http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     
     Serial.println("📡 Sending request...");
@@ -131,11 +131,14 @@ bool OTAHandler::startUpdate(const String& url) {
     int emptyReads = 0;
     
     while (http.connected() && written < contentLength) {
+        // 🔥 تاخیر هوشمند برای جلوگیری از Watchdog
         if (stream->available() == 0) {
             emptyReads++;
-            delay(10);
-            yield();
-            if (emptyReads > 50) {
+            delay(5);  // تاخیر کوتاه
+            if (emptyReads % 10 == 0) {
+                yield();  // هر ۱۰ بار yield کن
+            }
+            if (emptyReads > 100) {
                 Serial.println("⚠️ No data received, continuing...");
                 emptyReads = 0;
             }
@@ -160,10 +163,12 @@ bool OTAHandler::startUpdate(const String& url) {
             m_progress = 20 + (70 * written / contentLength);
             m_status = "Updating... " + String(100 * written / contentLength) + "%";
             
+            // 🔥 بعد از هر نوشته yield کن
             yield();
         }
         
-        if (millis() - lastYield > 2) {
+        // 🔥 هر ۵ میلی‌ثانیه yield کن
+        if (millis() - lastYield > 5) {
             yield();
             lastYield = millis();
         }
