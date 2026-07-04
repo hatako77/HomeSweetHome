@@ -4,8 +4,8 @@
 #include <Arduino.h>
 
 // ===== WiFi Configuration =====
-#define WIFI_SSID "YourWiFiSSID"
-#define WIFI_PASSWORD "YourWiFiPassword"
+#define WIFI_SSID "Ali TT"
+#define WIFI_PASSWORD "2150068486"
 #define WIFI_TIMEOUT 30 // seconds
 
 // ===== OTA Configuration =====
