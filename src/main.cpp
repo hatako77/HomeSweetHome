@@ -4,7 +4,7 @@
 #include "web_server.h"
 #include "ota_handler.h"
 #include "version.h"
-
+   
 // Global objects
 WebServer webServer;
 OTAHandler otaHandler;
