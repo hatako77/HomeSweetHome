@@ -1,6 +1,7 @@
 #ifndef IO_MANAGER_H
 #define IO_MANAGER_H
 
+#include "IO/PCF8574Driver.h"
 #include "IO/IOConfig.h"
 
 class IOManager
