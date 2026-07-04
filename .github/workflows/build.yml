@@ -29,12 +29,16 @@ jobs:
     - name: Get current version
       id: current_version
       run: |
-        MAJOR=$(grep "VERSION_MAJOR" src/version.h | cut -d' ' -f3)
-        MINOR=$(grep "VERSION_MINOR" src/version.h | cut -d' ' -f3)
-        PATCH=$(grep "VERSION_PATCH" src/version.h | cut -d' ' -f3)
+        # استخراج اعداد با sed (فقط عدد را می‌گیرد)
+        MAJOR=$(sed -n 's/#define VERSION_MAJOR \([0-9]*\)/\1/p' src/version.h)
+        MINOR=$(sed -n 's/#define VERSION_MINOR \([0-9]*\)/\1/p' src/version.h)
+        PATCH=$(sed -n 's/#define VERSION_PATCH \([0-9]*\)/\1/p' src/version.h)
+        
         echo "MAJOR=$MAJOR" >> $GITHUB_ENV
         echo "MINOR=$MINOR" >> $GITHUB_ENV
         echo "PATCH=$PATCH" >> $GITHUB_ENV
+        
+        echo "📦 Current version: $MAJOR.$MINOR.$PATCH"
 
     - name: Calculate new version
       id: new_version
