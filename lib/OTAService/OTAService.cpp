@@ -35,6 +35,12 @@ bool OTAService::checkForUpdate() {
     }
 
     String payload = http.getString();
+    
+    Serial.println("========== JSON ==========");
+    Serial.println(payload);
+    Serial.println("==========================");
+    Serial.print("Requested URL: ");
+    Serial.println(url);
     http.end();
 
     JsonDocument doc;
