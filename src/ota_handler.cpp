@@ -5,7 +5,7 @@ OTAHandler::OTAHandler() {
     m_updateAvailable = false;
     m_progress = 0;
     m_status = "Idle";
-    m_downloading = false;
+    m_downloading = false;  // ← مقداردهی اولیه
 }
 
 bool OTAHandler::checkForUpdate(const String& currentVersion) {
@@ -126,18 +126,16 @@ bool OTAHandler::startUpdate(const String& url) {
     
     WiFiClient* stream = http.getStreamPtr();
     size_t written = 0;
-    uint8_t buff[512];  // کاهش سایز بافر
+    uint8_t buff[512];
     unsigned long lastYield = millis();
     int emptyReads = 0;
     
     while (http.connected() && written < contentLength) {
-        // 🔥 مهم: اگر داده‌ای نیست، تاخیر بذار و yield کن
         if (stream->available() == 0) {
             emptyReads++;
-            delay(10);  // تاخیر بیشتر
+            delay(10);
             yield();
             if (emptyReads > 50) {
-                // اگر خیلی طول کشید، شاید دانلود قطع شده
                 Serial.println("⚠️ No data received, continuing...");
                 emptyReads = 0;
             }
@@ -162,11 +160,9 @@ bool OTAHandler::startUpdate(const String& url) {
             m_progress = 20 + (70 * written / contentLength);
             m_status = "Updating... " + String(100 * written / contentLength) + "%";
             
-            // 🔥 هر بار که داده نوشته میشه، yield کن
             yield();
         }
         
-        // 🔥 هر 2 میلی‌ثانیه یکبار yield کن
         if (millis() - lastYield > 2) {
             yield();
             lastYield = millis();
