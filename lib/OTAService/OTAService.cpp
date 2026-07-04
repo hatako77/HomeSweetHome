@@ -59,21 +59,18 @@ bool OTAService::checkForUpdate() {
 bool OTAService::downloadAndUpdate(const String& url) {
 
     HTTPClient http;
-    http.begin(url);
-    Serial.print("ur;: ");
-    Serial.println(url);
-    int code = http.GET();
-    Serial.print("Code: ");
-    Serial.println(code);
 
+    http.setFollowRedirects(HTTPC_FORCE_FOLLOW_REDIRECTS);  // ⭐ مهم
+
+    http.begin(url);
+
+    int code = http.GET();
     if (code != HTTP_CODE_OK) {
         http.end();
         return false;
     }
 
     int len = http.getSize();
-    Serial.print("len: ");
-    Serial.println(len);
 
     if (!Update.begin(len)) {
         http.end();
@@ -82,24 +79,11 @@ bool OTAService::downloadAndUpdate(const String& url) {
 
     WiFiClient* stream = http.getStreamPtr();
 
-    size_t written = 0;
-    uint8_t buff[128];
+    size_t written = Update.writeStream(*stream);
 
-    while (http.connected() && (len > 0 || len == -1)) {
-
-        size_t size = stream->available();
-        if (size) {
-            int c = stream->readBytes(buff, ((size > sizeof(buff)) ? sizeof(buff) : size));
-
-            Update.write(buff, c);
-            written += c;
-
-            if (len > 0) len -= c;
-
-            yield();   // 💥 مهم
-        }
-
-        delay(1);
+    if (written != len) {
+        http.end();
+        return false;
     }
 
     if (!Update.end()) {
@@ -107,10 +91,9 @@ bool OTAService::downloadAndUpdate(const String& url) {
         return false;
     }
 
-    http.end();
-
     return Update.isFinished();
 }
+
 bool OTAService::updateFirmware() {
 
     if (firmwareURL == "") return false;
