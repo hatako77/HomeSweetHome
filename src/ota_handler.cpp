@@ -16,7 +16,7 @@ bool OTAHandler::checkForUpdate(const String& currentVersion) {
     HTTPClient http;
     http.begin(url);
     http.setTimeout(5000);
-    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS); // ← دنبال کردن هدایت
+    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     
     int httpCode = http.GET();
     if (httpCode == 200) {
@@ -52,7 +52,7 @@ bool OTAHandler::startUpdate(const String& url) {
     HTTPClient http;
     http.begin(url);
     http.setTimeout(30000);
-    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS); // ← دنبال کردن هدایت
+    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     
     int httpCode = http.GET();
     if (httpCode != 200) {
@@ -90,6 +90,7 @@ bool OTAHandler::startUpdate(const String& url) {
     WiFiClient* stream = http.getStreamPtr();
     size_t written = 0;
     uint8_t buff[1024];
+    unsigned long lastYield = millis(); // زمان آخرین yield
     
     while (http.connected() && written < contentLength) {
         size_t available = stream->available();
@@ -110,7 +111,13 @@ bool OTAHandler::startUpdate(const String& url) {
                 m_status = "Updating... " + String(100 * written / contentLength) + "%";
             }
         }
-        delay(1);
+        
+        // 🔥 مهم: هر 10 میلی‌ثانیه یکبار yield را صدا بزن
+        // این کار به سیستم اجازه می‌دهد تا وظایف دیگر را اجرا کند
+        if (millis() - lastYield > 10) {
+            yield();
+            lastYield = millis();
+        }
     }
     
     http.end();
