@@ -9,8 +9,8 @@
 #include "WebUI/app_js.h"
 
 // ===== WiFi Config =====
-const char* ssid = "YOUR_WIFI";
-const char* password = "YOUR_PASS";
+const char* ssid = "Ali TT";
+const char* password = "2150068486";
 
 // ===== Web Server =====
 WebServer server(80);
