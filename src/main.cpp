@@ -36,34 +36,41 @@ void sendOTAProgress(int progress, const String& status) {
     events.send(json.c_str(), "message", millis());
 }
 
-// ===== بررسی نسخه جدید از version.txt (با شکستن کش) =====
+// ===== بررسی نسخه جدید از version.json =====
 String checkLatestVersion() {
-    Serial.println("🌐 Checking version.txt from GitHub...");
+    Serial.println("🌐 Checking version.json from GitHub...");
     
-    // پارامتر تصادفی برای شکستن کش
-    String randomParam = "?t=" + String(random(100000, 999999));
-    String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.txt" + randomParam;
+    // پارامتر timestamp برای شکستن کش
+    String timestamp = String(millis());
+    String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.json?t=" + timestamp;
     
     HTTPClient http;
     http.begin(url);
     http.setTimeout(5000);
     http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
-    
-    // هدرهای no-cache
     http.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     http.addHeader("Pragma", "no-cache");
-    http.addHeader("Expires", "0");
     
     int httpCode = http.GET();
     Serial.println("📡 HTTP Code: " + String(httpCode));
     
     String latestVersion = "";
     if (httpCode == 200) {
-        latestVersion = http.getString();
-        latestVersion.trim();
-        Serial.println("✅ Version from GitHub: [" + latestVersion + "]");
+        String response = http.getString();
+        Serial.println("📄 Raw: " + response);
+        
+        // استخراج نسخه از JSON
+        int start = response.indexOf("\"version\":\"") + 11;
+        if (start > 10) {
+            int end = response.indexOf("\"", start);
+            if (end > start) {
+                latestVersion = response.substring(start, end);
+                latestVersion.trim();
+            }
+        }
+        Serial.println("✅ Version: [" + latestVersion + "]");
     } else {
-        Serial.println("❌ Failed to get version: " + String(httpCode));
+        Serial.println("❌ HTTP Error: " + String(httpCode));
     }
     http.end();
     return latestVersion;
@@ -80,20 +87,18 @@ void setup() {
     Serial.println("Build: " + String(BUILD_DATE) + " @ " + String(BUILD_TIME));
     Serial.println("=================================\n");
     
-    // ===== اتصال به WiFi =====
+    // WiFi
     Serial.print("📶 Connecting to WiFi");
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    
     int attempts = 0;
     while (WiFi.status() != WL_CONNECTED && attempts < 30) {
         delay(500);
         Serial.print(".");
         attempts++;
     }
-    
     if (WiFi.status() == WL_CONNECTED) {
         Serial.println("\n✅ WiFi Connected!");
-        Serial.print("🌐 IP Address: ");
+        Serial.print("🌐 IP: ");
         Serial.println(WiFi.localIP());
     } else {
         Serial.println("\n❌ WiFi Connection Failed!");
@@ -117,11 +122,12 @@ void setup() {
     
     server.on("/api/check-update", HTTP_GET, [](AsyncWebServerRequest* request) {
         Serial.println("🔍 Check update API called!");
-        
         String currentVersion = getVersion();
         String latestVersion = checkLatestVersion();
-        
         bool hasUpdate = (latestVersion != "" && latestVersion != currentVersion);
+        Serial.println("📦 Current: " + currentVersion);
+        Serial.println("📦 Latest: " + latestVersion);
+        Serial.println("🔍 Has update: " + String(hasUpdate ? "YES" : "NO"));
         
         String json = "{";
         json += "\"current\":\"" + currentVersion + "\",";
@@ -134,18 +140,14 @@ void setup() {
     server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
         String latestVersion = checkLatestVersion();
         String currentVersion = getVersion();
-        
         if (latestVersion == "" || latestVersion == currentVersion) {
             request->send(400, "application/json", "{\"success\":false,\"error\":\"No update available\"}");
             return;
         }
-        
         String url = "https://github.com/hatako77/HomeSweetHome/releases/download/v" + latestVersion + "/firmware.bin";
         bool success = otaHandler.startUpdate(url);
-        
         String json = "{\"success\":" + String(success ? "true" : "false") + "}";
         request->send(200, "application/json", json);
-        
         if (success) {
             delay(1000);
             ESP.restart();
@@ -153,7 +155,7 @@ void setup() {
     });
     
     server.begin();
-    Serial.println("✅ Web Server started on port 80");
+    Serial.println("✅ Web Server started");
     Serial.println("=================================\n");
     Serial.println("🚀 System Ready!");
 }
