@@ -5,8 +5,8 @@
 #include "webpage.h"
 
 // ===== تنظیمات WiFi =====
-const char* WIFI_SSID = "YourWiFiSSID";
-const char* WIFI_PASSWORD = "YourWiFiPassword";
+const char* WIFI_SSID = "Ali TT";
+const char* WIFI_PASSWORD = "2150068486";
 
 // ===== سرور وب =====
 AsyncWebServer server(80);
