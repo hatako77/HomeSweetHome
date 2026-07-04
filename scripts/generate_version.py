@@ -88,7 +88,7 @@ def main():
 
     # مهم: این URL باید با GitHub repo واقعی جایگزین شود
     version["url"] = (
-        "https://github.com/YOUR_USERNAME/HomeSweetHome/releases/latest/download/"
+        "https://github.com/hatako77/HomeSweetHome/releases/latest/download/"
         + firmware_name
     )
 
