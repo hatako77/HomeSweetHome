@@ -116,24 +116,32 @@ void setup() {
     });
     
     // API: شروع به‌روزرسانی
-    server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
-        String latestVersion = checkLatestVersion();
-        if (latestVersion == "" || latestVersion == getVersion()) {
-            request->send(400, "application/json", "{\"success\":false,\"error\":\"No update available\"}");
-            return;
-        }
-        
-        String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/release/firmware.bin";
-        bool success = otaHandler.startUpdate(url);
-        
-        String json = "{\"success\":" + String(success ? "true" : "false") + "}";
-        request->send(200, "application/json", json);
-        
-        if (success) {
-            delay(1000);
-            ESP.restart();
-        }
-    });
+    // API: شروع به‌روزرسانی
+server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
+    String latestVersion = checkLatestVersion();
+    String currentVersion = getVersion();
+    
+    if (latestVersion == "" || latestVersion == currentVersion) {
+        request->send(400, "application/json", "{\"success\":false,\"error\":\"No update available\"}");
+        return;
+    }
+    
+    // آدرس دانلود از ریلیز
+    String url = "https://github.com/hatako77/HomeSweetHome/releases/download/v" + latestVersion + "/firmware.bin";
+    
+    Serial.println("📥 Downloading from: " + url);
+    
+    bool success = otaHandler.startUpdate(url);
+    
+    String json = "{\"success\":" + String(success ? "true" : "false") + "}";
+    request->send(200, "application/json", json);
+    
+    if (success) {
+        delay(1000);
+        ESP.restart();
+    }
+});
+
     
     server.begin();
     Serial.println("✅ Web Server started on port 80");
