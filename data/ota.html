@@ -1,0 +1,99 @@
+<!-- ========================= data/ota.html ========================= -->
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>OTA</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Firmware Update</h1>
+
+<div class="card">
+
+<h2>Automatic Update</h2>
+
+<p>
+
+Current Version :
+
+<span id="currentVersion"></span>
+
+</p>
+
+<p>
+
+Latest Version :
+
+<span id="latestVersion">Checking...</span>
+
+</p>
+
+<button id="autoBtn" onclick="autoUpdate()" disabled>
+
+Update
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Manual Update</h2>
+
+<input type="file" id="firmware">
+
+<br><br>
+
+<button onclick="manualUpdate()">
+
+Upload
+
+</button>
+
+</div>
+
+<div class="progressBox">
+
+<div id="progress">
+
+</div>
+
+</div>
+
+<div id="percent">
+
+0%
+
+</div>
+
+<div id="status">
+
+Idle
+
+</div>
+
+<div id="countdown">
+
+</div>
+
+</div>
+
+<script src="/js/ota.js"></script>
+
+</body>
+
+</html>
