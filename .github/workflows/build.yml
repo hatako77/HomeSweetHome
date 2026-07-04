@@ -35,19 +35,28 @@ jobs:
     - name: Get version
       id: version
       run: |
-        VERSION_MAJOR=$(grep "VERSION_MAJOR" src/version.h | cut -d' ' -f3)
-        VERSION_MINOR=$(grep "VERSION_MINOR" src/version.h | cut -d' ' -f3)
-        VERSION_PATCH=$(grep "VERSION_PATCH" src/version.h | cut -d' ' -f3)
-        BUILD_NUMBER=$(grep "BUILD_NUMBER" src/version.h | cut -d' ' -f3 || echo "1")
+        # استخراج اعداد با استفاده از sed و regex
+        VERSION_MAJOR=$(grep -E '#define VERSION_MAJOR' src/version.h | sed -E 's/.*VERSION_MAJOR ([0-9]+).*/\1/')
+        VERSION_MINOR=$(grep -E '#define VERSION_MINOR' src/version.h | sed -E 's/.*VERSION_MINOR ([0-9]+).*/\1/')
+        VERSION_PATCH=$(grep -E '#define VERSION_PATCH' src/version.h | sed -E 's/.*VERSION_PATCH ([0-9]+).*/\1/')
+        BUILD_NUMBER=$(grep -E '#define BUILD_NUMBER' src/version.h | sed -E 's/.*BUILD_NUMBER ([0-9]+).*/\1/' || echo "1")
+        
+        # ساخت نسخه
         VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${BUILD_NUMBER}"
+        
+        # ذخیره در محیط با استفاده از delimiter
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "version=$VERSION" >> $GITHUB_OUTPUT
+        
+        echo "📦 Version extracted: $VERSION"
 
     - name: Update build number
       run: |
-        BUILD_NUMBER=$(($(grep "BUILD_NUMBER" src/version.h | cut -d' ' -f3 || echo "0") + 1))
-        sed -i "s/#define BUILD_NUMBER .*/#define BUILD_NUMBER $BUILD_NUMBER/" src/version.h
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+        # افزایش BUILD_NUMBER
+        CURRENT_BUILD=$(grep -E '#define BUILD_NUMBER' src/version.h | sed -E 's/.*BUILD_NUMBER ([0-9]+).*/\1/' || echo "0")
+        NEW_BUILD=$((CURRENT_BUILD + 1))
+        sed -i "s/#define BUILD_NUMBER .*/#define BUILD_NUMBER $NEW_BUILD/" src/version.h
+        echo "🔢 Build number updated: $CURRENT_BUILD → $NEW_BUILD"
 
     - name: Build firmware
       run: |
@@ -79,7 +88,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4  # <--- نسخه v4
+      uses: actions/upload-artifact@v4
       with:
         name: firmware-v${{ env.VERSION }}
         path: |
@@ -87,7 +96,7 @@ jobs:
           .pio/build/esp32dev/firmware.bin
           .pio/build/esp32dev/partition_table.bin
           .pio/build/esp32dev/bootloader.bin
-        retention-days: 30  # اختیاری: تعداد روزهای نگهداری
+        retention-days: 30
 
     - name: Upload SPIFFS image
       run: |
