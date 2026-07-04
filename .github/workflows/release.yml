@@ -73,12 +73,12 @@ jobs:
         run: |
           VERSION=$(cat version.json | jq -r '.version')
           mkdir -p include
-          echo "#ifndef VERSION_H" > include/Version.h
-          echo "#define VERSION_H" >> include/Version.h
-          echo "#define APP_NAME \"HomeSweetHome\"" >> include/Version.h
-          echo "#define APP_VERSION \"$VERSION\"" >> include/Version.h
-          echo "#define APP_BUILD \"auto\"" >> include/Version.h
-          echo "#endif" >> include/Version.h
+          echo "#ifndef VERSION_H" > include/Core/Version.h
+          echo "#define VERSION_H" >> include/Core/Version.h
+          echo "#define APP_NAME \"HomeSweetHome\"" >> include/Core/Version.h
+          echo "#define APP_VERSION \"$VERSION\"" >> include/Core/Version.h
+          echo "#define APP_BUILD \"auto\"" >> include/Core/Version.h
+          echo "#endif" >> include/Core/Version.h
 
       # =========================
       # Build firmware
