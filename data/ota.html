@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>به‌روزرسانی OTA</title>
+    <link rel="stylesheet" href="/css/ota.css">
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🔄 به‌روزرسانی سیستمی</h1>
+            <a href="/" class="btn-back">← بازگشت</a>
+        </header>
+        
+        <div class="info-card">
+            <div class="version-display">
+                <span class="label">نسخه فعلی</span>
+                <span class="version-badge" id="currentVersion">---</span>
+            </div>
+            <div class="device-info">
+                <span class="chip">ESP32</span>
+                <span class="status" id="deviceStatus">🟢 فعال</span>
+            </div>
+        </div>
+        
+        <!-- Automatic Update Section -->
+        <div class="card">
+            <h2>🤖 به‌روزرسانی خودکار</h2>
+            <div class="version-compare">
+                <div class="version-item">
+                    <span class="label">نسخه نصب شده</span>
+                    <span class="value" id="installedVersion">---</span>
+                </div>
+                <div class="version-arrow">→</div>
+                <div class="version-item">
+                    <span class="label">نسخه جدید</span>
+                    <span class="value highlight" id="latestVersion">---</span>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-info" onclick="checkUpdate()" id="checkBtn">
+                    🔍 بررسی نسخه جدید
+                </button>
+                <button class="btn btn-success hidden" onclick="startUpdate()" id="updateBtn">
+                    ⬇️ دانلود و نصب
+                </button>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress">
+                    <div class="progress-bar" id="autoProgress" style="width: 0%">
+                        <span class="progress-text">۰%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="status-box" id="autoStatus">
+                <span class="icon">⏳</span>
+                <span class="status-text">آماده به‌روزرسانی</span>
+            </div>
+        </div>
+        
+        <!-- Manual Update Section -->
+        <div class="card">
+            <h2>📁 به‌روزرسانی دستی</h2>
+            <p class="subtitle">فایل فریم‌ور (firmware.bin) را انتخاب کنید</p>
+            
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <label class="file-input">
+                        <span class="icon">📂</span>
+                        <span>انتخاب فایل</span>
+                        <input type="file" name="firmware" accept=".bin" required>
+                        <span class="file-name" id="fileName">هیچ فایلی انتخاب نشده</span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="manualUploadBtn">
+                    ⬆️ آپلود و نصب
+                </button>
+            </form>
+            
+            <div class="progress-container">
+                <div class="progress">
+                    <div class="progress-bar" id="manualProgress" style="width: 0%">
+                        <span class="progress-text">۰%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="status-box" id="manualStatus">
+                <span class="icon">📤</span>
+                <span class="status-text">آماده آپلود</span>
+            </div>
+        </div>
+        
+        <!-- Success Message Overlay -->
+        <div id="successMessage" class="success-overlay hidden">
+            <div class="success-content">
+                <div class="success-icon">✅</div>
+                <h2>به‌روزرسانی با موفقیت انجام شد!</h2>
+                <p>دستگاه در حال راه‌اندازی مجدد...</p>
+                <div class="countdown-circle">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" class="bg"/>
+                        <circle cx="50" cy="50" r="45" class="progress-ring" id="countdownRing"/>
+                    </svg>
+                    <span class="countdown-text" id="countdownText">۵</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/ota.js"></script>
+</body>
+</html>
