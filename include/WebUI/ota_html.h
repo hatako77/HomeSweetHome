@@ -96,16 +96,15 @@ let remoteVersion = "";
 // Load version info
 // =======================
 async function checkVersion() {
+
   let res = await fetch('/version');
   let data = await res.json();
 
-  currentVersion = data.version;
-  document.getElementById("current").innerText = currentVersion;
+  document.getElementById("current").innerText = data.version;
 
-  // fake server version check (replace with real API if needed)
-  let remote = await fetch('/update'); // فقط برای trigger نیست، بهتره endpoint جدا داشته باشی
+  // فرض: نسخه سرور از GitHub یا OTA service
+  let remoteRes = await fetch('/ota-version'); // ❌ هنوز نداری
 }
-
 // =======================
 // Start OTA
 // =======================
