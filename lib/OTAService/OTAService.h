@@ -6,27 +6,29 @@
 #include <Update.h>
 #include <ArduinoJson.h>
 
+struct OTAStatus
+{
+    bool running = false;
+    bool finished = false;
+    bool success = false;
+
+    uint32_t downloaded = 0;
+    uint32_t total = 0;
+
+    uint8_t percent = 0;
+
+    float speedKB = 0;
+
+    uint32_t eta = 0;
+
+    String state = "Idle";
+    String error = "";
+};
 class OTAService {
 public:
     bool checkForUpdate();
     bool updateFirmware();
 
-    struct OTAStatus {
-        bool running;
-        bool finished;
-        bool success;
-    
-        uint32_t downloaded;
-        uint32_t total;
-        uint8_t percent;
-    
-        float speedKB;
-    
-        uint32_t eta;
-    
-        String state;
-        String error;
-    };
     
 void setVersionURL(const String& url);
     void setCurrentVersion(const String& version);
