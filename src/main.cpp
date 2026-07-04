@@ -116,7 +116,7 @@ void setup() {
     });
     
     // API: شروع به‌روزرسانی
-    // API: شروع به‌روزرسانی
+// API: شروع به‌روزرسانی
 server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
     String latestVersion = checkLatestVersion();
     String currentVersion = getVersion();
@@ -126,12 +126,17 @@ server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
         return;
     }
     
-    // آدرس دانلود از ریلیز
     String url = "https://github.com/hatako77/HomeSweetHome/releases/download/v" + latestVersion + "/firmware.bin";
     
     Serial.println("📥 Downloading from: " + url);
+    Serial.println("📦 Current version: " + currentVersion);
+    Serial.println("🆕 New version: " + latestVersion);
+    Serial.println("💾 Free space: " + String(ESP.getFreeSketchSpace()) + " bytes");
     
     bool success = otaHandler.startUpdate(url);
+    
+    Serial.println("✅ Update success: " + String(success));
+    Serial.println("📊 Status: " + otaHandler.getStatus());
     
     String json = "{\"success\":" + String(success ? "true" : "false") + "}";
     request->send(200, "application/json", json);
