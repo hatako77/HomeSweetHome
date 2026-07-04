@@ -2,7 +2,7 @@
 
 void PCF8574Driver::begin()
 {
-    Wire.begin();
+    Wire.begin(16, 17);
 
     for (uint8_t i = 0; i < DEVICE_COUNT; i++)
     {
