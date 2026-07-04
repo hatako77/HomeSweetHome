@@ -188,8 +188,7 @@ void setup() {
   Serial.println("\nWiFi connected");
   Serial.println(WiFi.localIP());
   ota.setCurrentVersion(APP_VERSION);
-  ota.setVersionURL("https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.json");
-
+  ota.setVersionURL("https://github.com/hatako77/HomeSweetHome/releases/latest/download/version.json");
 
   //if (ota.checkForUpdate()) {
   //  Serial.println("Update available! Installing...");
