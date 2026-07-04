@@ -32,10 +32,15 @@ bool OTAService::checkForUpdate() {
     String payload = http.getString();
     http.end();
 
-    StaticJsonDocument<512> doc;
+    JsonDocument doc;
+    
     DeserializationError err = deserializeJson(doc, payload);
-    Serial.println(err);
-    if (err) return false;
+    
+    if (err) {
+        Serial.print("JSON Error: ");
+        Serial.println(err.c_str());
+        return false;
+    }
 
     remoteVersion = doc["version"].as<String>();
     firmwareURL = doc["url"].as<String>();
