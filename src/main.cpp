@@ -17,6 +17,7 @@ const char* password = "2150068486";
 // ===== Web Server =====
 WebServer server(80);
 OTAService ota;
+TaskHandle_t otaTaskHandle = nullptr;
 // ===== Relay pins =====
 const int relayPins[] = {16, 17};
 const int relayCount = 2;
@@ -36,6 +37,20 @@ void setRelay(int ch, bool state) {
 // =========================
 // Handlers
 // =========================
+void otaTask(void *parameter)
+{
+    bool result = ota.updateFirmware();
+
+    if(result)
+    {
+        delay(2000);
+        ESP.restart();
+    }
+
+    otaTaskHandle = nullptr;
+
+    vTaskDelete(NULL);
+}
 void handleOtaVersion() {
 
   Serial.println("OTA Version Request");
@@ -86,27 +101,33 @@ void handleOTAStatus() {
   server.send(200, "application/json", out);
 }
 
-void handleUpdate() {
-  server.send(200, "text/plain", "Checking update...");
+void handleUpdate()
+{
+    if(otaTaskHandle != nullptr)
+    {
+        server.send(409, "text/plain", "OTA already running");
+        return;
+    }
 
-  bool hasUpdate = ota.checkForUpdate();
+    if(!ota.checkForUpdate())
+    {
+        server.send(404, "text/plain", "No update");
+        return;
+    }
 
-  if (!hasUpdate) {
-    Serial.println("No update available");
-    return;
-  }
+    server.send(200, "text/plain", "OTA Started");
 
-  Serial.println("New firmware found, updating...");
-
-  bool result = ota.updateFirmware();
-
-  if (result) {
-    Serial.println("Update success, rebooting...");
-    ESP.restart();
-  } else {
-    Serial.println("Update failed");
-  }
+    xTaskCreatePinnedToCore(
+        otaTask,
+        "OTA",
+        12000,
+        NULL,
+        1,
+        &otaTaskHandle,
+        1
+    );
 }
+
 void handleCSS() {
   server.send_P(200, "text/css", STYLE_CSS);
 }
