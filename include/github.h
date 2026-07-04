@@ -5,13 +5,29 @@
 class GitHub
 {
 public:
+
     GitHub();
 
-    bool checkVersion();
+    bool begin();
 
-    String latestVersion();
-    String firmwareURL();
+    bool check();
+
+    String latestVersion() const;
+
+    String firmwareURL() const;
+
+    String changelogURL() const;
+
+    String versionURL() const;
+
+    String lastError() const;
 
 private:
+
     String _latestVersion;
+
+    String _lastError;
+
+    bool downloadVersionFile(String &json);
+
 };
