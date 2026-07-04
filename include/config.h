@@ -9,7 +9,7 @@
 #define WIFI_TIMEOUT 30 // seconds
 
 // ===== OTA Configuration =====
-#define OTA_HOST "your-github-username.github.io"
+#define OTA_HOST "hatako77.github.io"
 #define OTA_PATH "/firmware/"
 #define OTA_VERSION_FILE "version.txt"
 #define OTA_FIRMWARE_FILE "firmware.bin"
