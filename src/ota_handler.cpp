@@ -64,7 +64,6 @@ bool OTAHandler::startUpdate(const String& url) {
     http.setTimeout(30000);
     http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     
-    // دیباگ: هدرها رو چاپ کن
     Serial.println("📡 Sending request...");
     
     int httpCode = http.GET();
@@ -117,12 +116,21 @@ bool OTAHandler::startUpdate(const String& url) {
     size_t written = 0;
     uint8_t buff[1024];
     unsigned long lastYield = millis();
+    int emptyReads = 0;  // شمارنده برای تاخیر بیشتر
     
     while (http.connected() && written < contentLength) {
+        // 🔥 مهم: هر بار که داده‌ای نیست، تاخیر بیشتری بذار
         if (stream->available() == 0) {
-            delay(1);
+            emptyReads++;
+            if (emptyReads > 10) {
+                delay(5);  // تاخیر بیشتر
+                emptyReads = 0;
+            } else {
+                delay(1);
+            }
             continue;
         }
+        emptyReads = 0;
         
         size_t toRead = min((size_t)stream->available(), sizeof(buff));
         size_t read = stream->readBytes(buff, toRead);
@@ -139,9 +147,13 @@ bool OTAHandler::startUpdate(const String& url) {
             written += wrote;
             m_progress = 20 + (70 * written / contentLength);
             m_status = "Updating... " + String(100 * written / contentLength) + "%";
+            
+            // 🔥 هر بار که داده نوشته میشه، yield رو صدا بزن
+            yield();
         }
         
-        if (millis() - lastYield > 10) {
+        // 🔥 هر 5 میلی‌ثانیه یکبار yield رو صدا بزن
+        if (millis() - lastYield > 5) {
             yield();
             lastYield = millis();
         }
