@@ -249,6 +249,10 @@ Restarting...
 </div>
 
 <button id="updateBtn" onclick="startOTA()" disabled>
+
+Update Firmware
+
+</button>
 <script>
 
 let rebootTimer = null;
@@ -396,6 +400,3 @@ checkVersion();
 )rawliteral";
 
 #endif
-Update Firmware
-
-</button>
