@@ -1,168 +1,48 @@
-#include <Arduino.h>
-#include <WiFi.h>
-#include <ESPAsyncWebServer.h>
-#include <HTTPClient.h>
-#include "version.h"
-#include "webpage.h"
-#include "ota_handler.h"
+// ===== روت‌های سرور =====
+server.addHandler(&events);
 
-// ===== تنظیمات WiFi =====
-const char* WIFI_SSID = "Ali TT";
-const char* WIFI_PASSWORD = "2150068486";
-
-// ===== سرور وب =====
-AsyncWebServer server(80);
-AsyncEventSource events("/events");
-
-// ===== OTA Handler =====
-OTAHandler otaHandler;
-
-// ===== مدیریت نسخه =====
-String getVersion() {
-    return String(FIRMWARE_VERSION);
-}
-
-// ===== ارسال پیشرفت OTA =====
-void sendOTAProgress(int progress, const String& status) {
-    String json = "{";
-    json += "\"type\":\"progress\",";
-    json += "\"progress\":" + String(progress) + ",";
-    json += "\"status\":\"" + status + "\"";
-    if (progress >= 100) {
-        json += ",\"type\":\"complete\"";
-        json += ",\"message\":\"Update completed successfully!\"";
-    }
-    json += "}";
-    events.send(json.c_str(), "message", millis());
-}
-
-// ===== بررسی نسخه جدید از version.txt =====
-String checkLatestVersion() {
-    String url = "https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.txt";
-    HTTPClient http;
-    http.begin(url);
-    http.setTimeout(5000);
-    int httpCode = http.GET();
-    String latestVersion = "";
-    if (httpCode == 200) {
-        latestVersion = http.getString();
-        latestVersion.trim();
-    }
-    http.end();
-    return latestVersion;
-}
-
-// ===== راه‌اندازی =====
-void setup() {
-    Serial.begin(115200);
-    delay(1000);
-    
-    Serial.println("\n=================================");
-    Serial.println("ESP32 Base Project");
-    Serial.println("Version: " + getVersion());
-    Serial.println("Build: " + String(BUILD_DATE) + " @ " + String(BUILD_TIME));
-    Serial.println("=================================\n");
-    
-    // ===== اتصال به WiFi =====
-    Serial.print("📶 Connecting to WiFi");
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    
-    int attempts = 0;
-    while (WiFi.status() != WL_CONNECTED && attempts < 30) {
-        delay(500);
-        Serial.print(".");
-        attempts++;
-    }
-    
-    if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("\n✅ WiFi Connected!");
-        Serial.print("🌐 IP Address: ");
-        Serial.println(WiFi.localIP());
-    } else {
-        Serial.println("\n❌ WiFi Connection Failed!");
-    }
-    
-    // ===== روت‌های سرور =====
-    server.addHandler(&events);
-    
-    // صفحه اصلی
-    server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
-        request->send(200, "text/html", INDEX_HTML);
-    });
-    
-    // صفحه OTA
-    server.on("/ota", HTTP_GET, [](AsyncWebServerRequest* request) {
-        request->send(200, "text/html", OTA_HTML);
-    });
-    
-    // API: دریافت نسخه فعلی
-    server.on("/api/version", HTTP_GET, [](AsyncWebServerRequest* request) {
-        String json = "{\"version\":\"" + getVersion() + "\"}";
-        request->send(200, "application/json", json);
-    });
-    
-    // API: بررسی نسخه جدید از version.txt
-    server.on("/api/check-update", HTTP_GET, [](AsyncWebServerRequest* request) {
-        String currentVersion = getVersion();
-        String latestVersion = checkLatestVersion();
-        bool hasUpdate = (latestVersion != "" && latestVersion != currentVersion);
-        
-        String json = "{";
-        json += "\"current\":\"" + currentVersion + "\",";
-        json += "\"latest\":\"" + latestVersion + "\",";
-        json += "\"updateAvailable\":" + String(hasUpdate ? "true" : "false");
-        json += "}";
-        request->send(200, "application/json", json);
-    });
-    
-    // API: شروع به‌روزرسانی
-// API: شروع به‌روزرسانی
-server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
-    String latestVersion = checkLatestVersion();
-    String currentVersion = getVersion();
-    
-    if (latestVersion == "" || latestVersion == currentVersion) {
-        request->send(400, "application/json", "{\"success\":false,\"error\":\"No update available\"}");
-        return;
-    }
-    
-    String url = "https://github.com/hatako77/HomeSweetHome/releases/download/v" + latestVersion + "/firmware.bin";
-    
-    Serial.println("📥 Downloading from: " + url);
-    Serial.println("📦 Current version: " + currentVersion);
-    Serial.println("🆕 New version: " + latestVersion);
-    Serial.println("💾 Free space: " + String(ESP.getFreeSketchSpace()) + " bytes");
-    
-    bool success = otaHandler.startUpdate(url);
-    
-    Serial.println("✅ Update success: " + String(success));
-    Serial.println("📊 Status: " + otaHandler.getStatus());
-    
-    String json = "{\"success\":" + String(success ? "true" : "false") + "}";
-    request->send(200, "application/json", json);
-    
-    if (success) {
-        delay(1000);
-        ESP.restart();
-    }
+// صفحه اصلی
+server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
+    Serial.println("📄 Root page requested");
+    request->send(200, "text/html", INDEX_HTML);
 });
 
-    
-    server.begin();
-    Serial.println("✅ Web Server started on port 80");
-    if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("🌐 URL: http://" + WiFi.localIP().toString());
-    }
-    Serial.println("=================================\n");
-    Serial.println("🚀 System Ready!");
-}
+// صفحه OTA
+server.on("/ota", HTTP_GET, [](AsyncWebServerRequest* request) {
+    Serial.println("📄 OTA page requested");
+    request->send(200, "text/html", OTA_HTML);
+});
 
-void loop() {
-    static int lastProgress = -1;
-    int progress = otaHandler.getProgress();
-    if (progress != lastProgress) {
-        lastProgress = progress;
-        sendOTAProgress(progress, otaHandler.getStatus());
-    }
-    delay(100);
-}
+// API: دریافت نسخه فعلی
+server.on("/api/version", HTTP_GET, [](AsyncWebServerRequest* request) {
+    Serial.println("📊 Version API called");
+    String json = "{\"version\":\"" + getVersion() + "\"}";
+    request->send(200, "application/json", json);
+});
+
+// API: بررسی نسخه جدید (با دیباگ)
+server.on("/api/check-update", HTTP_GET, [](AsyncWebServerRequest* request) {
+    Serial.println("🔍 Check update API called!");  // ← این خط را اضافه کنید
+    
+    String currentVersion = getVersion();
+    Serial.println("📦 Current version: " + currentVersion);
+    
+    String latestVersion = checkLatestVersion();
+    Serial.println("📦 Latest version: " + latestVersion);
+    
+    bool hasUpdate = (latestVersion != "" && latestVersion != currentVersion);
+    Serial.println("🔍 Has update: " + String(hasUpdate ? "YES" : "NO"));
+    
+    String json = "{";
+    json += "\"current\":\"" + currentVersion + "\",";
+    json += "\"latest\":\"" + latestVersion + "\",";
+    json += "\"updateAvailable\":" + String(hasUpdate ? "true" : "false");
+    json += "}";
+    request->send(200, "application/json", json);
+});
+
+// API: شروع به‌روزرسانی
+server.on("/api/start-update", HTTP_POST, [](AsyncWebServerRequest* request) {
+    Serial.println("🚀 Start update API called!");
+    // ... بقیه کد
+});
