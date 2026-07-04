@@ -45,7 +45,7 @@ void setVersionURL(const String& url);
 private:
     String versionURL;
     String currentVersion;
-
+    OTAStatus status;
     String remoteVersion;
     String firmwareURL;
 
