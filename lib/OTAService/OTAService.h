@@ -11,7 +11,24 @@ public:
     bool checkForUpdate();
     bool updateFirmware();
 
-    void setVersionURL(const String& url);
+    struct OTAStatus {
+        bool running;
+        bool finished;
+        bool success;
+    
+        uint32_t downloaded;
+        uint32_t total;
+        uint8_t percent;
+    
+        float speedKB;
+    
+        uint32_t eta;
+    
+        String state;
+        String error;
+    };
+    
+void setVersionURL(const String& url);
     void setCurrentVersion(const String& version);
     String getRemoteVersion() const {
     return remoteVersion;
