@@ -3,10 +3,12 @@
 #include <ArduinoJson.h>
 #include "Version.h"
 #include "OTAService.h"
+
 // Web UI (PROGMEM)
 #include "WebUI/index_html.h"
 #include "WebUI/style_css.h"
 #include "WebUI/app_js.h"
+#include "WebUI/ota_html.h"
 
 // ===== WiFi Config =====
 const char* ssid = "Ali TT";
@@ -137,6 +139,10 @@ void setup() {
   server.on("/version", handleVersion);
   server.on("/relay", handleRelay);
   server.on("/update", handleUpdate);
+  server.on("/ota", []() {
+    server.send_P(200, "text/html", OTA_HTML);
+  });
+
   
   server.begin();
   Serial.println("HTTP server started");
