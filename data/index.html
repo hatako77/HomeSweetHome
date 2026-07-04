@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دستگاه ESP32</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎛️ پنل کنترل ESP32</h1>
+            <div class="status-indicator" id="statusIndicator">
+                <span class="dot online"></span>
+                <span>آنلاین</span>
+            </div>
+        </header>
+        
+        <div class="card">
+            <h2>📊 اطلاعات دستگاه</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">نسخه فریم‌ور</span>
+                    <span class="value" id="version">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">زمان فعالیت</span>
+                    <span class="value" id="uptime">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">آدرس IP</span>
+                    <span class="value" id="ip">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">قدرت سیگنال</span>
+                    <span class="value" id="signal">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">دمای CPU</span>
+                    <span class="value" id="temperature">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">حافظه آزاد</span>
+                    <span class="value" id="memory">---</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>⚡ اقدامات سریع</h2>
+            <div class="btn-group">
+                <a href="/ota" class="btn btn-primary">
+                    <span class="icon">🔄</span>
+                    به‌روزرسانی OTA
+                </a>
+                <button class="btn btn-warning" onclick="restartDevice()">
+                    <span class="icon">🔁</span>
+                    راه‌اندازی مجدد
+                </button>
+                <button class="btn btn-info" onclick="refreshData()">
+                    <span class="icon">🔄</span>
+                    به‌روزرسانی
+                </button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>ESP32 OTA System v<span id="footerVersion">---</span></p>
+        </footer>
+    </div>
+    
+    <script src="/js/main.js"></script>
+</body>
+</html>
