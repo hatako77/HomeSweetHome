@@ -32,11 +32,9 @@ jobs:
         MAJOR=$(grep "VERSION_MAJOR" src/version.h | cut -d' ' -f3)
         MINOR=$(grep "VERSION_MINOR" src/version.h | cut -d' ' -f3)
         PATCH=$(grep "VERSION_PATCH" src/version.h | cut -d' ' -f3)
-        BUILD=$(grep "BUILD_NUMBER" src/version.h | cut -d' ' -f3 || echo "1")
         echo "MAJOR=$MAJOR" >> $GITHUB_ENV
         echo "MINOR=$MINOR" >> $GITHUB_ENV
         echo "PATCH=$PATCH" >> $GITHUB_ENV
-        echo "BUILD=$BUILD" >> $GITHUB_ENV
 
     - name: Calculate new version
       id: new_version
@@ -44,7 +42,6 @@ jobs:
         MAJOR=${{ env.MAJOR }}
         MINOR=${{ env.MINOR }}
         PATCH=${{ env.PATCH }}
-        BUILD=${{ env.BUILD }}
         
         TYPE="${{ github.event.inputs.version_type }}"
         
@@ -59,13 +56,11 @@ jobs:
           PATCH=$((PATCH + 1))
         fi
         
-        BUILD=$((BUILD + 1))
-        VERSION="$MAJOR.$MINOR.$PATCH.$BUILD"
+        VERSION="$MAJOR.$MINOR.$PATCH"
         
         echo "NEW_MAJOR=$MAJOR" >> $GITHUB_ENV
         echo "NEW_MINOR=$MINOR" >> $GITHUB_ENV
         echo "NEW_PATCH=$PATCH" >> $GITHUB_ENV
-        echo "NEW_BUILD=$BUILD" >> $GITHUB_ENV
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         
@@ -76,7 +71,6 @@ jobs:
         sed -i "s/#define VERSION_MAJOR .*/#define VERSION_MAJOR ${{ env.NEW_MAJOR }}/" src/version.h
         sed -i "s/#define VERSION_MINOR .*/#define VERSION_MINOR ${{ env.NEW_MINOR }}/" src/version.h
         sed -i "s/#define VERSION_PATCH .*/#define VERSION_PATCH ${{ env.NEW_PATCH }}/" src/version.h
-        sed -i "s/#define BUILD_NUMBER .*/#define BUILD_NUMBER ${{ env.NEW_BUILD }}/" src/version.h
 
     - name: Build firmware
       run: pio run -e esp32dev
