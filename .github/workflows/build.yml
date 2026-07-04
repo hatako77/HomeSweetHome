@@ -83,42 +83,11 @@ jobs:
     - name: Create release files
       run: |
         mkdir -p release
-        
-        # کپی firmware.bin
-        if [ -f ".pio/build/esp32dev/firmware.bin" ]; then
-          cp .pio/build/esp32dev/firmware.bin release/firmware.bin
-          echo "✅ firmware.bin copied"
-        else
-          echo "⚠️ firmware.bin not found"
-        fi
-        
-        # کپی partition_table.bin
-        if [ -f ".pio/build/esp32dev/partition_table.bin" ]; then
-          cp .pio/build/esp32dev/partition_table.bin release/partition.bin
-          echo "✅ partition.bin copied"
-        else
-          echo "⚠️ partition.bin not found"
-        fi
-        
-        # کپی partitions.bin (بعضی مواقع با این نام ساخته می‌شود)
-        if [ -f ".pio/build/esp32dev/partitions.bin" ]; then
-          cp .pio/build/esp32dev/partitions.bin release/partition.bin
-          echo "✅ partitions.bin copied as partition.bin"
-        fi
-        
-        # کپی bootloader.bin
-        if [ -f ".pio/build/esp32dev/bootloader.bin" ]; then
-          cp .pio/build/esp32dev/bootloader.bin release/bootloader.bin
-          echo "✅ bootloader.bin copied"
-        else
-          echo "⚠️ bootloader.bin not found"
-        fi
-        
-        # ذخیره نسخه
+        cp .pio/build/esp32dev/firmware.bin release/firmware.bin
+        cp .pio/build/esp32dev/partition_table.bin release/partition.bin || echo "⚠️ partition.bin not found"
+        cp .pio/build/esp32dev/bootloader.bin release/bootloader.bin || echo "⚠️ bootloader.bin not found"
         echo "${{ env.VERSION }}" > release/version.txt
-        
-        # نمایش لیست فایل‌های ساخته شده
-        echo "📁 Files in release directory:"
+        echo "✅ Release files created:"
         ls -la release/
 
     - name: Upload artifacts
@@ -133,9 +102,17 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         
-        # ابتدا تغییرات remote را دریافت کن
+        # ذخیره تغییرات فعلی
+        echo "📦 Stashing changes..."
+        git stash || true
+        
+        # دریافت تغییرات remote
         echo "📥 Pulling latest changes..."
         git pull origin ${{ github.ref_name }} --rebase || true
+        
+        # برگرداندن تغییرات ذخیره شده
+        echo "📦 Applying stashed changes..."
+        git stash pop || true
         
         # فایل تغییر کرده را add کن
         git add src/version.h
