@@ -16,9 +16,11 @@ bool OTAService::isNewVersion(String remote, String current) {
 bool OTAService::checkForUpdate() {
 
     if (WiFi.status() != WL_CONNECTED) return false;
-
+    String url = versionURL + "?ts=" + String(esp_random());
     HTTPClient http;
-    http.begin(versionURL);
+    http.addHeader("Cache-Control", "no-cache");
+    http.addHeader("Pragma", "no-cache");
+    http.begin(url);
     Serial.print("versionURL: ");
     Serial.println(versionURL);
     int code = http.GET();
