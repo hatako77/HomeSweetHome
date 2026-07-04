@@ -2,7 +2,7 @@
 #include <WebServer.h>
 #include <ArduinoJson.h>
 #include "Version.h"
-
+#include "OTAService.h"
 // Web UI (PROGMEM)
 #include "WebUI/index_html.h"
 #include "WebUI/style_css.h"
@@ -14,7 +14,7 @@ const char* password = "YOUR_PASS";
 
 // ===== Web Server =====
 WebServer server(80);
-
+OTAService ota;
 // ===== Relay pins =====
 const int relayPins[] = {16, 17};
 const int relayCount = 2;
@@ -37,7 +37,27 @@ void setRelay(int ch, bool state) {
 void handleRoot() {
   server.send_P(200, "text/html", INDEX_HTML);
 }
+void handleUpdate() {
+  server.send(200, "text/plain", "Checking update...");
 
+  bool hasUpdate = ota.checkForUpdate();
+
+  if (!hasUpdate) {
+    Serial.println("No update available");
+    return;
+  }
+
+  Serial.println("New firmware found, updating...");
+
+  bool result = ota.updateFirmware();
+
+  if (result) {
+    Serial.println("Update success, rebooting...");
+    ESP.restart();
+  } else {
+    Serial.println("Update failed");
+  }
+}
 void handleCSS() {
   server.send_P(200, "text/css", STYLE_CSS);
 }
@@ -95,14 +115,30 @@ void setup() {
 
   Serial.println("\nWiFi connected");
   Serial.println(WiFi.localIP());
+  ota.setCurrentVersion(APP_VERSION);
+  ota.setVersionURL("https://raw.githubusercontent.com/hatako77/HomeSweetHome/main/version.json");
 
+  Serial.println("Checking OTA update...");
+
+  if (ota.checkForUpdate()) {
+    Serial.println("Update available! Installing...");
+
+    if (ota.updateFirmware()) {
+      Serial.println("Update OK. Restarting...");
+      delay(2000);
+      ESP.restart();
+    } else {
+      Serial.println("Update failed!");
+    }
+  }
   // Routes
   server.on("/", handleRoot);
   server.on("/style.css", handleCSS);
   server.on("/app.js", handleJS);
   server.on("/version", handleVersion);
   server.on("/relay", handleRelay);
-
+  server.on("/update", handleUpdate);
+  
   server.begin();
   Serial.println("HTTP server started");
 }
