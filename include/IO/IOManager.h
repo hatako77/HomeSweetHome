@@ -21,7 +21,7 @@ public:
     void toggle(uint8_t index);
 
 private:
-
+    PCF8574Driver driver;
     IOConfig io[TOTAL_IO];
 
 };
