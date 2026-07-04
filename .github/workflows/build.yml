@@ -22,6 +22,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # مهم برای دسترسی به تاریخچه کامل
 
     - name: Install PlatformIO
       run: pip install platformio
@@ -29,7 +31,6 @@ jobs:
     - name: Get current version
       id: current_version
       run: |
-        # استخراج اعداد با sed (فقط عدد را می‌گیرد)
         MAJOR=$(sed -n 's/#define VERSION_MAJOR \([0-9]*\)/\1/p' src/version.h)
         MINOR=$(sed -n 's/#define VERSION_MINOR \([0-9]*\)/\1/p' src/version.h)
         PATCH=$(sed -n 's/#define VERSION_PATCH \([0-9]*\)/\1/p' src/version.h)
@@ -99,8 +100,22 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git add src/version.h
-        git diff --staged --quiet || git commit -m "Bump version to ${{ env.VERSION }} [skip ci]"
-        git push
+        
+        # فقط اگر تغییری وجود داشت
+        if ! git diff --staged --quiet; then
+          echo "📝 Changes detected, committing..."
+          
+          # اول pull کن تا با remote هماهنگ شود
+          git pull --rebase origin ${{ github.ref_name }} || git pull --rebase
+          
+          # commit کن
+          git commit -m "Bump version to ${{ env.VERSION }} [skip ci]"
+          
+          # push کن
+          git push origin ${{ github.ref_name }}
+        else
+          echo "✅ No changes to commit"
+        fi
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
