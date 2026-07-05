@@ -33,14 +33,19 @@ enum class IOType : uint8_t
 
 struct IOChannel
 {
+    uint16_t id;
     String name;
-    IOIcon icon = IOIcon::Light;
-    IOType type = IOType::DigitalOutput;
-    bool state = false;
-    bool enabled = true;
-    bool activeLow = false;
-    uint8_t pcf = 0;
-    uint8_t pin = 0;
+    IOIcon icon;
+    IOType type;
+    bool state;
+    bool enabled;
+    bool activeLow;
+    uint8_t board;
+    uint8_t address;
+    uint8_t pin;
+    uint8_t roomId;
+    uint8_t groupId;
+    bool favorite;
 };
 
 #endif
