@@ -112,7 +112,8 @@ void setup() {
     server.send_P(200, "text/html", OTA_HTML);
   });
   ioManager.begin();
-
+  LittleFS.begin(true);
+  IOStorage::load();
   server.begin();
   Serial.println("HTTP server started");
 }
