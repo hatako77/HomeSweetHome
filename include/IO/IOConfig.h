@@ -23,8 +23,12 @@ enum class IOIcon : uint8_t
 
 enum class IOType : uint8_t
 {
-    DigitalInput,
-    DigitalOutput
+    DigitalInput = 0,
+    DigitalOutput,
+    AnalogInput,
+    PWMOutput,
+    Virtual,
+    Disabled
 };
 
 struct IOChannel
