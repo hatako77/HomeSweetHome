@@ -11,6 +11,30 @@ namespace ApiIO
 void registerRoutes(WebServerService& web)
 {
     auto& server = web.server();
+    server.on("^\\/api\\/io\\/([0-9]+)$", HTTP_POST, [&server]()
+    {
+        String uri = server.uri();
+    
+        int pos = uri.lastIndexOf('/');
+    
+        uint8_t id = uri.substring(pos + 1).toInt();
+    
+        IOChannel* ch = ioManager.get(id);
+    
+        if (ch == nullptr)
+        {
+            server.send(404, "text/plain", "Not Found");
+            return;
+        }
+    
+        bool state = !ioManager.getState(id);
+    
+        ioManager.setState(id, state);
+    
+        server.send(200, "text/plain", state ? "ON" : "OFF");
+    });
+    
+    
     server.on("/api/io/toggle", HTTP_POST, [&server]()
     {
         if (!server.hasArg("id"))
