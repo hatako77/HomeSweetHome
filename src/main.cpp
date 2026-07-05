@@ -20,21 +20,6 @@ const char* password = "2150068486";
 WebServer server(80);
 OTAService ota;
 TaskHandle_t otaTaskHandle = nullptr;
-// ===== Relay pins =====
-const int relayPins[] = {16, 17};
-const int relayCount = 2;
-
-bool relayState[2] = {false, false};
-
-// =========================
-// Relay Control
-// =========================
-void setRelay(int ch, bool state) {
-  if (ch < 0 || ch >= relayCount) return;
-
-  relayState[ch] = state;
-  digitalWrite(relayPins[ch], state ? HIGH : LOW);
-}
 
 // =========================
 // Handlers
@@ -97,31 +82,12 @@ void handleJS() {
 }
 
 
-void handleRelay() {
-  if (!server.hasArg("ch")) {
-    server.send(400, "text/plain", "Missing channel");
-    return;
-  }
-
-  int ch = server.arg("ch").toInt() - 1;
-
-  bool newState = !relayState[ch];
-  setRelay(ch, newState);
-
-  server.send(200, "text/plain", newState ? "ON" : "OFF");
-}
 
 // =========================
 // Setup
 // =========================
 void setup() {
   Serial.begin(115200);
-
-  // Relay init
-  for (int i = 0; i < relayCount; i++) {
-    pinMode(relayPins[i], OUTPUT);
-    setRelay(i, false);
-  }
 
   // WiFi connect
   WiFi.begin(ssid, password);
@@ -137,41 +103,16 @@ void setup() {
   ota.setCurrentVersion(APP_VERSION);
   ota.setVersionURL("https://github.com/hatako77/HomeSweetHome/releases/latest/download/version.json");
 
-  //if (ota.checkForUpdate()) {
-  //  Serial.println("Update available! Installing...");
-
-  //  if (ota.updateFirmware()) {
-  //    Serial.println("Update OK. Restarting...");
-  //    delay(2000);
-  //    ESP.restart();
-  //  } else {
-  //    Serial.println("Update failed!");
-  //  }
-  //}
+  
   // Routes
   server.on("/", handleRoot);
   server.on("/style.css", handleCSS);
   server.on("/app.js", handleJS);
-  server.on("/relay", handleRelay);
   server.on("/ota", []() {
     server.send_P(200, "text/html", OTA_HTML);
   });
   ioManager.begin();
-  ioManager.setState(0, true);
-  delay(1000);  
-  ioManager.setState(0, false);
-  
-  ioManager.begin();
-  
-  delay(1000);
-  
-  Serial.println(ioManager.count());
-  
-  ioManager.setState(0,true);
-  
-  delay(1000);
 
-ioManager.setState(0,false);
   server.begin();
   Serial.println("HTTP server started");
 }
