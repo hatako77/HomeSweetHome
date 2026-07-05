@@ -4,15 +4,18 @@ void PCF8574Driver::begin()
 {
     Wire.begin(16, 17);
 
-    Serial.println("Scanning...");
-    
-    for (uint8_t addr = 1; addr < 127; addr++) {
+    deviceCount = 0;
+
+    Serial.println("Scanning I2C...");
+
+    for (uint8_t addr = 1; addr < 127; addr++)
+    {
         Wire.beginTransmission(addr);
-    
-        if (Wire.endTransmission() == 0) {
+
+        if (Wire.endTransmission() == 0)
             Serial.printf("Found: 0x%02X\n", addr);
-        }
     }
+
     for (uint8_t i = 0; i < DEVICE_COUNT; i++)
     {
         uint8_t addr = 0x20 + i;
@@ -21,19 +24,46 @@ void PCF8574Driver::begin()
 
         connected[i] = pcf[i]->begin();
 
-        Serial.print("PCF ");
-        Serial.print(addr, HEX);
+        Serial.printf("PCF %02X ", addr);
 
         if (connected[i])
-            Serial.println(" OK");
+        {
+            Serial.println("OK");
+            deviceCount++;
+            pcf[i]->write8(0xFF);
+        }
         else
-            Serial.println(" NOT FOUND");
+        {
+            Serial.println("NOT FOUND");
+        }
+    }
+
+    Serial.print("PCF Found: ");
+    Serial.println(deviceCount);
+}
+
+void PCF8574Driver::update()
+{
+    for (uint8_t i = 0; i < DEVICE_COUNT; i++)
+    {
+        if (!connected[i])
+            continue;
+
+        pcf[i]->read8();
     }
 }
 
 bool PCF8574Driver::isConnected(uint8_t index)
 {
+    if (index >= DEVICE_COUNT)
+        return false;
+
     return connected[index];
+}
+
+uint8_t PCF8574Driver::getDeviceCount()
+{
+    return deviceCount;
 }
 
 bool PCF8574Driver::read(uint8_t index, uint8_t pin)
