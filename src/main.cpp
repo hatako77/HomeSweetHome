@@ -239,5 +239,6 @@ ioManager.setState(0,false);
 // Loop
 // =========================
 void loop() {
+  ioManager.update();
   server.handleClient();
 }
