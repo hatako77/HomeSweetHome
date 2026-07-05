@@ -65,7 +65,7 @@ bool IOStorage::load()
         ch->enabled = o["enabled"] | true;
         ch->activeLow = o["activeLow"] | false;
         ch->type = (IOType)(uint8_t)(o["type"] | 1);
-
+        ch->icon = o["icon"] | "lightbulb";
         i++;
     }
 
