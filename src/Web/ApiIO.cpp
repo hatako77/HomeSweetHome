@@ -13,24 +13,17 @@ void registerRoutes(WebServerService& web)
     auto& server = web.server();
     server.on("^\\/api\\/io\\/([0-9]+)$", HTTP_POST, [&server]()
     {
-        String uri = server.uri();
-    
-        int pos = uri.lastIndexOf('/');
-    
-        uint8_t id = uri.substring(pos + 1).toInt();
-    
-        IOChannel* ch = ioManager.get(id);
-    
+        String uri = server.uri();    
+        int pos = uri.lastIndexOf('/');    
+        uint8_t id = uri.substring(pos + 1).toInt();    
+        IOChannel* ch = ioManager.get(id);    
         if (ch == nullptr)
         {
             server.send(404, "text/plain", "Not Found");
             return;
-        }
-    
-        bool state = !ioManager.getState(id);
-    
-        ioManager.setState(id, state);
-    
+        }    
+        bool state = !ioManager.getState(id);    
+        ioManager.setState(id, state);    
         server.send(200, "text/plain", state ? "ON" : "OFF");
     });
     
@@ -41,24 +34,21 @@ void registerRoutes(WebServerService& web)
         {
             server.send(400, "text/plain", "Missing id");
             return;
-        }
-    
-        uint8_t id = server.arg("id").toInt();
-    
-        IOChannel* ch = ioManager.get(id);
-    
-        if (ch == nullptr)
+        }    
+        uint8_t id = server.arg("id").toInt();    
+        if (id >= ioManager.count())
         {
-            server.send(404, "text/plain", "Invalid id");
+            server.send(404, "text/plain", "Invalid ID");
             return;
-        }
-    
-        bool newState = !ioManager.getState(id);
-    
-        ioManager.setState(id, newState);
-    
-        server.send(200, "text/plain", newState ? "ON" : "OFF");
+        }    
+        ioManager.toggle(id);
+        server.send(200, "application/json", "{\"success\":true}");
     });
+
+
+
+
+    
     server.on("/api/io", HTTP_GET, [&server]()
     {
         JsonDocument doc;
@@ -67,9 +57,7 @@ void registerRoutes(WebServerService& web)
         for (uint8_t i = 0; i < ioManager.count(); i++)
         {
             IOChannel* ch = ioManager.get(i);
-
             JsonObject obj = arr.add<JsonObject>();
-
             obj["id"] = i;
             obj["name"] = ch->name;
             obj["state"] = ch->state;
@@ -83,7 +71,6 @@ void registerRoutes(WebServerService& web)
 
         String out;
         serializeJson(doc, out);
-
         server.send(200, "application/json", out);
     });
 }
