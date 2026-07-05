@@ -1,35 +1,86 @@
 #include "IO/IOManager.h"
 
+IOManager ioManager;
+
 void IOManager::begin()
 {
     driver.begin();
-    for (uint8_t i = 0; i < TOTAL_IO; i++)
+
+    ioCount = 0;
+
+    for(uint8_t p=0;p<8;p++)
     {
-        io[i].pcf = i / 8;
-        io[i].pin = i % 8;
+        if(!driver.isConnected(p))
+            continue;
+
+        for(uint8_t pin=0;pin<8;pin++)
+        {
+            channels[ioCount].name="IO "+String(ioCount+1);
+
+            channels[ioCount].type=IOType::OUTPUT;
+
+            channels[ioCount].state=false;
+
+            channels[ioCount].activeLow=false;
+
+            channels[ioCount].enabled=true;
+
+            channels[ioCount].pcf=p;
+
+            channels[ioCount].pin=pin;
+
+            ioCount++;
+        }
     }
+
+    Serial.print("IO Count : ");
+    Serial.println(ioCount);
 }
 
-IOConfig& IOManager::get(uint8_t index)
+void IOManager::update()
 {
-    return io[index];
+
 }
 
-bool IOManager::getState(uint8_t index)
+bool IOManager::setState(uint8_t id,bool state)
 {
-    return io[index].state;
+    if(id>=ioCount)
+        return false;
+
+    channels[id].state=state;
+
+    driver.write(
+        channels[id].pcf,
+        channels[id].pin,
+        state
+    );
+
+    return true;
 }
 
-void IOManager::setState(uint8_t index, bool state)
+bool IOManager::getState(uint8_t id)
 {
-        io[index].state = state;
+    if(id>=ioCount)
+        return false;
 
-    driver.write(io[index].pcf,
-                 io[index].pin,
-                 state);
+    channels[id].state=
+        driver.read(
+            channels[id].pcf,
+            channels[id].pin
+        );
+
+    return channels[id].state;
 }
 
-void IOManager::toggle(uint8_t index)
+IOChannel* IOManager::get(uint8_t id)
 {
-    io[index].state = !io[index].state;
+    if(id>=ioCount)
+        return nullptr;
+
+    return &channels[id];
+}
+
+uint8_t IOManager::count()
+{
+    return ioCount;
 }
