@@ -3,7 +3,7 @@
 #include "Web/ApiVersion.h"
 #include "Web/ApiIO.h"
 #include "Web/ApiOTA.h"
-
+#include "Web/ApiSettings.h"
 
 
 WebServerService web;
@@ -38,4 +38,5 @@ void WebServerService::registerApi()
     ApiVersion::registerRoutes(*this);
     ApiIO::registerRoutes(*this);
     ApiOTA::registerRoutes(*this);
+    ApiSettings::registerRoutes(*this);
 }
