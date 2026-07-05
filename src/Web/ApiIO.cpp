@@ -66,10 +66,7 @@ void registerRoutes(WebServerService& web)
             obj["icon"] = (uint8_t)ch->icon;
             obj["pcf"] = ch->pcf;
             obj["pin"] = ch->pin;
-            obj["type"] =
-                ch->type == IOType::DigitalOutput ?
-                "output" :
-                "input";
+            obj["type"] = (uint8_t)ch->type;
         }
 
         String out;
