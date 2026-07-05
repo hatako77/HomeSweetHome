@@ -4,6 +4,15 @@ void PCF8574Driver::begin()
 {
     Wire.begin(16, 17);
 
+    Serial.println("Scanning...");
+    
+    for (uint8_t addr = 1; addr < 127; addr++) {
+        Wire.beginTransmission(addr);
+    
+        if (Wire.endTransmission() == 0) {
+            Serial.printf("Found: 0x%02X\n", addr);
+        }
+    }
     for (uint8_t i = 0; i < DEVICE_COUNT; i++)
     {
         uint8_t addr = 0x20 + i;
