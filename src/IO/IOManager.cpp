@@ -47,7 +47,7 @@ void IOManager::update()
     }
 }
 
-bool IOManager::setState(uint8_t id, bool state)
+bool IOManager::write(uint8_t id, bool state)
 {
     if (id >= ioCount)
         return false;
