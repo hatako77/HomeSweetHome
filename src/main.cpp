@@ -77,6 +77,35 @@ void handleOtaVersion() {
 void handleRoot() {
   server.send_P(200, "text/html", INDEX_HTML);
 }
+
+void handleIO()
+{
+    JsonDocument doc;
+    JsonArray arr = doc.to<JsonArray>();
+
+    for (uint8_t i = 0; i < ioManager.count(); i++)
+    {
+        IOChannel* ch = ioManager.get(i);
+
+        JsonObject obj = arr.add<JsonObject>();
+
+        obj["id"] = i;
+        obj["name"] = ch->name;
+        obj["state"] = ch->state;
+        obj["enabled"] = ch->enabled;
+        obj["activeLow"] = ch->activeLow;
+
+        obj["type"] =
+            ch->type == IOType::DigitalOutput ?
+            "output" :
+            "input";
+    }
+
+    String out;
+    serializeJson(doc, out);
+
+    server.send(200, "application/json", out);
+}
 void handleOTAStatus() {
 
   OTAStatus &s = ota.getStatus();
@@ -213,6 +242,7 @@ void setup() {
   server.on("/ota", []() {
     server.send_P(200, "text/html", OTA_HTML);
   });
+  server.on("/api/io", handleIO);
   server.on("/ota-version", handleOtaVersion);
   server.on("/ota-status", handleOTAStatus);
   ioManager.begin();
