@@ -13,14 +13,15 @@ public:
     void begin();
 
     bool isConnected(uint8_t index);
-
+    void update();
+    uint8_t getDeviceCount();
     bool read(uint8_t index, uint8_t pin);
 
     void write(uint8_t index, uint8_t pin, bool state);
 
 private:
     PCF8574* pcf[DEVICE_COUNT];
-
+    uint8_t deviceCount = 0;
     bool connected[DEVICE_COUNT];
 };
 
