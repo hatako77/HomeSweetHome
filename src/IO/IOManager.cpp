@@ -17,7 +17,7 @@ void IOManager::begin()
         {
             channels[ioCount].name="IO "+String(ioCount+1);
 
-            channels[ioCount].type=IOType::OUTPUT;
+            channels[ioCount].type = IOType::DigitalOutput;
 
             channels[ioCount].state=false;
 
