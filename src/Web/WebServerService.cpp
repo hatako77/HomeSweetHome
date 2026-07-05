@@ -31,5 +31,5 @@ void WebServerService::registerPages()
 
 void WebServerService::registerApi()
 {
-    // فعلاً خالی
+    ApiVersion::registerRoutes(*this);
 }
