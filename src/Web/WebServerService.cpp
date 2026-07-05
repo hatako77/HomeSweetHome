@@ -1,4 +1,5 @@
 #include "Web/WebServerService.h"
+#include "Web/Pages.h"
 
 WebServerService web;
 
@@ -24,10 +25,10 @@ WebServer& WebServerService::server()
 
 void WebServerService::registerPages()
 {
-    // TODO
+    Pages::registerRoutes(*this);
 }
 
 void WebServerService::registerApi()
 {
-    // TODO
+    // فعلاً خالی
 }
