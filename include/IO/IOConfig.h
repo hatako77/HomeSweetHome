@@ -13,17 +13,19 @@ struct IOChannel
 {
     String name;
 
-    IOType type;
+    String icon = "lightbulb";
 
-    bool state;
+    IOType type = IOType::DigitalOutput;
 
-    bool activeLow;
+    bool state = false;
 
-    bool enabled;
+    bool enabled = true;
 
-    uint8_t pcf;
+    bool activeLow = false;
 
-    uint8_t pin;
+    uint8_t pcf = 0;
+
+    uint8_t pin = 0;
 };
 
 #endif
