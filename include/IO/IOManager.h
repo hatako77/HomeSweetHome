@@ -11,7 +11,15 @@ class IOManager
 public:
 
     static const uint8_t MAX_IO = 64;
-
+    bool write(uint8_t id, bool state);
+    
+    bool read(uint8_t id);
+    
+    bool on(uint8_t id);
+    
+    bool off(uint8_t id);
+    
+    bool toggle(uint8_t id);
     void begin();
 
     void update();
