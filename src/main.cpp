@@ -55,56 +55,11 @@ void otaTask(void *parameter)
 
     vTaskDelete(NULL);
 }
-void handleOtaVersion() {
-
-  Serial.println("OTA Version Request");
-
-  bool ok = ota.checkForUpdate();
-
-  Serial.print("checkForUpdate: ");
-  Serial.println(ok);
-
-  StaticJsonDocument<256> doc;
-  doc["success"] = ok;
-  doc["version"] = ota.getRemoteVersion();
-
-  String out;
-  serializeJson(doc, out);
-
-  server.send(200, "application/json", out);
-}
 
 void handleRoot() {
   server.send_P(200, "text/html", INDEX_HTML);
 }
 
-void handleOTAStatus() {
-
-  OTAStatus &s = ota.getStatus();
-
-  StaticJsonDocument<512> doc;
-
-  doc["running"] = s.running;
-  doc["finished"] = s.finished;
-  doc["success"] = s.success;
-
-  doc["downloaded"] = s.downloaded;
-  doc["total"] = s.total;
-
-  doc["percent"] = s.percent;
-
-  doc["speed"] = s.speedKB;
-
-  doc["eta"] = s.eta;
-
-  doc["state"] = s.state;
-  doc["error"] = s.error;
-
-  String out;
-  serializeJson(doc, out);
-
-  server.send(200, "application/json", out);
-}
 
 void handleUpdate()
 {
@@ -198,12 +153,9 @@ void setup() {
   server.on("/style.css", handleCSS);
   server.on("/app.js", handleJS);
   server.on("/relay", handleRelay);
-  server.on("/update", handleUpdate);
   server.on("/ota", []() {
     server.send_P(200, "text/html", OTA_HTML);
   });
-  server.on("/ota-version", handleOtaVersion);
-  server.on("/ota-status", handleOTAStatus);
   ioManager.begin();
   ioManager.setState(0, true);
   delay(1000);  
