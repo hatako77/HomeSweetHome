@@ -26,6 +26,7 @@ bool IOStorage::save()
         o["enabled"] = ch->enabled;
         o["activeLow"] = ch->activeLow;
         o["type"] = (uint8_t)ch->type;
+        o["icon"] = ch->icon;
     }
 
     serializeJson(doc, f);
