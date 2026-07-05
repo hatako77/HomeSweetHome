@@ -1,0 +1,44 @@
+#include "Web/ApiIO.h"
+
+#include <ArduinoJson.h>
+
+#include "Web/WebServerService.h"
+#include "IO/IOManager.h"
+
+namespace ApiIO
+{
+
+void registerRoutes(WebServerService& web)
+{
+    auto& server = web.server();
+
+    server.on("/api/io", HTTP_GET, [&server]()
+    {
+        JsonDocument doc;
+        JsonArray arr = doc.to<JsonArray>();
+
+        for (uint8_t i = 0; i < ioManager.count(); i++)
+        {
+            IOChannel* ch = ioManager.get(i);
+
+            JsonObject obj = arr.add<JsonObject>();
+
+            obj["id"] = i;
+            obj["name"] = ch->name;
+            obj["state"] = ch->state;
+            obj["enabled"] = ch->enabled;
+            obj["activeLow"] = ch->activeLow;
+            obj["type"] =
+                ch->type == IOType::DigitalOutput ?
+                "output" :
+                "input";
+        }
+
+        String out;
+        serializeJson(doc, out);
+
+        server.send(200, "application/json", out);
+    });
+}
+
+}
