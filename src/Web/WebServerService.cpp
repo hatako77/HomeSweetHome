@@ -1,5 +1,6 @@
 #include "Web/WebServerService.h"
 #include "Web/Pages.h"
+#include "Web/ApiVersion.h"
 
 WebServerService web;
 
