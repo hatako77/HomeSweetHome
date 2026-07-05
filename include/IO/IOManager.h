@@ -22,6 +22,7 @@ public:
 
     IOChannel* get(uint8_t id);
 
+    PCF8574Driver& getDriver();
     uint8_t count();
 
 private:
