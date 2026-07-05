@@ -3,6 +3,24 @@
 
 #include <Arduino.h>
 
+
+enum class IOIcon : uint8_t
+{
+    Light,
+    Fan,
+    Door,
+    Lock,
+    Motion,
+    Temperature,
+    Water,
+    Outlet,
+    Bell,
+    Curtain,
+    TV,
+    Generic
+};
+
+
 enum class IOType : uint8_t
 {
     DigitalInput,
@@ -12,19 +30,12 @@ enum class IOType : uint8_t
 struct IOChannel
 {
     String name;
-
-    String icon = "lightbulb";
-
+    IOIcon icon = IOIcon::Light;
     IOType type = IOType::DigitalOutput;
-
     bool state = false;
-
     bool enabled = true;
-
     bool activeLow = false;
-
     uint8_t pcf = 0;
-
     uint8_t pin = 0;
 };
 
