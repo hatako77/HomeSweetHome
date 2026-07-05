@@ -1,6 +1,7 @@
 #include "Web/WebServerService.h"
 #include "Web/Pages.h"
 #include "Web/ApiVersion.h"
+#include "Web/ApiIO.h"
 
 WebServerService web;
 
@@ -32,4 +33,5 @@ void WebServerService::registerPages()
 void WebServerService::registerApi()
 {
     ApiVersion::registerRoutes(*this);
+    ApiIO::registerRoutes(*this);
 }
