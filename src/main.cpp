@@ -221,14 +221,17 @@ void setup() {
   delay(1000);  
   ioManager.setState(0, false);
   
-  Serial.println(ioManager.get(0).pcf);
-  Serial.println(ioManager.get(0).pin);
+  ioManager.begin();
   
-  Serial.println(ioManager.get(15).pcf);
-  Serial.println(ioManager.get(15).pin);
+  delay(1000);
   
-  Serial.println(ioManager.get(63).pcf);
-  Serial.println(ioManager.get(63).pin);
+  Serial.println(ioManager.count());
+  
+  ioManager.setState(0,true);
+  
+  delay(1000);
+
+ioManager.setState(0,false);
   server.begin();
   Serial.println("HTTP server started");
 }
