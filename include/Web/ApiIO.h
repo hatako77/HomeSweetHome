@@ -6,6 +6,7 @@ class WebServerService;
 namespace ApiIO
 {
     void registerRoutes(WebServerService& web);
-}
 
+    void handleToggle(WebServerService& web);
+}
 #endif
