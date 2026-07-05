@@ -63,13 +63,20 @@ bool IOManager::write(uint8_t id, bool state)
     return true;
 }
 
-bool IOManager::getState(uint8_t id)
+bool IOManager::read(uint8_t id)
 {
     if (id >= ioCount)
         return false;
 
+    channels[id].state =
+        driver.read(
+            channels[id].pcf,
+            channels[id].pin
+        );
+
     return channels[id].state;
 }
+
 
 IOChannel* IOManager::get(uint8_t id)
 {
@@ -87,4 +94,20 @@ uint8_t IOManager::count()
 PCF8574Driver& IOManager::getDriver()
 {
     return driver;
+}
+
+
+bool IOManager::toggle(uint8_t id)
+{
+    return write(id, !read(id));
+}
+
+bool IOManager::on(uint8_t id)
+{
+    return write(id, true);
+}
+
+bool IOManager::off(uint8_t id)
+{
+    return write(id, false);
 }
