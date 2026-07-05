@@ -19,7 +19,6 @@ const char* password = "2150068486";
 // ===== Web Server =====
 WebServer server(80);
 OTAService ota;
-IOManager ioManager;
 TaskHandle_t otaTaskHandle = nullptr;
 // ===== Relay pins =====
 const int relayPins[] = {16, 17};
