@@ -169,17 +169,6 @@ void handleJS() {
   server.send_P(200, "application/javascript", APP_JS);
 }
 
-void handleVersion() {
-  StaticJsonDocument<256> doc;
-  doc["app"] = APP_NAME;
-  doc["version"] = APP_VERSION;
-  doc["build"] = APP_BUILD;
-
-  String out;
-  serializeJson(doc, out);
-
-  server.send(200, "application/json", out);
-}
 
 void handleRelay() {
   if (!server.hasArg("ch")) {
@@ -236,7 +225,6 @@ void setup() {
   server.on("/", handleRoot);
   server.on("/style.css", handleCSS);
   server.on("/app.js", handleJS);
-  server.on("/version", handleVersion);
   server.on("/relay", handleRelay);
   server.on("/update", handleUpdate);
   server.on("/ota", []() {
