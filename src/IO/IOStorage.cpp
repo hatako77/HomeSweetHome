@@ -26,7 +26,7 @@ bool IOStorage::save()
         o["enabled"] = ch->enabled;
         o["activeLow"] = ch->activeLow;
         o["type"] = (uint8_t)ch->type;
-        o["icon"] = ch->icon;
+        o["icon"] = (uint8_t)ch->icon;
     }
 
     serializeJson(doc, f);
@@ -65,7 +65,7 @@ bool IOStorage::load()
         ch->enabled = o["enabled"] | true;
         ch->activeLow = o["activeLow"] | false;
         ch->type = (IOType)(uint8_t)(o["type"] | 1);
-        ch->icon = o["icon"] | "lightbulb";
+        ch->icon = (IOIcon)(uint8_t)(o["icon"] | 0);
         i++;
     }
 
