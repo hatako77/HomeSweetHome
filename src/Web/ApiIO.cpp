@@ -63,7 +63,7 @@ void registerRoutes(WebServerService& web)
             obj["state"] = ch->state;
             obj["enabled"] = ch->enabled;
             obj["activeLow"] = ch->activeLow;
-            obj["icon"] = ch->icon;
+            obj["icon"] = (uint8_t)ch->icon;
             obj["pcf"] = ch->pcf;
             obj["pin"] = ch->pin;
             obj["type"] =
