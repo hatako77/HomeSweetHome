@@ -5,8 +5,8 @@
 
 enum class IOType : uint8_t
 {
-    INPUT,
-    OUTPUT
+    DigitalInput,
+    DigitalOutput
 };
 
 struct IOChannel
