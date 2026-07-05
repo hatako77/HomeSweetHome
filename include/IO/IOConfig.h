@@ -3,42 +3,27 @@
 
 #include <Arduino.h>
 
-enum class IOMode : uint8_t
+enum class IOType : uint8_t
 {
-    Input = 0,
-    Output = 1
+    INPUT,
+    OUTPUT
 };
 
-enum class IOIcon : uint8_t
+struct IOChannel
 {
-    Generic = 0,
-    Light,
-    Fan,
-    Door,
-    Window,
-    Motion,
-    Smoke,
-    Water,
-    Button
-};
+    String name;
 
-struct IOConfig
-{
-    bool enabled = false;
+    IOType type;
 
-    String name = "";
+    bool state;
 
-    IOMode mode = IOMode::Output;
+    bool activeLow;
 
-    IOIcon icon = IOIcon::Generic;
+    bool enabled;
 
-    bool invert = false;
+    uint8_t pcf;
 
-    bool state = false;
-
-    uint8_t pcf = 0;
-
-    uint8_t pin = 0;
+    uint8_t pin;
 };
 
 #endif
