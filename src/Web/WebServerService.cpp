@@ -7,6 +7,7 @@
 
 
 WebServerService web;
+extern OTAService ota;
 
 void WebServerService::begin()
 {
@@ -14,7 +15,7 @@ void WebServerService::begin()
     registerApi();
 
     webServer.begin();
-
+     ota.registerRoutes(webServer); 
     Serial.println("WebServer started");
 }
 
