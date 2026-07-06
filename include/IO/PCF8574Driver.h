@@ -22,7 +22,7 @@ uint8_t deviceCount() override;
 private:
     PCF8574* pcf[DEVICE_COUNT];
     bool connected[DEVICE_COUNT];
-    uint8_t deviceCount = 0;
+    uint8_t deviceCountValue = 0;
 };
 
 #endif
