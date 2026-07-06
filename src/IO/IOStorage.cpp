@@ -27,6 +27,9 @@ bool IOStorage::save()
         o["activeLow"] = ch->activeLow;
         o["type"] = (uint8_t)ch->type;
         o["icon"] = (uint8_t)ch->icon;
+        o["favorite"] = ch->favorite;
+        o["roomId"] = ch->roomId;
+        o["groupId"] = ch->groupId;
     }
 
     serializeJson(doc, f);
@@ -66,6 +69,9 @@ bool IOStorage::load()
         ch->activeLow = o["activeLow"] | false;
         ch->type = (IOType)(uint8_t)(o["type"] | 1);
         ch->icon = (IOIcon)(uint8_t)(o["icon"] | 0);
+        ch->favorite = o["favorite"] | false;
+        ch->roomId = o["roomId"] | 0;
+        ch->groupId = o["groupId"] | 0;
         i++;
     }
 
