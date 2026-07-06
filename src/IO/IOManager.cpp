@@ -33,7 +33,7 @@ void IOManager::begin()
             ch.enabled = true;
             ch.activeLow = false;
 
-            ch.driver = drv;
+            ch.driverId = d;
             ch.device = device;
             ch.pin = pin;
 
@@ -59,7 +59,12 @@ void IOManager::update()
 
     for (uint8_t i = 0; i < ioCount; i++)
     {
-        bool state = channels[i].driver->read(
+        IIODriver* drv = getDriver(channels[i].driverId);
+        
+        if (!drv)
+            continue;
+        
+        bool state = drv->read(
             channels[i].device,
             channels[i].pin
         );
@@ -79,7 +84,10 @@ bool IOManager::write(uint8_t id, bool state)
     bool hwState = state;
     if (channels[id].activeLow)
         hwState = !hwState;
-    channels[id].driver->write(
+    IIODriver* drv = getDriver(channels[id].driverId);
+    if (!drv)
+        return false;    
+    drv->write(
         channels[id].device,
         channels[id].pin,
         hwState
@@ -128,4 +136,11 @@ bool IOManager::on(uint8_t id)
 bool IOManager::off(uint8_t id)
 {
     return write(id, false);
+}
+IIODriver* IOManager::getDriver(uint8_t driverId)
+{
+    if (driverId >= driverCount)
+        return nullptr;
+
+    return drivers[driverId];
 }
