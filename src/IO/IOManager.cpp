@@ -23,7 +23,7 @@ void IOManager::begin()
             channels[ioCount].favorite = false;
             channels[ioCount].roomId = 0;
             channels[ioCount].groupId = 0;
-            channels[ioCount]channels[...] = p;
+            channels[ioCount].device = p;
             channels[ioCount].pin = pin;
             channels[ioCount].driver = driver;
 
