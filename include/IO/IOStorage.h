@@ -1,5 +1,6 @@
 #ifndef IO_STORAGE_H
 #define IO_STORAGE_H
+class IOManager;
 
 class IOStorage
 {
