@@ -30,7 +30,12 @@ enum class IOType : uint8_t
     Virtual,
     Disabled
 };
-
+struct IOAddress
+{
+    uint8_t driverId;
+    uint8_t device;
+    uint8_t pin;
+};
 struct IOChannel
 {
     uint16_t id;
