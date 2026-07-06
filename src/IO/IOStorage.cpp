@@ -1,5 +1,6 @@
 #include "IO/IOStorage.h"
-
+#include "IO/TypeHelper.h"
+#include "IO/IconHelper.h"
 #include <LittleFS.h>
 #include <ArduinoJson.h>
 
@@ -62,7 +63,7 @@ bool IOStorage::load()
         if (i >= ioManager.count())
             break;
 
-        auto* ch = ioManager.get(i);
+        auto* ch = ioManager.getChannel(i);
 
         ch->name = o["name"] | ch->name;
         ch->enabled = o["enabled"] | true;
