@@ -11,13 +11,20 @@ void IOManager::begin()
         drivers[i]->begin();
     }
     ioCount = 0;
-    for (uint8_t p = 0; p < PCF8574Driver::DEVICE_COUNT; p++)
+
+    for (uint8_t d = 0; d < driverCount; d++)
+{
+    IIODriver* drv = drivers[d];
+
+    for (uint8_t device = 0; device < drv->deviceCount(); device++)
     {
-        if (!pcfDriver.isConnected(p))
+        if (!drv->isConnected(device))
             continue;
-        for (uint8_t pin = 0; pin < 8; pin++)
+
+        for (uint8_t pin = 0; pin < drv->pinCount(device); pin++)
         {
-            IOChannel ch;            
+            IOChannel ch;
+
             ch.id = ioCount;
             ch.name = "IO " + String(ioCount + 1);
             ch.icon = IOIcon::Light;
@@ -25,18 +32,19 @@ void IOManager::begin()
             ch.state = false;
             ch.enabled = true;
             ch.activeLow = false;
-            
-            ch.driver = drivers[0];
-            ch.device = p;
+
+            ch.driver = drv;
+            ch.device = device;
             ch.pin = pin;
-            
+
             ch.roomId = 0;
             ch.groupId = 0;
             ch.favorite = false;
-            
+
             registerChannel(ch);
         }
     }
+}
 
     Serial.print("IO Count: ");
     Serial.println(ioCount);
