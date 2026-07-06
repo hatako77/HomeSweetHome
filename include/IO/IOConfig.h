@@ -46,7 +46,6 @@ struct IOChannel
     bool favorite;
     IIODriver* driver;
     uint8_t device;
-    bool activeLow;
 };
 
 #endif
