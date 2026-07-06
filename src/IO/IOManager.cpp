@@ -33,9 +33,9 @@ void IOManager::begin()
             ch.enabled = true;
             ch.activeLow = false;
 
-            ch.driverId = d;
-            ch.device = device;
-            ch.pin = pin;
+            ch.address.driverId = d;
+            ch.address.device = device;
+            ch.address.pin = pin;
 
             ch.roomId = 0;
             ch.groupId = 0;
@@ -59,14 +59,14 @@ void IOManager::update()
 
     for (uint8_t i = 0; i < ioCount; i++)
     {
-        IIODriver* drv = getDriver(channels[i].driverId);
+        IIODriver* drv = getDriver(channels[i].address.driverId);
         
         if (!drv)
             continue;
         
         bool state = drv->read(
-            channels[i].device,
-            channels[i].pin
+            channels[i].address.device,
+            channels[i].address.pin
         );
         if (channels[i].activeLow)
             state = !state;
@@ -84,12 +84,12 @@ bool IOManager::write(uint8_t id, bool state)
     bool hwState = state;
     if (channels[id].activeLow)
         hwState = !hwState;
-    IIODriver* drv = getDriver(channels[id].driverId);
+    IIODriver* drv = getDriver(channels[id].address.driverId);
     if (!drv)
         return false;    
     drv->write(
-        channels[id].device,
-        channels[id].pin,
+        channels[id].address.device,
+        channels[id].address.pin,
         hwState
     );
     return true;
