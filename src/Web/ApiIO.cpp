@@ -125,9 +125,9 @@ void registerRoutes(WebServerService& web)
 
             obj["roomId"] = ch->roomId;
             obj["groupId"] = ch->groupId;
-
-            obj["device"] = ch->device;
-            obj["pin"] = ch->pin;
+            obj["driverId"] = ch->address.driverId;
+            obj["device"] = ch->address.device;
+            obj["pin"] = ch->address.pin;
         }
 
         String out;
