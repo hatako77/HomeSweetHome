@@ -15,7 +15,6 @@ void WebServerService::begin()
     registerApi();
 
     webServer.begin();
-     ota.registerRoutes(webServer); 
     Serial.println("WebServer started");
 }
 
