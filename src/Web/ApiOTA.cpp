@@ -51,19 +51,19 @@ void registerRoutes(WebServerService& web)
         server.send(200, "application/json", out);
     });
 
-    server.on("/api/ota/update", HTTP_POST, [&server]()
-    {
-        server.send(200, "text/plain", "OTA STARTED");
-    
-        xTaskCreate([](void*)
+        server.on("/api/ota/update", HTTP_POST, [&server]()
         {
-            bool ok = ota.updateFirmware();
-    
-            Serial.println(ok ? "OTA OK" : "OTA FAILED");
-    
-            vTaskDelete(NULL);
-        }, "ota_task", 8192, NULL, 1, NULL);
-    });
+            server.send(200, "text/plain", "OTA STARTED");
+        
+            xTaskCreate([](void*)
+            {
+                bool ok = ota.updateFirmware();
+        
+                Serial.println(ok ? "OTA OK" : "OTA FAILED");
+        
+                vTaskDelete(NULL);
+            }, "ota_task", 8192, NULL, 1, NULL);
+        });
 
-}
+    }
 }
