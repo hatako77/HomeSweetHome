@@ -14,7 +14,7 @@ public:
     static const uint8_t MAX_IO = 64;
     bool registerChannel(const IOChannel& channel);
     bool write(uint8_t id, bool state);    
-    bool read(uint8_t id);    
+    bool read(uint8_t id) const;    
     bool on(uint8_t id);    
     bool off(uint8_t id);    
     bool toggle(uint8_t id);
