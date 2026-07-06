@@ -4,7 +4,7 @@ bool PCF8574Driver::begin()
 {
     Wire.begin(16, 17);
 
-    deviceCount = 0;
+    deviceCountValue = 0;
 
     Serial.println("Scanning I2C...");
 
