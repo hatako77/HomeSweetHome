@@ -21,7 +21,7 @@ public:
     void begin();
     void update();
     IOChannel* get(uint8_t id);
-    uint8_t count();
+    uint8_t count() const;
     IIODriver* getDriver(uint8_t driverId);
 private:
 static const uint8_t MAX_DRIVERS = 8;
