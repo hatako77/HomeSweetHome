@@ -44,8 +44,9 @@ void registerRoutes(WebServerService& web)
             ch->name = o["name"] | ch->name;
             ch->enabled = o["enabled"] | true;
             ch->activeLow = o["activeLow"] | false;
-            ch->type = (IOType)(uint8_t)(o["type"] | 1);
-
+            IOType type;
+            if (typeFromValue(o["type"] | 1, type))
+                ch->type = type;
             i++;
         }
 
