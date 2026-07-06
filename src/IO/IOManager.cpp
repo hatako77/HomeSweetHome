@@ -17,20 +17,24 @@ void IOManager::begin()
             continue;
         for (uint8_t pin = 0; pin < 8; pin++)
         {
-            channels[ioCount].name = "IO " + String(ioCount + 1);
-            channels[ioCount].type = IOType::DigitalOutput;
-            channels[ioCount].state = false;
-            channels[ioCount].activeLow = false;
-            channels[ioCount].enabled = true;
-            channels[ioCount].id = ioCount;
-            channels[ioCount].icon = IOIcon::Light;
-            channels[ioCount].favorite = false;
-            channels[ioCount].roomId = 0;
-            channels[ioCount].groupId = 0;
-            channels[ioCount].device = p;
-            channels[ioCount].pin = pin;
-            channels[ioCount].driver = drivers[0];
-            ioCount++;
+            IOChannel ch;            
+            ch.id = ioCount;
+            ch.name = "IO " + String(ioCount + 1);
+            ch.icon = IOIcon::Light;
+            ch.type = IOType::DigitalOutput;
+            ch.state = false;
+            ch.enabled = true;
+            ch.activeLow = false;
+            
+            ch.driver = drivers[0];
+            ch.device = p;
+            ch.pin = pin;
+            
+            ch.roomId = 0;
+            ch.groupId = 0;
+            ch.favorite = false;
+            
+            registerChannel(ch);
         }
     }
 
@@ -91,6 +95,16 @@ IOChannel* IOManager::get(uint8_t id)
 uint8_t IOManager::count()
 {
     return ioCount;
+}
+
+bool IOManager::registerChannel(const IOChannel& channel)
+{
+    if (ioCount >= MAX_IO)
+        return false;
+
+    channels[ioCount++] = channel;
+
+    return true;
 }
 
 PCF8574Driver& IOManager::getDriver()
