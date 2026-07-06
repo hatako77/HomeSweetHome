@@ -11,7 +11,7 @@
 const char* ssid = "Ali TT";
 const char* password = "2150068486";
 // =========================
-extern OTAService ota;
+OTAService ota;
 // =========================
 void setup()
 {
