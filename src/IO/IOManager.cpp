@@ -20,9 +20,15 @@ void IOManager::begin()
             channels[ioCount].state = false;
             channels[ioCount].activeLow = false;
             channels[ioCount].enabled = true;
-            channels[ioCount].pcf = p;
+            channels[ioCount].id = ioCount;
+            channels[ioCount].icon = IOIcon::Light;
+            channels[ioCount].favorite = false;
+            channels[ioCount].roomId = 0;
+            channels[ioCount].groupId = 0;
+            
+            channels[ioCount].board = p;
+            channels[ioCount].address = 0x20 + p;
             channels[ioCount].pin = pin;
-
             ioCount++;
         }
     }
@@ -41,7 +47,7 @@ void IOManager::update()
             continue;
 
         channels[i].state = driver.read(
-            channels[i].pcf,
+            channels[i].board,
             channels[i].pin
         );
     }
@@ -55,7 +61,7 @@ bool IOManager::write(uint8_t id, bool state)
     channels[id].state = state;
 
     driver.write(
-        channels[id].pcf,
+        channels[id].board,
         channels[id].pin,
         state
     );
@@ -70,7 +76,7 @@ bool IOManager::read(uint8_t id)
 
     channels[id].state =
         driver.read(
-            channels[id].pcf,
+            channels[id].board,
             channels[id].pin
         );
 
