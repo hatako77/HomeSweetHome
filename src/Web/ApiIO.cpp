@@ -67,9 +67,9 @@ void registerRoutes(WebServerService& web)
             return;
         }
 
-        bool state = !ioManager.getState(id);
+        bool state = !ioManager.read(id);
 
-        ioManager.setState(id,state);
+        ioManager.write(id,state);
 
         server.send(200,"text/plain",state ? "ON" : "OFF");
     });
@@ -113,7 +113,7 @@ void registerRoutes(WebServerService& web)
             obj["id"] = i;
             obj["name"] = ch->name;
 
-            obj["state"] = ioManager.getState(i);
+            obj["state"] = ioManager.read(i);
 
             obj["enabled"] = ch->enabled;
             obj["activeLow"] = ch->activeLow;
@@ -127,7 +127,6 @@ void registerRoutes(WebServerService& web)
             obj["groupId"] = ch->groupId;
 
             obj["board"] = ch->board;
-            obj["address"] = ch->address;
             obj["pin"] = ch->pin;
         }
 
