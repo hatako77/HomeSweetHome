@@ -11,7 +11,7 @@
 class IOManager
 {
 public:
-    static const uint8_t MAX_IO = 64;
+    static constexpr uint8_t MAX_IO = 64;
     bool registerChannel(const IOChannel& channel);
     bool write(uint8_t id, bool state);    
     bool read(uint8_t id) const;    
@@ -24,7 +24,7 @@ public:
     uint8_t count() const;
     IIODriver* getDriver(uint8_t driverId);
 private:
-static const uint8_t MAX_DRIVERS = 8;
+static constexpr uint8_t MAX_DRIVERS = 8;
 IIODriver* drivers[MAX_DRIVERS];
 uint8_t driverCount = 0;
 PCF8574Driver pcfDriver;
