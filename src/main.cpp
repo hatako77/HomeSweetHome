@@ -37,7 +37,7 @@ void setup()
         Serial.println("LittleFS mount failed");
     }
     ioManager.begin();
-    IOStorage::load();
+    IOStorage::load(ioManager);
     web.begin();
     Serial.println("System Ready");
 }
