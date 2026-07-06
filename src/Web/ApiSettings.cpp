@@ -39,7 +39,7 @@ void registerRoutes(WebServerService& web)
             if (i >= ioManager.count())
                 break;
 
-            IOChannel* ch = ioManager.get(i);
+            IOChannel* ch = ioManager.getChannel(i);
 
             ch->name = o["name"] | ch->name;
             ch->enabled = o["enabled"] | true;
