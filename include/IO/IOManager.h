@@ -24,10 +24,8 @@ public:
 
     void update();
 
-    bool setState(uint8_t id,bool state);
-
-    bool getState(uint8_t id);
-
+bool setState(uint8_t id, bool state);
+bool getState(uint8_t id);
     IOChannel* get(uint8_t id);
 
     PCF8574Driver& getDriver();
