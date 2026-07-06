@@ -5,6 +5,7 @@
 #include "Web/ApiOTA.h"
 #include "Web/ApiSettings.h"
 #include "OTA/OTAService.h"
+#include "Web/ApiRoom.h"
 
 WebServerService web;
 extern OTAService ota;
