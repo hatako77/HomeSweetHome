@@ -51,7 +51,7 @@ void registerRoutes(WebServerService& web)
         server.send(200, "application/json", out);
     });
 
-    server.on("/api/ota/update", HTTP_POST, []()
+    server.on("/api/ota/update", HTTP_POST, [&server]()
     {
         server.send(200, "text/plain", "OTA STARTED");
     
