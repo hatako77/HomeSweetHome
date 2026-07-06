@@ -40,5 +40,5 @@ void WebServerService::registerApi()
     ApiIO::registerRoutes(*this);
     ApiOTA::registerRoutes(*this);
     ApiSettings::registerRoutes(*this);
-    ApiRoom::registerRoutes(this);
+    ApiRoom::registerRoutes(*this);
 }
