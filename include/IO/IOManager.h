@@ -11,6 +11,7 @@
 class IOManager
 {
 public:
+    uint8_t countByRoom(uint8_t roomId) const;
     static constexpr uint8_t MAX_IO = 64;
     bool registerChannel(const IOChannel& channel);
     bool write(uint8_t id, bool state);    
