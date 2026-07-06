@@ -40,7 +40,10 @@ void IOManager::begin()
 
 void IOManager::update()
 {
-    driver->update();
+    for (uint8_t i = 0; i < driverCount; i++)
+    {
+        drivers[i]->update();
+    }
 
     for (uint8_t i = 0; i < ioCount; i++)
     {
