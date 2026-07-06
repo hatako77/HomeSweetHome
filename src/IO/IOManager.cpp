@@ -101,14 +101,33 @@ PCF8574Driver& IOManager::getDriver()
 {
     return driver;
 }
-bool IOManager::getState(uint8_t pin) {
-    return digitalRead(pin);
-}
+bool IOManager::getState(uint8_t id)
+{
+    if (id >= ioCount)
+        return false;
 
-void IOManager::setState(uint8_t pin, bool state) {
-    digitalWrite(pin, state);
-}
+    channels[id].state = driver.read(
+        channels[id].board,
+        channels[id].pin
+    );
 
+    return channels[id].state;
+}
+bool IOManager::setState(uint8_t id, bool state)
+{
+    if (id >= ioCount)
+        return false;
+
+    channels[id].state = state;
+
+    driver.write(
+        channels[id].board,
+        channels[id].pin,
+        state
+    );
+
+    return true;
+}
 bool IOManager::toggle(uint8_t id)
 {
     return write(id, !read(id));
