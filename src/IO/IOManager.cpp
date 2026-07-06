@@ -152,3 +152,15 @@ IIODriver* IOManager::getDriver(uint8_t driverId)
 
     return drivers[driverId];
 }
+uint8_t IOManager::countByRoom(uint8_t roomId) const
+{
+    uint8_t count = 0;
+
+    for (uint8_t i = 0; i < ioCount; i++)
+    {
+        if (channels[i].roomId == roomId)
+            count++;
+    }
+
+    return count;
+}
