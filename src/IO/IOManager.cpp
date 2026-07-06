@@ -94,7 +94,7 @@ bool IOManager::write(uint8_t id, bool state)
     );
     return true;
 }
-bool IOManager::read(uint8_t id)
+bool IOManager::read(uint8_t id) const
 {
     if (id >= ioCount)
         return false;
@@ -108,7 +108,7 @@ IOChannel* IOManager::get(uint8_t id)
     return &channels[id];
 }
 
-uint8_t IOManager::count()
+uint8_t IOManager::count() const
 {
     return ioCount;
 }
