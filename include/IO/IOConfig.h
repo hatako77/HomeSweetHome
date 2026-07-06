@@ -44,7 +44,7 @@ struct IOChannel
     uint8_t roomId;
     uint8_t groupId;
     bool favorite;
-    IIODriver* driver;
+    uint8_t driverId;
     uint8_t device;
 };
 
