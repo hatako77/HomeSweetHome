@@ -4,15 +4,13 @@ IOManager ioManager;
 
 void IOManager::begin()
 {
-    driver.begin();
-
+    driver = &pcfDriver;
+    driver->begin();
     ioCount = 0;
-
     for (uint8_t p = 0; p < PCF8574Driver::DEVICE_COUNT; p++)
     {
-        if (!driver.isConnected(p))
+        if (!driver->isConnected(p))
             continue;
-
         for (uint8_t pin = 0; pin < 8; pin++)
         {
             channels[ioCount].name = "IO " + String(ioCount + 1);
@@ -37,11 +35,11 @@ void IOManager::begin()
 
 void IOManager::update()
 {
-    driver.update();
+    driver->update();
 
     for (uint8_t i = 0; i < ioCount; i++)
     {
-        bool state = driver.read(
+        bool state = driver->read(
             channels[i].board,
             channels[i].pin
         );
@@ -62,7 +60,7 @@ bool IOManager::write(uint8_t id, bool state)
     bool hwState = state;
     if (channels[id].activeLow)
         hwState = !hwState;
-    driver.write(
+    driver->write(
         channels[id].board,
         channels[id].pin,
         hwState
@@ -90,7 +88,7 @@ uint8_t IOManager::count()
 
 PCF8574Driver& IOManager::getDriver()
 {
-    return driver;
+    return pcfDriver;
 }
 bool IOManager::toggle(uint8_t id)
 {
