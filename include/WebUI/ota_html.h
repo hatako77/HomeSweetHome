@@ -263,12 +263,12 @@ async function checkVersion() {
 
     try {
 
-        const current = await fetch("/version");
+        const current = await fetch("/api/ota/version");
         const c = await current.json();
 
         document.getElementById("current").innerHTML = c.version;
 
-        const remote = await fetch("/ota-version");
+        const remote = await fetch("/api/ota-version");
         const r = await remote.json();
 
         document.getElementById("remote").innerHTML = r.version;
@@ -300,7 +300,7 @@ async function startOTA(){
     document.getElementById("error").classList.add("hidden");
     document.getElementById("success").classList.add("hidden");
 
-    await fetch("/update");
+    await fetch("/api/update");
 
     statusTimer=setInterval(updateStatus,250);
 
@@ -311,7 +311,7 @@ async function updateStatus(){
 
     try{
 
-        const res=await fetch("/ota-status");
+        const res=await fetch("/api/ota-status");
 
         const s=await res.json();
 
