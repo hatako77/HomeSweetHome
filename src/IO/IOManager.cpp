@@ -101,7 +101,13 @@ PCF8574Driver& IOManager::getDriver()
 {
     return driver;
 }
+bool IOManager::getState(uint8_t pin) {
+    return digitalRead(pin);
+}
 
+void IOManager::setState(uint8_t pin, bool state) {
+    digitalWrite(pin, state);
+}
 
 bool IOManager::toggle(uint8_t id)
 {
