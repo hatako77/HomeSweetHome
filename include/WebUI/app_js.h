@@ -5,22 +5,74 @@
 
 const char APP_JS[] PROGMEM = R"rawliteral(
 
-function toggleRelay(id) {
-    fetch("/relay?ch=" + id)
-      .then(res => res.text())
-      .then(data => console.log(data));
+async function loadVersion()
+{
+    try
+    {
+        const res = await fetch("/api/ota/version");
+        const data = await res.json();
+
+        const el = document.getElementById("version");
+
+        if(el)
+            el.innerText = "Version: " + data.current;
+    }
+    catch(e)
+    {
+        console.log(e);
+    }
 }
 
-function loadVersion() {
-    fetch("/version")
-      .then(res => res.json())
-      .then(data => {
-          document.getElementById("version").innerText =
-            "Version: " + data.version + " (build " + data.build + ")";
-      });
+async function loadIO()
+{
+    try
+    {
+        const res = await fetch("/api/io");
+        const list = await res.json();
+
+        const container = document.getElementById("ioContainer");
+
+        if(!container)
+            return;
+
+        container.innerHTML = "";
+
+        list.forEach(io =>
+        {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            card.innerHTML = `
+                <div class="title">${io.name}</div>
+                <div class="state">${io.state ? "ON" : "OFF"}</div>
+            `;
+
+            if(io.state)
+                card.classList.add("on");
+
+            card.onclick = async () =>
+            {
+                await fetch("/api/io/toggle?id=" + io.id,{
+                    method:"POST"
+                });
+
+                loadIO();
+            };
+
+            container.appendChild(card);
+        });
+    }
+    catch(e)
+    {
+        console.log(e);
+    }
 }
 
-loadVersion();
+window.onload = function()
+{
+    loadVersion();
+    loadIO();
+};
 
 )rawliteral";
 
