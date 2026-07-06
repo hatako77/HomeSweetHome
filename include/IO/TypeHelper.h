@@ -16,5 +16,12 @@ inline const char* typeName(IOType type)
         default:                    return "Unknown";
     }
 }
+inline bool typeFromValue(uint8_t value, IOType& type)
+{
+    if (value >= static_cast<uint8_t>(IOType::Count))
+        return false;
 
+    type = static_cast<IOType>(value);
+    return true;
+}
 #endif
