@@ -4,7 +4,9 @@
 #include <Arduino.h>
 
 #include "IO/IOConfig.h"
+#include "IO/IIODriver.h"
 #include "IO/PCF8574Driver.h"
+
 
 class IOManager
 {
@@ -21,8 +23,9 @@ public:
     PCF8574Driver& getDriver();
     uint8_t count();
 private:
-    PCF8574Driver driver;
-    IOChannel channels[MAX_IO];
+IIODriver* driver = nullptr;
+PCF8574Driver pcfDriver;
+IOChannel channels[MAX_IO];
     uint8_t ioCount = 0;
 };
 extern IOManager ioManager;
