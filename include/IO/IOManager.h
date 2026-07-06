@@ -12,6 +12,7 @@ class IOManager
 {
 public:
     static const uint8_t MAX_IO = 64;
+    bool registerChannel(const IOChannel& channel);
     bool write(uint8_t id, bool state);    
     bool read(uint8_t id);    
     bool on(uint8_t id);    
