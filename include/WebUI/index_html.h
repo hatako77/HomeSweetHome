@@ -6,6 +6,7 @@
 const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,37 +14,45 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <title>HomeSweetHome</title>
 
 <link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 
 <body>
 
+<!-- TOP BAR -->
 <header class="topbar">
-  <div class="logo">🏠 HomeSweetHome</div>
-  <div class="status" id="status">● Online</div>
+  <div class="logo">
+    <i class="fa-solid fa-house"></i> HomeSweetHome
+  </div>
+
+  <div class="status online">
+    <i class="fa-solid fa-circle"></i> Online
+  </div>
 </header>
 
 <main class="container">
 
-<!-- System Card -->
-<section class="card glass">
-  <h2>System Status</h2>
+<!-- SYSTEM CARD -->
+<section class="card glow">
+  <h2><i class="fa-solid fa-microchip"></i> System</h2>
 
-  <div class="row">
-    <span>Device:</span>
-    <span>Running</span>
+  <div class="info">
+    <div><i class="fa-solid fa-bolt"></i> Device: Running</div>
+    <div><i class="fa-solid fa-code-branch"></i> Version: <span id="version">...</span></div>
   </div>
 
-  <div class="row">
-    <span>Firmware:</span>
-    <span id="version">...</span>
-  </div>
-
-  <a class="btn" href="/ota">Firmware Update</a>
+  <a class="btn" href="/ota">
+    <i class="fa-solid fa-upload"></i> Firmware Update
+  </a>
 </section>
 
-<!-- Devices -->
+<!-- IO DEVICES -->
 <section>
-  <h2 class="section-title">Devices</h2>
+  <h2 class="section-title">
+    <i class="fa-solid fa-plug"></i> Devices
+  </h2>
+
   <div id="ioContainer" class="grid"></div>
 </section>
 
@@ -53,6 +62,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 
 </body>
 </html>
+
 )rawliteral";
 
 #endif
