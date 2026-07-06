@@ -103,6 +103,12 @@ bool IOManager::read(uint8_t id) const
     return channels[id].state;
 }
 
+IOChannel* IOManager::getChannel(uint8_t id) 
+{
+    if (id >= ioCount)
+        return nullptr;
+    return &channels[id];
+}
 IOChannel* IOManager::getChannel(uint8_t id) const
 {
     if (id >= ioCount)
