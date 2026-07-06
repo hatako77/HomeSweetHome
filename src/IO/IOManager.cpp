@@ -25,9 +25,7 @@ void IOManager::begin()
             channels[ioCount].favorite = false;
             channels[ioCount].roomId = 0;
             channels[ioCount].groupId = 0;
-            
             channels[ioCount].board = p;
-            channels[ioCount].address = 0x20 + p;
             channels[ioCount].pin = pin;
             ioCount++;
         }
