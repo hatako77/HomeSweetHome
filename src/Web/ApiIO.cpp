@@ -2,7 +2,7 @@
 
 #include <ArduinoJson.h>
 
-#include "Web/WebServerService.h"
+#include <WebServer.h>
 #include "IO/IOManager.h"
 
 namespace
