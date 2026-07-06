@@ -58,23 +58,23 @@ bool IOManager::write(uint8_t id, bool state)
 {
     if (id >= ioCount)
         return false;
-
+    if (channels[id].type != IOType::DigitalOutput)
+        return false;
     channels[id].state = state;
-
+    bool hwState = state;
+    if (channels[id].activeLow)
+        hwState = !hwState;
     driver.write(
         channels[id].board,
         channels[id].pin,
-        state
+        hwState
     );
-
     return true;
 }
-
 bool IOManager::read(uint8_t id)
 {
     if (id >= ioCount)
         return false;
-
     return channels[id].state;
 }
 
@@ -82,7 +82,6 @@ IOChannel* IOManager::get(uint8_t id)
 {
     if (id >= ioCount)
         return nullptr;
-
     return &channels[id];
 }
 
