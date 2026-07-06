@@ -67,8 +67,11 @@ bool IOStorage::load()
         ch->name = o["name"] | ch->name;
         ch->enabled = o["enabled"] | true;
         ch->activeLow = o["activeLow"] | false;
-        ch->type = (IOType)(uint8_t)(o["type"] | 1);
-        ch->icon = (IOIcon)(uint8_t)(o["icon"] | 0);
+        IOType type;
+        if (typeFromValue(o["type"] | 1, type))
+            ch->type = type;
+        if (typeFromValue(o["icon"] | 1, icon))
+            ch->icon = icon;
         ch->favorite = o["favorite"] | false;
         ch->roomId = o["roomId"] | 0;
         ch->groupId = o["groupId"] | 0;
