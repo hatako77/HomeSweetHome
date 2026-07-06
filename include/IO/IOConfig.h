@@ -40,11 +40,13 @@ struct IOChannel
     bool state;
     bool enabled;
     bool activeLow;
-    uint8_t board;
     uint8_t pin;
     uint8_t roomId;
     uint8_t groupId;
     bool favorite;
+    IIODriver* driver;
+    uint8_t device;
+    bool activeLow;
 };
 
 #endif
