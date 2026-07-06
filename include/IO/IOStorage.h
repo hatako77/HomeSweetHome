@@ -4,8 +4,8 @@
 class IOStorage
 {
 public:
-    static bool load();
-    static bool save();
+static bool load(IOManager& manager);
+static bool save(const IOManager& manager);
 };
 
 #endif
