@@ -6,7 +6,7 @@
 
 #include "IO/IOManager.h"
 
-bool IOStorage::save()
+bool IOStorage::save(const IOManager& manager)
 {
     File f = LittleFS.open("/io.json", "w");
 
@@ -42,7 +42,7 @@ bool IOStorage::save()
     return true;
 }
 
-bool IOStorage::load()
+bool IOStorage::load(IOManager& manager)
 {
     if (!LittleFS.exists("/io.json"))
         return false;
