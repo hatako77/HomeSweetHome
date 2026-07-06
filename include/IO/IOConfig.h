@@ -41,7 +41,6 @@ struct IOChannel
     bool enabled;
     bool activeLow;
     uint8_t board;
-    uint8_t address;
     uint8_t pin;
     uint8_t roomId;
     uint8_t groupId;
