@@ -27,7 +27,9 @@ void IOManager::begin()
 
             ch.id = ioCount;
             ch.name = "IO " + String(ioCount + 1);
+            // TODO: Load icon from storage.
             ch.icon = IOIcon::Light;
+            // TODO: Load channel configuration from storage.
             ch.type = IOType::DigitalOutput;
             ch.state = false;
             ch.enabled = true;
