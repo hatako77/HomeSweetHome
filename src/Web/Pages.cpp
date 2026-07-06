@@ -11,12 +11,12 @@ void registerRoutes(WebServerService& web)
 {
     auto& server = web.server();
 
-    server.on("/", HTTP_GET, []()
+    server.on("/", HTTP_GET, [&]()
     {
         server.send_P(200, "text/html", INDEX_HTML);
     });
 
-    server.on("/ota", HTTP_GET, []()
+    server.on("/ota", HTTP_GET, [&]()
     {
         server.send_P(200, "text/html", OTA_HTML);
     });
