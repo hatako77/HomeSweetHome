@@ -259,37 +259,33 @@ let rebootTimer = null;
 let statusTimer = null;
 
 // ==========================
-async function checkVersion() {
-
-    try {
-
-        const current = await fetch("/api/ota/version");
-        const c = await current.json();
+async function checkVersion()
+{
+    try
+    {
+        const res = await fetch("/api/ota/version");
+        const r = await res.json();
 
         document.getElementById("current").innerHTML = r.current;
-
-        const r = await current.json();
-
         document.getElementById("remote").innerHTML = r.remote;
-        if(r.version != "" && r.version != c.version){
 
+        if(r.update)
+        {
             document.getElementById("updateBtn").disabled = false;
-            document.getElementById("message").innerHTML="New firmware available";
-
-        }else{
-
-            document.getElementById("message").innerHTML="Firmware is up to date";
-
+            document.getElementById("message").innerHTML = "New firmware available";
         }
-
-    }catch(e){
-
-        document.getElementById("message").innerHTML="Version check failed";
-
+        else
+        {
+            document.getElementById("updateBtn").disabled = true;
+            document.getElementById("message").innerHTML = "Firmware is up to date";
+        }
     }
-
+    catch(e)
+    {
+        document.getElementById("message").innerHTML = "Version check failed";
+        console.log(e);
+    }
 }
-
 // ==========================
 async function startOTA(){
 
