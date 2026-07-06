@@ -83,3 +83,10 @@ bool  PCF8574Driver::write(uint8_t index, uint8_t pin, bool state)
     pcf[index]->write(pin, state);
     return true;
 }
+uint8_t PCF8574Driver::pinCount(uint8_t device)
+{
+    if (!isConnected(device))
+        return 0;
+
+    return 8;
+}
