@@ -109,7 +109,7 @@ IOChannel* IOManager::getChannel(uint8_t id)
         return nullptr;
     return &channels[id];
 }
-IOChannel* IOManager::getChannel(uint8_t id) const
+const IOChannel* IOManager::getChannel(uint8_t id) const
 {
     if (id >= ioCount)
         return nullptr;
