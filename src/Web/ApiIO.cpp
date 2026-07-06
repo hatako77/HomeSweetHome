@@ -126,7 +126,7 @@ void registerRoutes(WebServerService& web)
             obj["roomId"] = ch->roomId;
             obj["groupId"] = ch->groupId;
 
-            obj["board"] = ch->board;
+            obj["device"] = ch->device;
             obj["pin"] = ch->pin;
         }
 
