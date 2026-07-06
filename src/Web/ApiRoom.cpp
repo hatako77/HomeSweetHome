@@ -5,10 +5,9 @@
 #include "Room/RoomManager.h"
 
 
-void ApiRoom::registerRoutes(WebServer& server)
+void ApiRoom::registerRoutes(WebServerService& web)
 {
-
-    server.on("/api/rooms", HTTP_GET, [&server]()
+    web.server().on("/api/rooms", HTTP_GET, [&web]()
     {
         JsonDocument doc;
     
@@ -31,7 +30,7 @@ void ApiRoom::registerRoutes(WebServer& server)
     
         serializeJson(doc, response);
     
-        server.send(
+        web.server().send(
             200,
             "application/json",
             response
