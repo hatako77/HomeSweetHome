@@ -17,7 +17,8 @@ enum class IOIcon : uint8_t
     Bell,
     Curtain,
     TV,
-    Generic
+    Generic,
+    Count
 };
 
 
@@ -28,7 +29,8 @@ enum class IOType : uint8_t
     AnalogInput,
     PWMOutput,
     Virtual,
-    Disabled
+    Disabled,
+    Count
 };
 struct IOAddress
 {
