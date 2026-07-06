@@ -4,8 +4,12 @@ IOManager ioManager;
 
 void IOManager::begin()
 {
-    driver = &pcfDriver;
-    driver->begin();
+    driverCount = 0;    
+    drivers[driverCount++] = &pcfDriver;    
+    for (uint8_t i = 0; i < driverCount; i++)
+    {
+        drivers[i]->begin();
+    }
     ioCount = 0;
     for (uint8_t p = 0; p < PCF8574Driver::DEVICE_COUNT; p++)
     {
