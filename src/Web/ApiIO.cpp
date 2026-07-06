@@ -59,7 +59,7 @@ void registerRoutes(WebServerService& web)
 
         uint8_t id = uri.substring(pos + 1).toInt();
 
-        IOChannel* ch = ioManager.get(id);
+        IOChannel* ch = ioManager.getChannel(id);
 
         if(ch == nullptr)
         {
