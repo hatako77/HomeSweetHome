@@ -48,9 +48,8 @@ const char* typeToString(IOType type)
 namespace ApiIO
 {
 
-void registerRoutes(WebServerService& web)
+void registerRoutes(WebServer& server)
 {
-    auto& server = web.server();
 
     server.on("^\\/api\\/io\\/([0-9]+)$", HTTP_POST, [&server]()
     {
