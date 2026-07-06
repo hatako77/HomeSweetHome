@@ -12,7 +12,7 @@ public:
 
 bool begin() override;
 void update() override;
-
+uint8_t pinCount(uint8_t device) override;
 bool isConnected(uint8_t device) override;
 bool read(uint8_t device, uint8_t pin) override;
 bool write(uint8_t device, uint8_t pin, bool state) override;
