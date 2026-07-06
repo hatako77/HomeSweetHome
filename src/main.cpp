@@ -7,6 +7,8 @@
 #include "Core/Version.h"
 #include "OTA/OTAService.h"
 #include "IO/IOManager.h"
+#include "Web/ApiIO.h"
+
 
 // Web UI
 #include "WebUI/index_html.h"
