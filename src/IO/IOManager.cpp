@@ -13,7 +13,7 @@ void IOManager::begin()
     ioCount = 0;
     for (uint8_t p = 0; p < PCF8574Driver::DEVICE_COUNT; p++)
     {
-        if (!driver->isConnected(p))
+        if (!pcfDriver->isConnected(p))
             continue;
         for (uint8_t pin = 0; pin < 8; pin++)
         {
