@@ -71,7 +71,8 @@ bool IOStorage::load()
         IOType type;
         if (typeFromValue(o["type"] | 1, type))
             ch->type = type;
-        if (typeFromValue(o["icon"] | 1, icon))
+        IOIcon icon;        
+        if (iconFromValue(o["icon"] | 0, icon))
             ch->icon = icon;
         ch->favorite = o["favorite"] | false;
         ch->roomId = o["roomId"] | 0;
