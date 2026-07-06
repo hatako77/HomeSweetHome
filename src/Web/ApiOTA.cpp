@@ -66,3 +66,4 @@ void registerRoutes(WebServerService& web)
     });
 
 }
+}
