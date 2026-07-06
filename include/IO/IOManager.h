@@ -23,7 +23,9 @@ public:
     PCF8574Driver& getDriver();
     uint8_t count();
 private:
-IIODriver* driver = nullptr;
+static const uint8_t MAX_DRIVERS = 8;
+IIODriver* drivers[MAX_DRIVERS];
+uint8_t driverCount = 0;
 PCF8574Driver pcfDriver;
 IOChannel channels[MAX_IO];
     uint8_t ioCount = 0;
