@@ -111,7 +111,7 @@ void registerRoutes(WebServerService& web)
 
             JsonObject obj = arr.add<JsonObject>();
 
-            obj["id"] = ch->id;
+            obj["id"] = i;
             obj["name"] = ch->name;
 
             obj["state"] = ioManager.getState(i);
