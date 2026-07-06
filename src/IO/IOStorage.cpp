@@ -18,7 +18,7 @@ bool IOStorage::save()
 
     for (uint8_t i = 0; i < ioManager.count(); i++)
     {
-        auto* ch = ioManager.get(i);
+        auto* ch = ioManager.getChannel(i);
 
         JsonObject o = arr.add<JsonObject>();
 
