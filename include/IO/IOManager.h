@@ -21,7 +21,7 @@ public:
     void begin();
     void update();
     IOChannel* getChannel(uint8_t id);
-    IOChannel* getChannel(uint8_t id) const;
+    const IOChannel* getChannel(uint8_t id) const;
     uint8_t count() const;
     IIODriver* getDriver(uint8_t driverId);
 private:
