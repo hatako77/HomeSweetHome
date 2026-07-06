@@ -1,6 +1,6 @@
 #include "IO/PCF8574Driver.h"
 
-void PCF8574Driver::begin()
+bool PCF8574Driver::begin()
 {
     Wire.begin(16, 17);
 
@@ -40,6 +40,7 @@ void PCF8574Driver::begin()
 
     Serial.print("PCF Found: ");
     Serial.println(deviceCount);
+    return true;
 }
 
 void PCF8574Driver::update()
@@ -61,7 +62,7 @@ bool PCF8574Driver::isConnected(uint8_t index)
     return connected[index];
 }
 
-uint8_t PCF8574Driver::getDeviceCount()
+uint8_t PCF8574Driver::deviceCount()
 {
     return deviceCount;
 }
@@ -74,10 +75,11 @@ bool PCF8574Driver::read(uint8_t index, uint8_t pin)
     return pcf[index]->read(pin);
 }
 
-void PCF8574Driver::write(uint8_t index, uint8_t pin, bool state)
+bool  PCF8574Driver::write(uint8_t index, uint8_t pin, bool state)
 {
     if (!connected[index])
-        return;
+        return false;
 
     pcf[index]->write(pin, state);
+    return true;
 }
