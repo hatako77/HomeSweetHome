@@ -103,7 +103,7 @@ void registerRoutes(WebServerService& web)
 
         for(uint8_t i = 0; i < ioManager.count(); i++)
         {
-            IOChannel* ch = ioManager.get(i);
+            IOChannel* ch = ioManager.getChannel(i);
 
             if(ch == nullptr)
                 continue;
