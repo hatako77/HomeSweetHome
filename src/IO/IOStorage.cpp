@@ -17,9 +17,9 @@ bool IOStorage::save(const IOManager& manager)
 
     JsonArray arr = doc.to<JsonArray>();
 
-    for (uint8_t i = 0; i < ioManager.count(); i++)
+    for (uint8_t i = 0; i < manager.count(); i++)
     {
-        auto* ch = ioManager.getChannel(i);
+        auto* ch = manager.getChannel(i);
         JsonObject o = arr.add<JsonObject>();
         o["id"] = ch->id;        
         o["name"] = ch->name;        
@@ -62,10 +62,10 @@ bool IOStorage::load(IOManager& manager)
 
     for (JsonObject o : arr)
     {
-        if (i >= ioManager.count())
+        if (i >= manager.count())
             break;
 
-        auto* ch = ioManager.getChannel(i);
+        auto* ch = manager.getChannel(i);
 
         ch->name = o["name"] | ch->name;
         ch->enabled = o["enabled"] | true;
