@@ -51,8 +51,7 @@ void registerRoutes(WebServerService& web)
             i++;
         }
 
-        IOStorage::save();
-
+        IOStorage::save(ioManager);
         server.send(200, "application/json", "{\"success\":true}");
     });
 }
