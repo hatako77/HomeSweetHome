@@ -43,16 +43,17 @@ void IOManager::update()
 
     for (uint8_t i = 0; i < ioCount; i++)
     {
-        if (channels[i].type != IOType::DigitalInput)
-            continue;
-
-        channels[i].state = driver.read(
+        bool state = driver.read(
             channels[i].board,
             channels[i].pin
         );
+
+        if (channels[i].activeLow)
+            state = !state;
+
+        channels[i].state = state;
     }
 }
-
 bool IOManager::write(uint8_t id, bool state)
 {
     if (id >= ioCount)
@@ -74,15 +75,8 @@ bool IOManager::read(uint8_t id)
     if (id >= ioCount)
         return false;
 
-    channels[id].state =
-        driver.read(
-            channels[id].board,
-            channels[id].pin
-        );
-
     return channels[id].state;
 }
-
 
 IOChannel* IOManager::get(uint8_t id)
 {
