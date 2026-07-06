@@ -6,51 +6,53 @@
 const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>HomeSweetHome</title>
 
 <link rel="stylesheet" href="/style.css">
-
 </head>
 
 <body>
 
-<div class="container">
+<header class="topbar">
+  <div class="logo">🏠 HomeSweetHome</div>
+  <div class="status" id="status">● Online</div>
+</header>
 
-<h1>🏠 HomeSweetHome</h1>
+<main class="container">
 
-<div class="card">
+<!-- System Card -->
+<section class="card glass">
+  <h2>System Status</h2>
 
-<h2>System</h2>
+  <div class="row">
+    <span>Device:</span>
+    <span>Running</span>
+  </div>
 
-<p>Device is running</p>
+  <div class="row">
+    <span>Firmware:</span>
+    <span id="version">...</span>
+  </div>
 
-<p id="version">Version: ...</p>
+  <a class="btn" href="/ota">Firmware Update</a>
+</section>
 
-<p>
-<a href="/ota">Firmware Update</a>
-</p>
+<!-- Devices -->
+<section>
+  <h2 class="section-title">Devices</h2>
+  <div id="ioContainer" class="grid"></div>
+</section>
 
-</div>
-
-<h2>Devices</h2>
-
-<div id="ioContainer"></div>
-
-</div>
+</main>
 
 <script src="/app.js"></script>
 
 </body>
-
 </html>
-
 )rawliteral";
 
 #endif
