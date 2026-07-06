@@ -3,7 +3,7 @@
 #include <ArduinoJson.h>
 
 #include "Core/Version.h"
-#include "Services/OTAService.h"
+#include "OTA/OTAService.h"
 #include "IO/IOManager.h"
 
 // Web UI (PROGMEM)
