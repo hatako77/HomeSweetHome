@@ -1,12 +1,11 @@
 #ifndef API_IO_H
 #define API_IO_H
 
-class WebServerService;
+#include <WebServer.h>
 
 namespace ApiIO
 {
-    void registerRoutes(WebServerService& web);
-
-    void handleToggle(WebServerService& web);
+    void registerRoutes(WebServer& server);
 }
+
 #endif
