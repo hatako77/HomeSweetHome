@@ -115,10 +115,6 @@ bool IOManager::registerChannel(const IOChannel& channel)
     return true;
 }
 
-PCF8574Driver& IOManager::getDriver()
-{
-    return pcfDriver;
-}
 bool IOManager::toggle(uint8_t id)
 {
     return write(id, !read(id));
