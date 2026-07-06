@@ -266,13 +266,11 @@ async function checkVersion() {
         const current = await fetch("/api/ota/version");
         const c = await current.json();
 
-        document.getElementById("current").innerHTML = c.version;
+        document.getElementById("current").innerHTML = r.current;
 
-        const remote = await fetch("/api/ota-version");
-        const r = await remote.json();
+        const r = await current.json();
 
-        document.getElementById("remote").innerHTML = r.version;
-
+        document.getElementById("remote").innerHTML = r.remote;
         if(r.version != "" && r.version != c.version){
 
             document.getElementById("updateBtn").disabled = false;
@@ -300,8 +298,9 @@ async function startOTA(){
     document.getElementById("error").classList.add("hidden");
     document.getElementById("success").classList.add("hidden");
 
-    await fetch("/api/update");
-
+    await fetch("/api/ota/update",{
+        method:"POST"
+    });
     statusTimer=setInterval(updateStatus,250);
 
 }
@@ -311,7 +310,7 @@ async function updateStatus(){
 
     try{
 
-        const res=await fetch("/api/ota-status");
+        const res=await fetch("/api/ota/status");
 
         const s=await res.json();
 
