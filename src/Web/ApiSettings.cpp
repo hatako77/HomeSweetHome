@@ -1,5 +1,6 @@
 #include "Web/ApiSettings.h"
-
+#include "IO/TypeHelper.h"
+#include "IO/IconHelper.h"
 #include <LittleFS.h>
 #include <ArduinoJson.h>
 
