@@ -20,17 +20,19 @@ bool IOStorage::save()
     for (uint8_t i = 0; i < ioManager.count(); i++)
     {
         auto* ch = ioManager.getChannel(i);
-
         JsonObject o = arr.add<JsonObject>();
-
-        o["name"] = ch->name;
+        o["id"] = ch->id;        
+        o["name"] = ch->name;        
         o["enabled"] = ch->enabled;
-        o["activeLow"] = ch->activeLow;
-        o["type"] = (uint8_t)ch->type;
-        o["icon"] = (uint8_t)ch->icon;
-        o["favorite"] = ch->favorite;
+        o["favorite"] = ch->favorite;        
+        o["activeLow"] = ch->activeLow;        
+        o["type"] = static_cast<uint8_t>(ch->type);
+        o["icon"] = static_cast<uint8_t>(ch->icon);        
         o["roomId"] = ch->roomId;
-        o["groupId"] = ch->groupId;
+        o["groupId"] = ch->groupId;        
+        o["driverId"] = ch->address.driverId;
+        o["device"] = ch->address.device;
+        o["pin"] = ch->address.pin;
     }
 
     serializeJson(doc, f);
@@ -77,6 +79,10 @@ bool IOStorage::load()
         ch->favorite = o["favorite"] | false;
         ch->roomId = o["roomId"] | 0;
         ch->groupId = o["groupId"] | 0;
+        ch->favorite = o["favorite"] | false;
+        ch->address.driverId = o["driverId"] | 0;
+        ch->address.device = o["device"] | 0;
+        ch->address.pin = o["pin"] | 0;
         i++;
     }
 
