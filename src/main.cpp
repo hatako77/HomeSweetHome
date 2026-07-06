@@ -27,7 +27,7 @@ void setup()
     Serial.println();
     Serial.println("WiFi connected");
     Serial.println(WiFi.localIP());
-
+    ota.registerRoutes(server);
     ota.setCurrentVersion(APP_VERSION);
     ota.setVersionURL(
         "https://github.com/hatako77/HomeSweetHome/releases/latest/download/version.json"
