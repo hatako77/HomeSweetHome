@@ -21,7 +21,6 @@ public:
     void begin();
     void update();
     IOChannel* get(uint8_t id);
-    PCF8574Driver& getDriver();
     uint8_t count();
 private:
 static const uint8_t MAX_DRIVERS = 8;
