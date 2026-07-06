@@ -29,8 +29,7 @@ void IOManager::begin()
             channels[ioCount].groupId = 0;
             channels[ioCount].device = p;
             channels[ioCount].pin = pin;
-            channels[ioCount].driver = driver;
-
+            channels[ioCount].driver = drivers[0];
             ioCount++;
         }
     }
