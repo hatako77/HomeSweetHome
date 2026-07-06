@@ -29,7 +29,7 @@ bool PCF8574Driver::begin()
         if (connected[i])
         {
             Serial.println("OK");
-            deviceCount++;
+            deviceCountValue++;
             pcf[i]->write8(0xFF);
         }
         else
@@ -39,7 +39,7 @@ bool PCF8574Driver::begin()
     }
 
     Serial.print("PCF Found: ");
-    Serial.println(deviceCount);
+    Serial.println(deviceCountValue);
     return true;
 }
 
@@ -64,7 +64,7 @@ bool PCF8574Driver::isConnected(uint8_t index)
 
 uint8_t PCF8574Driver::deviceCount()
 {
-    return deviceCount;
+    return deviceCountValue;
 }
 
 bool PCF8574Driver::read(uint8_t index, uint8_t pin)
