@@ -23,8 +23,10 @@ void IOManager::begin()
             channels[ioCount].favorite = false;
             channels[ioCount].roomId = 0;
             channels[ioCount].groupId = 0;
-            channels[ioCount].board = p;
+            channels[ioCount]channels[...] = p;
             channels[ioCount].pin = pin;
+            channels[ioCount].driver = driver;
+
             ioCount++;
         }
     }
@@ -39,11 +41,10 @@ void IOManager::update()
 
     for (uint8_t i = 0; i < ioCount; i++)
     {
-        bool state = driver->read(
-            channels[i].board,
+        bool state = channels[i].driver->read(
+            channels[i].device,
             channels[i].pin
         );
-
         if (channels[i].activeLow)
             state = !state;
 
@@ -60,8 +61,8 @@ bool IOManager::write(uint8_t id, bool state)
     bool hwState = state;
     if (channels[id].activeLow)
         hwState = !hwState;
-    driver->write(
-        channels[id].board,
+    channels[id].driver->write(
+        channels[id].device,
         channels[id].pin,
         hwState
     );
