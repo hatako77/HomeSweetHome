@@ -2,7 +2,7 @@
 #define IO_CONFIG_H
 
 #include <Arduino.h>
-
+#include "IO/IIODriver.h"
 
 enum class IOIcon : uint8_t
 {
