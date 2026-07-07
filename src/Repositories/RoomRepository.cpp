@@ -1,89 +1,150 @@
 #include "Repositories/RoomRepository.h"
 
-#include <FS.h>
 #include <ArduinoJson.h>
+#include <FS.h>
 
 #include "Core/FileStorage.h"
 #include "Core/Paths.h"
 
+RoomRepository roomRepository;
 
-bool RoomStorage::save(RoomRepository& repository)
+void RoomRepository::begin()
 {
-    File f = FileStorage::open(Paths::Rooms, "w");
+    load();
+}
 
-    if (!f)
+uint8_t RoomRepository::count() const
+{
+    return roomCount;
+}
+
+Room* RoomRepository::get(uint16_t id)
+{
+    for (uint8_t i = 0; i < roomCount; i++)
+    {
+        if (rooms[i].id == id)
+            return &rooms[i];
+    }
+
+    return nullptr;
+}
+
+bool RoomRepository::add(const Room& room)
+{
+    if (roomCount >= MAX_ROOMS)
         return false;
 
+    Room newRoom = room;
+
+    if (newRoom.id == 0)
+        newRoom.id = nextId++;
+
+    rooms[roomCount++] = newRoom;
+
+    return save();
+}
+
+bool RoomRepository::update(const Room& room)
+{
+    Room* existing = get(room.id);
+
+    if (!existing)
+        return false;
+
+    *existing = room;
+
+    return save();
+}
+
+bool RoomRepository::remove(uint16_t id)
+{
+    for (uint8_t i = 0; i < roomCount; i++)
+    {
+        if (rooms[i].id == id)
+        {
+            for (uint8_t j = i; j < roomCount - 1; j++)
+            {
+                rooms[j] = rooms[j + 1];
+            }
+
+            roomCount--;
+
+            return save();
+        }
+    }
+
+    return false;
+}
+
+bool RoomRepository::save()
+{
+    File file = FileStorage::open(Paths::Rooms, "w");
+
+    if (!file)
+        return false;
 
     JsonDocument doc;
 
-    JsonArray arr = doc.to<JsonArray>();
+    JsonArray array = doc.to<JsonArray>();
 
-
-    for (uint8_t i = 0; i < repository.count(); i++)
+    for (uint8_t i = 0; i < roomCount; i++)
     {
-        Room* room = repository.get(i);
+        JsonObject obj = array.add<JsonObject>();
 
-        JsonObject o = arr.add<JsonObject>();
-
-        o["id"] = room->id;
-        o["name"] = room->name;
-        o["icon"] = room->icon;
-        o["enabled"] = room->enabled;
-        o["favorite"] = room->favorite;
+        obj["id"] = rooms[i].id;
+        obj["name"] = rooms[i].name;
+        obj["icon"] = rooms[i].icon;
+        obj["enabled"] = rooms[i].enabled;
+        obj["favorite"] = rooms[i].favorite;
     }
 
+    serializeJson(doc, file);
 
-    serializeJson(doc, f);
-
-    f.close();
+    file.close();
 
     return true;
 }
 
-
-
-bool RoomStorage::load(RoomRepository& repository)
+bool RoomRepository::load()
 {
+    roomCount = 0;
+    nextId = 1;
+
     if (!FileStorage::exists(Paths::Rooms))
+        return true;
+
+    File file = FileStorage::open(Paths::Rooms, "r");
+
+    if (!file)
         return false;
-
-
-    File f = FileStorage::open(Paths::Rooms, "r");
-
-    if (!f)
-        return false;
-
 
     JsonDocument doc;
 
+    DeserializationError error = deserializeJson(doc, file);
 
-    if (deserializeJson(doc, f))
-    {
-        f.close();
+    file.close();
+
+    if (error)
         return false;
-    }
 
+    JsonArray array = doc.as<JsonArray>();
 
-    JsonArray arr = doc.as<JsonArray>();
-
-
-    for (JsonObject o : arr)
+    for (JsonObject obj : array)
     {
-        Room room;
+        if (roomCount >= MAX_ROOMS)
+            break;
 
-        room.id = o["id"] | 0;
-        room.name = o["name"] | "Room";
-        room.icon = o["icon"] | "home";
-        room.enabled = o["enabled"] | true;
-        room.favorite = o["favorite"] | false;
+        Room& room = rooms[roomCount++];
 
+        room.id = obj["id"] | nextId;
+        room.name = obj["name"] | "";
+        room.icon = obj["icon"] | "";
+        room.enabled = obj["enabled"] | true;
+        room.favorite = obj["favorite"] | false;
 
-        repository.add(room);
+        if (room.id >= nextId)
+            nextId = room.id + 1;
     }
-
-
-    f.close();
 
     return true;
 }
