@@ -1,10 +1,10 @@
-#ifndef ROOM_MANAGER_H
-#define ROOM_MANAGER_H
+#ifndef ROOM_REPOSITORY_H
+#define ROOM_REPOSITORY_H
 
 #include <Arduino.h>
 #include "Room/Room.h"
 
-class RoomManager
+class RoomRepository
 {
 public:
 
@@ -23,7 +23,7 @@ private:
     uint16_t nextId = 1;};
 
 
-extern RoomManager roomManager;
+extern RoomRepository roomRepository;
 
 
 #endif
