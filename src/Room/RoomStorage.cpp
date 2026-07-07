@@ -4,7 +4,7 @@
 #include <ArduinoJson.h>
 
 
-bool RoomStorage::save(RoomManager& manager)
+bool RoomStorage::save(RoomRepository& repository)
 {
     File f = LittleFS.open("/rooms.json", "w");
 
@@ -17,9 +17,9 @@ bool RoomStorage::save(RoomManager& manager)
     JsonArray arr = doc.to<JsonArray>();
 
 
-    for (uint8_t i = 0; i < manager.count(); i++)
+    for (uint8_t i = 0; i < repository.count(); i++)
     {
-        Room* room = manager.get(i);
+        Room* room = repository.get(i);
 
         JsonObject o = arr.add<JsonObject>();
 
@@ -40,7 +40,7 @@ bool RoomStorage::save(RoomManager& manager)
 
 
 
-bool RoomStorage::load(RoomManager& manager)
+bool RoomStorage::load(RoomRepository& repository)
 {
     if (!LittleFS.exists("/rooms.json"))
         return false;
@@ -76,7 +76,7 @@ bool RoomStorage::load(RoomManager& manager)
         room.favorite = o["favorite"] | false;
 
 
-        manager.add(room);
+        repository.add(room);
     }
 
 
