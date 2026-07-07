@@ -14,9 +14,9 @@ void ApiRoom::registerRoutes(WebServerService& web)
     
         JsonArray arr = doc.to<JsonArray>();
     
-        for (uint8_t i = 0; i < roomManager.count(); i++)
+        for (uint8_t i = 0; i < roomRepository.count(); i++)
         {
-            Room* room = roomManager.get(i);
+            Room* room = roomRepository.get(i);
     
             JsonObject o = arr.add<JsonObject>();
     
@@ -64,10 +64,10 @@ void ApiRoom::registerRoutes(WebServerService& web)
         room.enabled = doc["enabled"] | true;
         room.favorite = doc["favorite"] | false;
     
-        bool ok = roomManager.update(room);
+        bool ok = roomRepository.update(room);
     
         if (ok)
-            RoomStorage::save(roomManager);
+            RoomStorage::save(roomRepository);
     
         web.server().send(
             ok ? 200 : 404,
@@ -102,10 +102,10 @@ void ApiRoom::registerRoutes(WebServerService& web)
         room.enabled = true;
         room.favorite = false;
     
-        bool ok = roomManager.add(room);
+        bool ok = roomRepository.add(room);
     
         if (ok)
-            RoomStorage::save(roomManager);
+            RoomStorage::save(roomRepository);
     
         web.server().send(
             ok ? 200 : 500,
