@@ -32,12 +32,14 @@ uint8_t RoomManager::count() const
 
 Room* RoomManager::get(uint8_t id)
 {
-    if (id >= roomCount)
-        return nullptr;
+    for (uint8_t i = 0; i < roomCount; i++)
+    {
+        if (rooms[i].id == id)
+            return &rooms[i];
+    }
 
-    return &rooms[id];
+    return nullptr;
 }
-
 
 bool RoomManager::add(const Room& room)
 {
