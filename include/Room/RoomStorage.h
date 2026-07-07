@@ -1,7 +1,7 @@
 #ifndef ROOM_STORAGE_H
 #define ROOM_STORAGE_H
 
-#include "Room/RoomManager.h"
+#include "Repositories/RoomRepository.h"
 
 class RoomStorage
 {
