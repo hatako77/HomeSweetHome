@@ -7,17 +7,23 @@ RoomManager roomManager;
 void RoomManager::begin()
 {
     roomCount = 0;
+    nextId = 1;
 }
 
 bool RoomManager::update(const Room& room)
 {
-    if (room.id >= roomCount)
-        return false;
+    for (uint8_t i = 0; i < roomCount; i++)
+    {
+        if (rooms[i].id == room.id)
+        {
+            rooms[i] = room;
+            return true;
+        }
+    }
 
-    rooms[room.id] = room;
-
-    return true;
+    return false;
 }
+
 uint8_t RoomManager::count() const
 {
     return roomCount;
@@ -37,13 +43,9 @@ bool RoomManager::add(const Room& room)
 {
     if (roomCount >= MAX_ROOMS)
         return false;
-
-
     rooms[roomCount] = room;
-    rooms[roomCount].id = roomCount;
-
+    rooms[roomCount].id = nextId++;
     roomCount++;
-
     return true;
 }
 
