@@ -7,7 +7,7 @@
 
 bool RoomStorage::save(RoomRepository& repository)
 {
-    File f = FileStorage::open("/rooms.json", "w");
+    File f = FileStorage::open(Paths::Rooms, "w");
 
     if (!f)
         return false;
@@ -43,11 +43,11 @@ bool RoomStorage::save(RoomRepository& repository)
 
 bool RoomStorage::load(RoomRepository& repository)
 {
-    if (!FileStorage::exists("/rooms.json"))
+    if (!FileStorage::exists(Paths::Rooms))
         return false;
 
 
-    File f = FileStorage::open("/rooms.json", "r");
+    File f = FileStorage::open(Paths::Rooms, "r");
 
     if (!f)
         return false;
