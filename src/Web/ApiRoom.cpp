@@ -39,7 +39,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
     });
    
     
-    server.on("/api/rooms/add", HTTP_POST, [&web]()
+    web.server().on("/api/rooms/add", HTTP_POST, [&web]()
     {
         if (!web.server().hasArg("plain"))
         {
