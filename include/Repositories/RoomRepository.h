@@ -10,7 +10,7 @@ public:
 
     static constexpr uint8_t MAX_ROOMS = 32;
     void begin();
-    uint8_t count() const;
+    uint16_t count() const;
     Room* get(uint16_t id);
     bool add(const Room& room);
     bool remove(uint16_t id);
