@@ -7,9 +7,9 @@ class RoomStorage
 {
 public:
 
-    static bool save(RoomManager& manager);
+    static bool save(RoomRepository& repository);
 
-    static bool load(RoomManager& manager);
+    static bool load(RoomRepository& repository);
 };
 
 #endif
