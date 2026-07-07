@@ -1,16 +1,15 @@
 #include "Repositories/RoomRepository.h"
 
 
-RoomManager roomManager;
+RoomRepository roomRepository;
 
-
-void RoomManager::begin()
+void RoomRepository::begin()
 {
     roomCount = 0;
     nextId = 1;
 }
 
-bool RoomManager::update(const Room& room)
+bool RoomRepository::update(const Room& room)
 {
     for (uint8_t i = 0; i < roomCount; i++)
     {
@@ -24,13 +23,13 @@ bool RoomManager::update(const Room& room)
     return false;
 }
 
-uint8_t RoomManager::count() const
+uint8_t RoomRepository::count() const
 {
     return roomCount;
 }
 
 
-Room* RoomManager::get(uint8_t id)
+Room* RoomRepository::get(uint8_t id)
 {
     for (uint8_t i = 0; i < roomCount; i++)
     {
@@ -41,7 +40,7 @@ Room* RoomManager::get(uint8_t id)
     return nullptr;
 }
 
-bool RoomManager::add(const Room& room)
+bool RoomRepository::add(const Room& room)
 {
     if (roomCount >= MAX_ROOMS)
         return false;
@@ -52,7 +51,7 @@ bool RoomManager::add(const Room& room)
 }
 
 
-bool RoomManager::remove(uint8_t id)
+bool RoomRepository::remove(uint8_t id)
 {
     if (id >= roomCount)
         return false;
