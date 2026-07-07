@@ -9,7 +9,15 @@ void RoomManager::begin()
     roomCount = 0;
 }
 
+bool RoomManager::update(const Room& room)
+{
+    if (room.id >= roomCount)
+        return false;
 
+    rooms[room.id] = room;
+
+    return true;
+}
 uint8_t RoomManager::count() const
 {
     return roomCount;
