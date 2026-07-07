@@ -15,5 +15,4 @@ struct Room
 
     bool favorite;
 };
-bool update(const Room& room);
 #endif
