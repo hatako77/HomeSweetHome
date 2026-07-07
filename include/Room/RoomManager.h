@@ -20,7 +20,7 @@ private:
 
     Room rooms[MAX_ROOMS];
     uint8_t roomCount = 0;
-};
+    uint16_t nextId = 1;};
 
 
 extern RoomManager roomManager;
