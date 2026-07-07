@@ -66,7 +66,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
         bool ok = roomRepository.update(room);
     
         if (ok)
-            RoomStorage::save(roomRepository);
+            roomRepository.save();
     
         web.server().send(
             ok ? 200 : 404,
@@ -104,7 +104,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
         bool ok = roomRepository.add(room);
     
         if (ok)
-            RoomStorage::save(roomRepository);
+            roomRepository.save();
     
         web.server().send(
             ok ? 200 : 500,
