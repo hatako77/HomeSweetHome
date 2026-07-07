@@ -38,6 +38,46 @@ void ApiRoom::registerRoutes(WebServerService& web)
         );
     });
    
+    web.server().on("/api/rooms/update", HTTP_POST, [&web]()
+    {
+        if (!web.server().hasArg("plain"))
+        {
+            web.server().send(400, "application/json",
+                "{\"success\":false,\"message\":\"Missing body\"}");
+            return;
+        }
+    
+        JsonDocument doc;
+    
+        if (deserializeJson(doc, web.server().arg("plain")))
+        {
+            web.server().send(400, "application/json",
+                "{\"success\":false,\"message\":\"Invalid JSON\"}");
+            return;
+        }
+    
+        Room room;
+    
+        room.id = doc["id"] | 0;
+        room.name = doc["name"] | "Room";
+        room.icon = doc["icon"] | "home";
+        room.enabled = doc["enabled"] | true;
+        room.favorite = doc["favorite"] | false;
+    
+        bool ok = roomManager.update(room);
+    
+        if (ok)
+            RoomStorage::save(roomManager);
+    
+        web.server().send(
+            ok ? 200 : 404,
+            "application/json",
+            ok
+                ? "{\"success\":true}"
+                : "{\"success\":false,\"message\":\"Room not found\"}"
+        );
+    });
+
     
     web.server().on("/api/rooms/add", HTTP_POST, [&web]()
     {
