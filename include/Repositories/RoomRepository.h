@@ -15,7 +15,8 @@ public:
     bool add(const Room& room);
     bool remove(uint16_t id);
     bool update(const Room& room);
-
+    bool load();
+    bool save();
 private:
 
     Room rooms[MAX_ROOMS];
