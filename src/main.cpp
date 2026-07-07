@@ -1,5 +1,4 @@
 #include <WiFi.h>
-#include <LittleFS.h>
 #include "Core/Version.h"
 #include "IO/IOManager.h"
 #include "IO/IOStorage.h"
