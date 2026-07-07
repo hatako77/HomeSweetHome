@@ -3,7 +3,7 @@
 #include <ArduinoJson.h>
 #include "Room/RoomStorage.h"
 #include "Room/Room.h"
-#include "Room/RoomManager.h"
+#include "Repositories/RoomRepository.h"
 
 
 void ApiRoom::registerRoutes(WebServerService& web)
