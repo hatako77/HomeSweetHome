@@ -31,10 +31,6 @@ void setup()
         "https://github.com/hatako77/HomeSweetHome/releases/latest/download/version.json"
     );
 
-    if (!LittleFS.begin(true))
-    {
-        Serial.println("LittleFS mount failed");
-    }
     ioManager.begin();
     IOStorage::load(ioManager);
     web.begin();
