@@ -13,7 +13,7 @@ void RoomRepository::begin()
     load();
 }
 
-uint8_t RoomRepository::count() const
+uint16_t RoomRepository::count() const
 {
     return roomCount;
 }
