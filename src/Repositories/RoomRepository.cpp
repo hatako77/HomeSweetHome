@@ -23,7 +23,27 @@ uint8_t RoomRepository::count() const
 {
     return roomCount;
 }
-
+bool RoomRepository::save()
+{
+    File f = FileStorage::open(Paths::Rooms, "w");
+    if (!f)
+        return false;
+    JsonDocument doc;
+    JsonArray arr = doc.to<JsonArray>();
+    for (uint8_t i = 0; i < repository.count(); i++)
+    {
+        Room* room = repository.get(i);
+        JsonObject o = arr.add<JsonObject>();
+        o["id"] = room->id;
+        o["name"] = room->name;
+        o["icon"] = room->icon;
+        o["enabled"] = room->enabled;
+        o["favorite"] = room->favorite;
+    }
+    serializeJson(doc, f);
+    f.close();
+    return true;
+}
 
 bool RoomRepository::load()
 {
