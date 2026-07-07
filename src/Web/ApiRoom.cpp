@@ -1,7 +1,8 @@
 #include "Web/ApiRoom.h"
 
 #include <ArduinoJson.h>
-
+#include "Room/RoomStorage.h"
+#include "Room/Room.h"
 #include "Room/RoomManager.h"
 
 
@@ -36,5 +37,40 @@ void ApiRoom::registerRoutes(WebServerService& web)
             response
         );
     });
-
+   
+    
+    server.on("/api/rooms/add", HTTP_POST, [&web]()
+    {
+        if (!web.server().hasArg("plain"))
+        {
+            web.server().send(400, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        JsonDocument doc;
+    
+        if (deserializeJson(doc, web.server().arg("plain")))
+        {
+            web.server().send(400, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        Room room;
+    
+        room.name = doc["name"] | "Room";
+        room.icon = doc["icon"] | "home";
+        room.enabled = true;
+        room.favorite = false;
+    
+        bool ok = roomManager.add(room);
+    
+        if (ok)
+            RoomStorage::save(roomManager);
+    
+        web.server().send(
+            ok ? 200 : 500,
+            "application/json",
+            ok ? "{\"success\":true}" : "{\"success\":false}"
+        );
+    });
 }
