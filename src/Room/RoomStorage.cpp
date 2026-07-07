@@ -7,7 +7,7 @@
 
 bool RoomStorage::save(RoomRepository& repository)
 {
-    File f = LittleFS.open("/rooms.json", "w");
+    File f = FileStorage::open("/rooms.json", "w");
 
     if (!f)
         return false;
@@ -43,11 +43,11 @@ bool RoomStorage::save(RoomRepository& repository)
 
 bool RoomStorage::load(RoomRepository& repository)
 {
-    if (!LittleFS.exists("/rooms.json"))
+    if (!FileStorage::exists("/rooms.json"))
         return false;
 
 
-    File f = LittleFS.open("/rooms.json", "r");
+    File f = FileStorage::open("/rooms.json", "r");
 
     if (!f)
         return false;
