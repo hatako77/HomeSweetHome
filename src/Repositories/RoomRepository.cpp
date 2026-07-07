@@ -20,7 +20,7 @@ uint16_t RoomRepository::count() const
 
 Room* RoomRepository::get(uint16_t id)
 {
-    for (uint8_t i = 0; i < roomCount; i++)
+    for (uint16_t i = 0; i < roomCount; i++)
     {
         if (rooms[i].id == id)
             return &rooms[i];
@@ -58,11 +58,11 @@ bool RoomRepository::update(const Room& room)
 
 bool RoomRepository::remove(uint16_t id)
 {
-    for (uint8_t i = 0; i < roomCount; i++)
+    for (uint16_t i = 0; i < roomCount; i++)
     {
         if (rooms[i].id == id)
         {
-            for (uint8_t j = i; j < roomCount - 1; j++)
+            for (uint16_t j = i; j < roomCount - 1; j++)
             {
                 rooms[j] = rooms[j + 1];
             }
@@ -87,7 +87,7 @@ bool RoomRepository::save()
 
     JsonArray array = doc.to<JsonArray>();
 
-    for (uint8_t i = 0; i < roomCount; i++)
+    for (uint16_t i = 0; i < roomCount; i++)
     {
         JsonObject obj = array.add<JsonObject>();
 
