@@ -1,6 +1,7 @@
 #include "Room/RoomStorage.h"
 
-#include <LittleFS.h>
+#include "Core/FileStorage.h"
+#include "Core/Paths.h"
 #include <ArduinoJson.h>
 
 
