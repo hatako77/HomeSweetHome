@@ -12,7 +12,7 @@ public:
     void begin();
     uint16_t count() const;
     Room* get(uint16_t id);
-    bool add(const Room& room);
+    Room* add(const Room& room);
     bool remove(uint16_t id);
     bool update(const Room& room);
     bool load();
