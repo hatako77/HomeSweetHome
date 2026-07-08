@@ -22,59 +22,86 @@ async function loadVersion()
         console.log(e);
     }
 }
-
-async function loadIO()
+async function loadRooms()
 {
-    try
+    const rooms = await (await fetch("/api/rooms")).json();
+    const channels = await (await fetch("/api/channels")).json();
+
+    const container = document.getElementById("roomsContainer");
+
+    container.innerHTML = "";
+
+    rooms.forEach(room =>
     {
-        const res = await fetch("/api/channels");
-        const list = await res.json();
+        const card = document.createElement("div");
+        card.className = "room-card";
 
-        const container = document.getElementById("ioContainer");
+        const list = channels.filter(c => c.roomId == room.id);
 
-        if (!container)
-            return;
+        card.innerHTML = `
+            <div class="room-header">
+                <div class="room-name">
+                    <i class="fa-solid fa-house"></i>
+                    ${room.name}
+                </div>
 
-        container.innerHTML = "";
+                <div class="room-count">
+                    ${list.length} Channels
+                </div>
+            </div>
+
+            <div class="channel-list" id="room-${room.id}"></div>
+        `;
+
+        container.appendChild(card);
+
+        const channelList = card.querySelector(".channel-list");
 
         list.forEach(ch =>
         {
-            const card = document.createElement("div");
+            const row = document.createElement("div");
 
-            card.className = "card";
+            row.className = "channel";
 
-            if (ch.state)
-                card.classList.add("on");
+            if(ch.state)
+                row.classList.add("on");
 
-            card.innerHTML = `
-                <div class="title">${ch.name}</div>
-                <div class="state">${ch.state ? "ON" : "OFF"}</div>
+            row.dataset.id = ch.id;
+
+            row.innerHTML = `
+                <div class="channel-left">
+                    <div class="channel-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+
+                    <div class="channel-name">
+                        ${ch.name}
+                    </div>
+                </div>
+
+                <div class="channel-state"></div>
             `;
 
-            card.onclick = async () =>
+            row.onclick = async() =>
             {
-                await fetch("/api/channels/toggle?id=" + ch.id,
+                await fetch("/api/channels/toggle?id="+ch.id,
                 {
-                    method: "POST"
+                    method:"POST"
                 });
 
-                loadIO();
+                loadRooms();
             };
 
-            container.appendChild(card);
+            channelList.appendChild(row);
         });
-    }
-    catch(e)
-    {
-        console.log(e);
-    }
+    });
 }
+
 
 window.onload = function()
 {
     loadVersion();
-    loadIO();
-};
+    loadRooms();};
 
 )rawliteral";
 
