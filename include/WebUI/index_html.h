@@ -17,7 +17,8 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
-
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<script src="/app.js"></script>
 <body>
 
 <!-- TOP BAR -->
@@ -48,14 +49,17 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 </section>
 
 <!-- IO DEVICES -->
+<!-- ROOMS -->
 <section>
-  <h2 class="section-title">
-    <i class="fa-solid fa-plug"></i> Devices
-  </h2>
 
-  <div id="ioContainer" class="grid"></div>
+    <h2 class="section-title">
+        <i class="fa-solid fa-house"></i>
+        Rooms
+    </h2>
+
+    <div id="roomsContainer"></div>
+
 </section>
-
 </main>
 
 <script src="/app.js"></script>
