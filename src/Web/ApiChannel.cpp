@@ -2,11 +2,61 @@
 #include <ArduinoJson.h>
 #include "Web/WebServerService.h"
 #include "IO/IOManager.h"
-
+#include "IO/TypeHelper.h"
+#include "IO/IconHelper.h"
 
 
 void ApiChannel::registerRoutes(WebServerService& web)
 {
+    web.server().on("/api/channels/update", HTTP_POST, [&web]()
+    {
+        if (!web.server().hasArg("plain"))
+        {
+            web.server().send(400, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        JsonDocument doc;
+    
+        if (deserializeJson(doc, web.server().arg("plain")))
+        {
+            web.server().send(400, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        IOChannel* ch = ioManager.getChannel(doc["id"] | 0);
+    
+        if (!ch)
+        {
+            web.server().send(404, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        IOChannel updated = *ch;
+    
+        updated.name = doc["name"] | updated.name;
+        updated.roomId = doc["roomId"] | updated.roomId;
+        updated.enabled = doc["enabled"] | updated.enabled;
+        updated.favorite = doc["favorite"] | updated.favorite;
+        updated.activeLow = doc["activeLow"] | updated.activeLow;
+    
+        IOType type;
+        if (typeFromValue(doc["type"] | (uint8_t)updated.type, type))
+            updated.type = type;
+    
+        IOIcon icon;
+        if (iconFromValue(doc["icon"] | (uint8_t)updated.icon, icon))
+            updated.icon = icon;
+    
+        bool ok = ioManager.update(updated);
+    
+        web.server().send(
+            ok ? 200 : 500,
+            "application/json",
+            ok ? "{\"success\":true}" : "{\"success\":false}"
+        );
+    });
+    
     web.server().on("/api/channels/on", HTTP_POST, [&web]()
     {
         if (!web.server().hasArg("id"))
