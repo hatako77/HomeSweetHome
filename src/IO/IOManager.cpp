@@ -104,7 +104,7 @@ bool IOManager::read(uint16_t id) const
     return channels[id].state;
 }
 
-IOChannel* IOManager::getChannel(uint816_t id) 
+IOChannel* IOManager::getChannel(uint16_t id) 
 {
     if (id >= channelCount)
         return nullptr;
@@ -158,7 +158,7 @@ bool IOManager::off(uint16_t id)
 
     return drivers[driverId];
 }
-    uint8_t IOManager::countByRoom(uint6_t roomId) const
+    uint8_t IOManager::countByRoom(uint16_t roomId) const
 {
         uint6_t count = 0;
 
