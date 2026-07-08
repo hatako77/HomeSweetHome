@@ -70,7 +70,43 @@ void ApiRoom::registerRoutes(WebServerService& web)
                 : "{\"success\":false,\"message\":\"Room not found\"}"
         );
     });
-
+    
+    server.on("/api/rooms/channels", HTTP_GET, [&server]()
+    {
+        if (!server.hasArg("id"))
+        {
+            server.send(400, "text/plain", "Missing room id");
+            return;
+        }
+    
+        uint8_t roomId = server.arg("id").toInt();
+    
+        JsonDocument doc;
+        JsonArray arr = doc.to<JsonArray>();
+    
+        for (uint16_t i = 0; i < ioManager.count(); i++)
+        {
+            IOChannel* ch = ioManager.getChannel(i);
+    
+            if (!ch)
+                continue;
+    
+            if (ch->roomId != roomId)
+                continue;
+    
+            JsonObject o = arr.add<JsonObject>();
+    
+            o["id"] = ch->id;
+            o["name"] = ch->name;
+            o["state"] = ch->state;
+            o["type"] = (uint8_t)ch->type;
+        }
+    
+        String json;
+        serializeJson(doc, json);
+    
+        server.send(200, "application/json", json);
+    });
     
     web.server().on("/api/rooms/add", HTTP_POST, [&web]()
     {
