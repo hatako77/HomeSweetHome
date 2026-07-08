@@ -3,6 +3,8 @@
 #include "IO/IOManager.h"
 #include "OTA/OTAService.h"
 #include "Web/WebServerService.h"
+#include "Core/DemoData.h"
+
 // =========================
 // WiFi
 // =========================
@@ -32,6 +34,7 @@ void setup()
 
     ioManager.begin();
     web.begin();
+    DemoData::create();
     Serial.println("System Ready");
 }
 
