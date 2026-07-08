@@ -34,7 +34,7 @@ private:
     static constexpr uint8_t MAX_DRIVERS = 8;
     IIODriver* drivers[MAX_DRIVERS];
     uint16_t driverCount = 0;
-    PCF8574Driver pcfDriver;
+    PCF8574Driver pcfDriver{};
     IOChannel channels[MAX_IO];
     uint16_t channelCount = 0;
     uint16_t nextId = 1;
