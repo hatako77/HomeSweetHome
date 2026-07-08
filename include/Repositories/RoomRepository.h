@@ -2,7 +2,7 @@
 #define ROOM_REPOSITORY_H
 
 #include <Arduino.h>
-#include "Room/Room.h"
+#include "Core/Room.h"
 
 class RoomRepository
 {
