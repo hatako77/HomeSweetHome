@@ -10,18 +10,61 @@ void ApiRoom::registerRoutes(WebServerService& web)
 {
     web.server().on("/api/rooms", HTTP_GET, [&web]()
     {
+        // GET /api/rooms?id=1
+        if (web.server().hasArg("id"))
+        {
+            uint16_t id = web.server().arg("id").toInt();
+    
+            Room* room = roomRepository.get(id);
+    
+            if (!room)
+            {
+                web.server().send(
+                    404,
+                    "application/json",
+                    "{\"success\":false,\"message\":\"Room not found\"}"
+                );
+                return;
+            }
+    
+            JsonDocument doc;
+    
+            doc["success"] = true;
+    
+            JsonObject data = doc["data"].to<JsonObject>();
+            data["id"] = room->id;
+            data["name"] = room->name;
+    
+            String response;
+            serializeJson(doc, response);
+    
+            web.server().send(
+                200,
+                "application/json",
+                response
+            );
+    
+            return;
+        }
+    
+        // GET /api/rooms
         JsonDocument doc;
     
-        JsonArray arr = doc.to<JsonArray>();
+        doc["success"] = true;
     
-        for (uint8_t i = 0; i < roomRepository.count(); i++)
+        JsonArray data = doc["data"].to<JsonArray>();
+    
+        for (uint16_t i = 0; i < roomRepository.count(); i++)
         {
             Room* room = roomRepository.get(i);
     
-            JsonObject o = arr.add<JsonObject>();
+            if (!room)
+                continue;
     
-            o["id"] = room->id;
-            o["name"] = room->name;
+            JsonObject obj = data.add<JsonObject>();
+    
+            obj["id"] = room->id;
+            obj["name"] = room->name;
         }
     
         String response;
@@ -32,6 +75,71 @@ void ApiRoom::registerRoutes(WebServerService& web)
             200,
             "application/json",
             response
+        );
+    });
+    
+    
+    
+    web.server().on("/api/rooms", HTTP_POST, [&web]()
+    {
+        if (!web.server().hasArg("plain"))
+        {
+            web.server().send(
+                400,
+                "application/json",
+                "{\"success\":false,\"message\":\"Missing body\"}"
+            );
+            return;
+        }
+    
+        JsonDocument doc;
+    
+        if (deserializeJson(doc, web.server().arg("plain")))
+        {
+            web.server().send(
+                400,
+                "application/json",
+                "{\"success\":false,\"message\":\"Invalid JSON\"}"
+            );
+            return;
+        }
+    
+        Room room;
+    
+        room.name = doc["name"] | "Room";
+    
+        bool ok = roomRepository.add(room);
+    
+        if (ok)
+            roomRepository.save();
+    
+        JsonDocument response;
+    
+        response["success"] = ok;
+    
+        if (ok)
+        {
+            JsonObject data = response["data"].to<JsonObject>();
+    
+            // آخرین Room اضافه شده
+            Room* created = roomRepository.get(roomRepository.count() - 1);
+    
+            data["id"] = created->id;
+            data["name"] = created->name;
+        }
+        else
+        {
+            response["message"] = "Unable to create room";
+        }
+    
+        String json;
+    
+        serializeJson(response, json);
+    
+        web.server().send(
+            ok ? 201 : 500,
+            "application/json",
+            json
         );
     });
    
