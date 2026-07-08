@@ -7,7 +7,7 @@
 namespace Pages
 {
 
-    void Pages::registerRoutes(WebServerService& web)
+    void registerRoutes(WebServerService& web)
     {
         auto& server = web.server();
     
