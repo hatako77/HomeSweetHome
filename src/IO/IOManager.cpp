@@ -1,5 +1,10 @@
 #include "IO/IOManager.h"
+#include <FS.h>
+#include <LittleFS.h>
+#include <ArduinoJson.h>
 
+#include "IO/TypeHelper.h"
+#include "IO/IconHelper.h"
 IOManager ioManager;
 
 void IOManager::begin()
