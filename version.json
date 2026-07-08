@@ -1,10 +1,10 @@
 {
     "app": "HomeSweetHome",
-    "version": "5.0.61",
-    "build": 271,
-    "firmware": "HomeSweetHome_v5.0.61.bin",
+    "version": "5.0.62",
+    "build": 273,
+    "firmware": "HomeSweetHome_v5.0.62.bin",
     "sha256": "",
-    "url": "https://github.com/hatako77/HomeSweetHome/releases/latest/download/HomeSweetHome_v5.0.61.bin",
+    "url": "https://github.com/hatako77/HomeSweetHome/releases/latest/download/HomeSweetHome_v5.0.62.bin",
     "update_required": false,
-    "build_time": "2026-07-08T11:49:42.072312Z"
+    "build_time": "2026-07-08T11:53:36.748016Z"
 }
