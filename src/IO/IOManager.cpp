@@ -290,3 +290,13 @@ bool IOManager::load()
 
     return true;
 }
+
+bool IOManager::registerDriver(IIODriver* driver)
+{
+    if (driverCount >= MAX_DRIVERS)
+        return false;
+
+    drivers[driverCount++] = driver;
+
+    return true;
+}
