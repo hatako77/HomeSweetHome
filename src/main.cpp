@@ -5,6 +5,7 @@
 #include "Web/WebServerService.h"
 #include "Core/DemoData.h"
 #include <LittleFS.h>
+#include "Repositories/RoomRepository.h"
 // =========================
 // WiFi
 // =========================
