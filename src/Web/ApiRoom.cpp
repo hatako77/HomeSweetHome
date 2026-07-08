@@ -21,9 +21,6 @@ void ApiRoom::registerRoutes(WebServerService& web)
     
             o["id"] = room->id;
             o["name"] = room->name;
-            o["icon"] = room->icon;
-            o["enabled"] = room->enabled;
-            o["favorite"] = room->favorite;
         }
     
         String response;
@@ -59,9 +56,6 @@ void ApiRoom::registerRoutes(WebServerService& web)
     
         room.id = doc["id"] | 0;
         room.name = doc["name"] | "Room";
-        room.icon = doc["icon"] | "home";
-        room.enabled = doc["enabled"] | true;
-        room.favorite = doc["favorite"] | false;
     
         bool ok = roomRepository.update(room);
     
@@ -97,9 +91,6 @@ void ApiRoom::registerRoutes(WebServerService& web)
         Room room;
     
         room.name = doc["name"] | "Room";
-        room.icon = doc["icon"] | "home";
-        room.enabled = true;
-        room.favorite = false;
     
         bool ok = roomRepository.add(room);
     
