@@ -334,3 +334,20 @@ bool IOManager::removeFromRoom(uint16_t channelId)
 }
 
 
+IOChannel* IOManager::getAt(uint16_t index)
+{
+    if (index >= channelCount)
+        return nullptr;
+
+    return &channels[index];
+}
+
+const IOChannel* IOManager::getAt(uint16_t index) const
+{
+    if (index >= channelCount)
+        return nullptr;
+
+    return &channels[index];
+}
+
+
