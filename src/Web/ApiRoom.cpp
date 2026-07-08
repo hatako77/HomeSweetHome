@@ -1,7 +1,7 @@
 #include "Web/ApiRoom.h"
 
 #include <ArduinoJson.h>
-#include "Room/Room.h"
+#include "Core/Room.h"
 #include "Repositories/RoomRepository.h"
 
 
