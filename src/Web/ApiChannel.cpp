@@ -8,6 +8,27 @@
 
 void ApiChannel::registerRoutes(WebServerService& web)
 {
+    web.server().on("/api/channels/assign", HTTP_POST, [&web]()
+    {
+        if (!web.server().hasArg("id") || !web.server().hasArg("roomId"))
+        {
+            web.server().send(400, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        uint16_t channelId = web.server().arg("id").toInt();
+        uint16_t roomId = web.server().arg("roomId").toInt();
+    
+        bool ok = ioManager.assignToRoom(channelId, roomId);
+    
+        web.server().send(
+            ok ? 200 : 404,
+            "application/json",
+            ok ? "{\"success\":true}" : "{\"success\":false}"
+        );
+    });
+    
+    
     web.server().on("/api/channels/update", HTTP_POST, [&web]()
     {
         if (!web.server().hasArg("plain"))
