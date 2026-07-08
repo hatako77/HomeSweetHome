@@ -24,9 +24,11 @@ async function loadVersion()
 }
 async function loadRooms()
 {
-    const rooms = await (await fetch("/api/rooms")).json();
-    const channels = await (await fetch("/api/channels")).json();
-
+    const roomResult = await (await fetch("/api/rooms")).json();
+    const channelResult = await (await fetch("/api/channels")).json();
+    
+    const rooms = roomResult.data;
+    const channels = channelResult;
     const container = document.getElementById("roomsContainer");
 
     container.innerHTML = "";
