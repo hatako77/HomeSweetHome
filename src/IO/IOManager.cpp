@@ -296,3 +296,33 @@ bool IOManager::registerDriver(IIODriver* driver)
     driver->begin();
     return true;
 }
+
+bool IOManager::assignToRoom(uint16_t channelId, uint8_t roomId)
+{
+    IOChannel* ch = getChannel(channelId);
+
+    if (!ch)
+        return false;
+
+    ch->roomId = roomId;
+
+    save();
+
+    return true;
+}
+
+bool IOManager::removeFromRoom(uint16_t channelId)
+{
+    IOChannel* ch = getChannel(channelId);
+
+    if (!ch)
+        return false;
+
+    ch->roomId = 0;
+
+    save();
+
+    return true;
+}
+
+
