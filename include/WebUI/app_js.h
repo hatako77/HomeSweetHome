@@ -27,33 +27,35 @@ async function loadIO()
 {
     try
     {
-        const res = await fetch("/api/io");
+        const res = await fetch("/api/channels");
         const list = await res.json();
 
         const container = document.getElementById("ioContainer");
 
-        if(!container)
+        if (!container)
             return;
 
         container.innerHTML = "";
 
-        list.forEach(io =>
+        list.forEach(ch =>
         {
             const card = document.createElement("div");
+
             card.className = "card";
 
-            card.innerHTML = `
-                <div class="title">${io.name}</div>
-                <div class="state">${io.state ? "ON" : "OFF"}</div>
-            `;
-
-            if(io.state)
+            if (ch.state)
                 card.classList.add("on");
+
+            card.innerHTML = `
+                <div class="title">${ch.name}</div>
+                <div class="state">${ch.state ? "ON" : "OFF"}</div>
+            `;
 
             card.onclick = async () =>
             {
-                await fetch("/api/io/toggle?id=" + io.id,{
-                    method:"POST"
+                await fetch("/api/channels/toggle?id=" + ch.id,
+                {
+                    method: "POST"
                 });
 
                 loadIO();
