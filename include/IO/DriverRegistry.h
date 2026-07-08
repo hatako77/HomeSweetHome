@@ -5,5 +5,6 @@
 class DriverRegistry
 {
 public:
+    static bool registerDriver(IIODriver* driver);
     static void registerDrivers();
 };
