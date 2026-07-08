@@ -104,17 +104,23 @@ bool IOManager::read(uint16_t id) const
     return channels[id].state;
 }
 
-IOChannel* IOManager::getChannel(uint16_t id) 
+IOChannel* IOManager::getChannel(uint8_t id)
 {
-    if (id >= channelCount)
-        return nullptr;
-    return &channels[id];
+    for (uint16_t i = 0; i < channelCount; i++)
+    {
+        if (channels[i].id == id)
+            return &channels[i];
+    }
+    return nullptr;
 }
 const IOChannel* IOManager::getChannel(uint16_t id) const
 {
-    if (id >= channelCount)
-        return nullptr;
-    return &channels[id];
+    for (uint16_t i = 0; i < channelCount; i++)
+    {
+        if (channels[i].id == id)
+            return &channels[i];
+    }
+    return nullptr;
 }
 
 uint16_t IOManager::count() const
@@ -158,24 +164,47 @@ bool IOManager::off(uint16_t id)
 
     return drivers[driverId];
 }
-    uint16_t IOManager::countByRoom(uint16_t roomId) const
+
+uint16_t IOManager::countByRoom(uint16_t roomId) const
 {
         uint16_t count = 0;
-
         for (uint16_t i = 0; i < channelCount; i++)
     {
         if (channels[i].roomId == roomId)
             count++;
     }
-
     return count;
 }
-bool IOManager::update(const IOChannel&)
+
+bool IOManager::remove(uint16_t id)
 {
+    for (uint16_t i = 0; i < channelCount; i++)
+    {
+        if (channels[i].id == id)
+        {
+            for (uint16_t j = i; j < channelCount - 1; j++)
+            {
+                channels[j] = channels[j + 1];
+            }
+
+            channelCount--;
+            return true;
+        }
+    }
+
+    return false;
+}
+bool IOManager::update(const IOChannel& channel)
+{
+    for (uint16_t i = 0; i < channelCount; i++)
+    {
+        if (channels[i].id == channel.id)
+        {
+            channels[i] = channel;
+            return true;
+        }
+    }
+
     return false;
 }
 
-bool IOManager::remove(uint16_t)
-{
-    return false;
-}
