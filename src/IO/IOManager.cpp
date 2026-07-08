@@ -41,12 +41,27 @@ void IOManager::begin()
             }
         }
     }    
-    Serial.print("channelCount: ");
-    Serial.println(channelCount);
     load();
-    Serial.print("Channel Count = ");
+    bool loaded = load();
+    
+    Serial.print("Load: ");
+    Serial.println(loaded ? "OK" : "NEW");
+    
+    Serial.print("Channel Count: ");
     Serial.println(channelCount);
     
+    for (uint16_t i = 0; i < channelCount; i++)
+    {
+        Serial.printf(
+            "%2d | %-12s | Room:%d | Driver:%d Device:%d Pin:%d\n",
+            channels[i].id,
+            channels[i].name.c_str(),
+            channels[i].roomId,
+            channels[i].address.driverId,
+            channels[i].address.device,
+            channels[i].address.pin
+        );
+    }    
     for (uint16_t i = 0; i < channelCount; i++)
     {
         Serial.print(channels[i].id);
