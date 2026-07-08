@@ -67,4 +67,25 @@ void ApiChannel::registerRoutes(WebServerService& web)
             response
         );
     });
+    web.server().on("/api/channels/toggle", HTTP_POST, [&web]()
+    {
+        if (!web.server().hasArg("id"))
+        {
+            web.server().send(400, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        uint16_t id = web.server().arg("id").toInt();
+    
+        bool ok = ioManager.toggle(id);
+    
+        if (ok)
+            ioManager.save();
+    
+        web.server().send(
+            ok ? 200 : 404,
+            "application/json",
+            ok ? "{\"success\":true}" : "{\"success\":false}"
+        );
+    });
 }
