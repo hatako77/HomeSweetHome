@@ -56,7 +56,7 @@ async function loadRooms()
         container.appendChild(card);
 
         const channelList = card.querySelector(".channel-list");
-
+        
         list.forEach(ch =>
         {
             const row = document.createElement("div");
@@ -93,6 +93,30 @@ async function loadRooms()
             };
 
             channelList.appendChild(row);
+        });
+
+        new Sortable(channelList,
+        {
+            group: "rooms",
+        
+            animation: 200,
+        
+            ghostClass: "dragging",
+        
+            onEnd: async function(evt)
+            {
+                const channelId = evt.item.dataset.id;
+        
+                const roomId = evt.to.id.replace("room-","");
+        
+                await fetch(
+                    `/api/channels/assign?id=${channelId}&roomId=${roomId}`,
+                    {
+                        method:"POST"
+                    });
+        
+                loadRooms();
+            }
         });
     });
 }
