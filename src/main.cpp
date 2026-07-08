@@ -4,7 +4,7 @@
 #include "OTA/OTAService.h"
 #include "Web/WebServerService.h"
 #include "Core/DemoData.h"
-
+#include <LittleFS.h>
 // =========================
 // WiFi
 // =========================
@@ -16,8 +16,17 @@ OTAService ota;
 void setup()
 {
     Serial.begin(115200);
+
+    if (!LittleFS.begin(true))
+    {
+        Serial.println("LittleFS Mount Failed");
+        while (true);
+    }
+
     WiFi.begin(ssid, password);
+
     Serial.print("Connecting WiFi");
+
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
@@ -27,14 +36,15 @@ void setup()
     Serial.println();
     Serial.println("WiFi connected");
     Serial.println(WiFi.localIP());
+
     ota.setCurrentVersion(APP_VERSION);
     ota.setVersionURL(
         "https://github.com/hatako77/HomeSweetHome/releases/latest/download/version.json"
     );
-
+    roomRepository.begin();
     ioManager.begin();
-    web.begin();
     DemoData::create();
+    web.begin();
     Serial.println("System Ready");
 }
 
