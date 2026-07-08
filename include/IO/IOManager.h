@@ -27,6 +27,8 @@ public:
     IIODriver* getDriver(uint16_t driverId);
     bool add(const IOChannel& channel);
     bool remove(uint16_t id);
+    bool save() const;
+    bool load();
 private:
     static constexpr uint8_t MAX_DRIVERS = 8;
     IIODriver* drivers[MAX_DRIVERS];
