@@ -2,7 +2,7 @@
 #include <FS.h>
 #include <LittleFS.h>
 #include <ArduinoJson.h>
-
+#include "IO/DriverRegistry.h"
 #include "IO/TypeHelper.h"
 #include "IO/IconHelper.h"
 IOManager ioManager;
@@ -10,10 +10,7 @@ IOManager ioManager;
 void IOManager::begin()
 {
     driverCount = 0;    
-    if (!registerDriver(&pcfDriver))
-    {
-        Serial.println("Failed to register PCF8574 driver");
-    }
+    DriverRegistry::registerDrivers();
     channelCount = 0;
     nextId = 1;
 
