@@ -40,7 +40,6 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 
   <div class="info">
     <div><i class="fa-solid fa-bolt"></i> Device: Running</div>
-    <div><i class="fa-solid fa-code-branch"></i> Version: <span id="version">...</span></div>
   </div>
 
   <a class="btn" href="/ota">
