@@ -93,9 +93,6 @@ bool RoomRepository::save()
 
         obj["id"] = rooms[i].id;
         obj["name"] = rooms[i].name;
-        obj["icon"] = rooms[i].icon;
-        obj["enabled"] = rooms[i].enabled;
-        obj["favorite"] = rooms[i].favorite;
     }
 
     serializeJson(doc, file);
@@ -138,9 +135,6 @@ bool RoomRepository::load()
 
         room.id = obj["id"] | nextId;
         room.name = obj["name"] | "";
-        room.icon = obj["icon"] | "";
-        room.enabled = obj["enabled"] | true;
-        room.favorite = obj["favorite"] | false;
 
         if (room.id >= nextId)
             nextId = room.id + 1;
