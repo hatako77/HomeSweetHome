@@ -29,20 +29,16 @@ Room* RoomRepository::get(uint16_t id)
     return nullptr;
 }
 
-bool RoomRepository::add(const Room& room)
+Room* RoomRepository::add(const Room& room)
 {
     if (roomCount >= MAX_ROOMS)
-        return false;
-
-    Room newRoom = room;
-
-    if (newRoom.id == 0)
-        newRoom.id = nextId++;
-
-    rooms[roomCount++] = newRoom;
-
-    return save();
+        return nullptr;
+    rooms[roomCount] = room;
+    rooms[roomCount].id = nextId++;
+    roomCount++;
+    return &rooms[roomCount - 1];
 }
+
 
 bool RoomRepository::update(const Room& room)
 {
