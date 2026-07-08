@@ -64,7 +64,7 @@ bool PCF8574Driver::isConnected(uint8_t index)
 
 uint8_t PCF8574Driver::deviceCount()
 {
-    return deviceCountValue;
+    return DEVICE_COUNT;
 }
 
 bool PCF8574Driver::read(uint8_t index, uint8_t pin)
