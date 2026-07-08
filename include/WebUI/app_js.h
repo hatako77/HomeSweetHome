@@ -109,7 +109,6 @@ async function loadRooms()
 
 window.onload = function()
 {
-    loadVersion();
     loadRooms();};
 
 )rawliteral";
