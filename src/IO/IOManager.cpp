@@ -158,11 +158,11 @@ bool IOManager::off(uint16_t id)
 
     return drivers[driverId];
 }
-    uint8_t IOManager::countByRoom(uint16_t roomId) const
+    uint16_t IOManager::countByRoom(uint16_t roomId) const
 {
-        uint6_t count = 0;
+        uint16_t count = 0;
 
-        for (uint6_t i = 0; i < channelCount; i++)
+        for (uint16_t i = 0; i < channelCount; i++)
     {
         if (channels[i].roomId == roomId)
             count++;
