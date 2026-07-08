@@ -12,7 +12,7 @@ class IOManager
 {
 public:
     uint16_t countByRoom(uint16_t roomId) const;
-    static constexpr uint16_t MAX_IO = 64;
+    static constexpr uint8_t MAX_IO = 64;
     bool write(uint16_t id, bool state);    
     bool read(uint16_t id) const;    
     bool on(uint16_t id);    
@@ -28,7 +28,7 @@ public:
     bool update(const IOChannel& channel);
     bool remove(uint16_t id);
 private:
-    static constexpr uint16_t MAX_DRIVERS = 8;
+    static constexpr uint8_t MAX_DRIVERS = 8;
     IIODriver* drivers[MAX_DRIVERS];
     uint16_t driverCount = 0;
     PCF8574Driver pcfDriver;
