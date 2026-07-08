@@ -7,28 +7,26 @@
 namespace Pages
 {
 
-void registerRoutes(WebServerService& web)
-{
-    auto& server = web.server();
-    server.on("/", HTTP_GET, [&server]()
+    void Pages::registerRoutes(WebServerService& web)
     {
-        server.send_P(200, "text/html", INDEX_HTML);
-    });
-    server.on("/ota", HTTP_GET, [&server]()
-    {
-        server.send_P(200, "text/html", OTA_HTML);
-    });
-    server.on("/style.css", HTTP_GET, [&server]()
-    {
-        server.send_P(200, "text/css", STYLE_CSS);
-    });
-    server.on("/app.js", HTTP_GET, [&server]()
-    {
-        server.send_P(200, "application/javascript", APP_JS);
-    });
-
-    // بعداً:
-    // server.on("/settings", HTTP_GET, ...);
-}
+        auto& server = web.server();
+    
+        if (!LittleFS.begin(true))
+        {
+            Serial.println("LittleFS Mount Failed");
+        }
+    
+        server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
+    
+        server.serveStatic("/style.css", LittleFS, "/style.css");
+        server.serveStatic("/app.js", LittleFS, "/app.js");
+    
+        server.serveStatic("/icons/", LittleFS, "/icons/");
+    
+        server.on("/ota", HTTP_GET, [&server]()
+        {
+            server.send_P(200, "text/html", OTA_HTML);
+        });
+    }
 
 }
