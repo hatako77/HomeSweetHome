@@ -14,10 +14,6 @@ void IOManager::begin()
     {
         Serial.println("Failed to register PCF8574 driver");
     }
-    for (uint16_t i = 0; i < driverCount; i++)
-    {
-        drivers[i]->begin();
-    }
     channelCount = 0;
     nextId = 1;
 
