@@ -7,6 +7,39 @@
 
 void ApiChannel::registerRoutes(WebServerService& web)
 {
+    web.server().on("/api/channels/on", HTTP_POST, [&web]()
+    {
+        if (!web.server().hasArg("id"))
+        {
+            web.server().send(400, "application/json", "{\"success\":false}");
+            return;
+        }    
+        bool ok = ioManager.on(web.server().arg("id").toInt());    
+        web.server().send(
+            ok ? 200 : 404,
+            "application/json",
+            ok ? "{\"success\":true}" : "{\"success\":false}"
+        );
+    });
+
+    web.server().on("/api/channels/off", HTTP_POST, [&web]()
+    {
+        if (!web.server().hasArg("id"))
+        {
+            web.server().send(400, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        bool ok = ioManager.off(web.server().arg("id").toInt());
+    
+        web.server().send(
+            ok ? 200 : 404,
+            "application/json",
+            ok ? "{\"success\":true}" : "{\"success\":false}"
+        );
+    });
+
+    
     web.server().on("/api/channels", HTTP_GET, [&web]()
     {
         if (web.server().hasArg("id"))
