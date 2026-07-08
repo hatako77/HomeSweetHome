@@ -9,6 +9,37 @@ void ApiChannel::registerRoutes(WebServerService& web)
 {
     web.server().on("/api/channels", HTTP_GET, [&web]()
     {
+        if (web.server().hasArg("id"))
+        {
+            uint16_t id = web.server().arg("id").toInt();
+        
+            const IOChannel* ch = ioManager.getChannel(id);
+        
+            if (!ch)
+            {
+                web.server().send(404, "application/json",
+                    "{\"success\":false}");
+                return;
+            }
+        
+            JsonDocument doc;
+        
+            doc["id"] = ch->id;
+            doc["name"] = ch->name;
+            doc["roomId"] = ch->roomId;
+            doc["state"] = ch->state;
+            doc["enabled"] = ch->enabled;
+            doc["favorite"] = ch->favorite;
+            doc["type"] = (uint8_t)ch->type;
+            doc["icon"] = (uint8_t)ch->icon;
+        
+            String json;
+            serializeJson(doc, json);
+        
+            web.server().send(200, "application/json", json);
+            return;
+        }
+        
         JsonDocument doc;
 
         JsonArray arr = doc.to<JsonArray>();
