@@ -1,7 +1,7 @@
 #ifndef WEB_SERVER_SERVICE_H
 #define WEB_SERVER_SERVICE_H
 
-#include <WebServer.h>
+#include <ESPAsyncWebServer.h>
 
 class WebServerService
 {
@@ -9,10 +9,10 @@ public:
     void begin();
     void update();
 
-    WebServer& server();
+    AsyncWebServer& server();
 
 private:
-    WebServer webServer{80};
+    AsyncWebServer webServer{80};
 
     void registerPages();
     void registerApi();
