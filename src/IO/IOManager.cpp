@@ -44,6 +44,15 @@ void IOManager::begin()
     Serial.print("channelCount: ");
     Serial.println(channelCount);
     load();
+    Serial.print("Channel Count = ");
+    Serial.println(channelCount);
+    
+    for (uint16_t i = 0; i < channelCount; i++)
+    {
+        Serial.print(channels[i].id);
+        Serial.print(" : ");
+        Serial.println(channels[i].name);
+    }
 }
 
 void IOManager::update()
