@@ -142,7 +142,118 @@ h2 {
   font-size: 15px;
   color: #f1f5f9;
 }
+/* ---------- ROOM ---------- */
 
+.room-card{
+    background:#111827;
+    border:1px solid #1f2937;
+    border-radius:16px;
+    margin-bottom:18px;
+    overflow:hidden;
+}
+
+.room-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 18px;
+    background:#0f172a;
+    border-bottom:1px solid #1f2937;
+}
+
+.room-name{
+    font-size:17px;
+    font-weight:600;
+}
+
+.room-count{
+    font-size:12px;
+    color:#94a3b8;
+}
+
+/* ---------- CHANNEL LIST ---------- */
+
+.channel-list{
+    padding:12px;
+    min-height:50px;
+}
+
+/* ---------- CHANNEL ---------- */
+
+.channel{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:12px;
+    margin-bottom:10px;
+
+    border-radius:12px;
+
+    background:#1e293b;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.channel:hover{
+    transform:translateX(3px);
+}
+
+.channel-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.channel-icon{
+    width:38px;
+    height:38px;
+
+    border-radius:10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#334155;
+}
+
+.channel-name{
+    font-size:14px;
+}
+
+.channel-state{
+
+    width:14px;
+    height:14px;
+
+    border-radius:50%;
+
+    background:#ef4444;
+}
+
+.channel.on .channel-state{
+
+    background:#22c55e;
+
+    box-shadow:0 0 12px #22c55e;
+}
+
+.dragging{
+
+    opacity:.5;
+
+}
+
+.channel-list.drag-over{
+
+    outline:2px dashed #38bdf8;
+
+    border-radius:12px;
+
+}
 )rawliteral";
 
 #endif
