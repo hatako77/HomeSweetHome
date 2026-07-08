@@ -5,23 +5,6 @@
 
 const char APP_JS[] PROGMEM = R"rawliteral(
 
-async function loadVersion()
-{
-    try
-    {
-        const res = await fetch("/api/ota/version");
-        const data = await res.json();
-
-        const el = document.getElementById("version");
-
-        if(el)
-            el.innerText = "Version: " + data.current;
-    }
-    catch(e)
-    {
-        console.log(e);
-    }
-}
 async function loadRooms()
 {
     const roomResult = await (await fetch("/api/rooms")).json();
