@@ -32,6 +32,8 @@ public:
     bool registerDriver(IIODriver* driver);
     bool assignToRoom(uint16_t channelId, uint8_t roomId);
     bool removeFromRoom(uint16_t channelId);
+    const IOChannel* getAt(uint16_t index) const;
+    IOChannel* getAt(uint16_t index);
 private:
     static constexpr uint8_t MAX_DRIVERS = 8;
     IIODriver* drivers[MAX_DRIVERS];
