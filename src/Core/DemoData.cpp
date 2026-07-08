@@ -5,8 +5,8 @@
 
 void DemoData::create()
 {
-    if (roomRepository.count() == 0)
-    {
+    //if (roomRepository.count() == 0)
+    //{
         roomRepository.add({0,"Living Room"});
         roomRepository.add({0,"Kitchen"});
         roomRepository.add({0,"Master Bedroom"});
@@ -15,9 +15,8 @@ void DemoData::create()
         roomRepository.add({0,"WC"});
         roomRepository.add({0,"Hallway"});
         roomRepository.add({0,"Yard"});
-
         roomRepository.save();
-    }
+    //}
 
     if (ioManager.count() == 0)
         return;
@@ -35,8 +34,7 @@ void DemoData::create()
         }
     }
 
-    if(assigned)
-        return;
+    //if(assigned) return;
 
     const char* names[] =
     {
@@ -44,24 +42,17 @@ void DemoData::create()
         "TV Light",
         "Chandelier",
         "Wall Light",
-
         "Kitchen Main",
         "Cabinet",
         "Hood",
-
         "Master Main",
         "Bed Light",
         "Reading",
-
         "Bedroom Main",
         "Desk",
-
         "Bathroom",
-
         "WC",
-
         "Hall",
-
         "Yard",
         "Parking",
         "Gate",
