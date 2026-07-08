@@ -14,7 +14,8 @@ public:
     uint16_t countByRoom(uint16_t roomId) const;
     static constexpr uint8_t MAX_IO = 64;
     bool write(uint16_t id, bool state);    
-    bool read(uint16_t id) const;    
+    bool read(uint16_t id) const;  
+    bool update(const IOChannel& channel);
     bool on(uint16_t id);    
     bool off(uint16_t id);    
     bool toggle(uint16_t id);
