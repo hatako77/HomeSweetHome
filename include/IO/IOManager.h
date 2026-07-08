@@ -30,6 +30,8 @@ public:
     bool save() const;
     bool load();
     bool registerDriver(IIODriver* driver);
+    bool assignToRoom(uint16_t channelId, uint8_t roomId);
+    bool removeFromRoom(uint16_t channelId);
 private:
     static constexpr uint8_t MAX_DRIVERS = 8;
     IIODriver* drivers[MAX_DRIVERS];
