@@ -223,7 +223,7 @@ bool IOManager::save() const
 
     for (uint16_t i = 0; i < channelCount; i++)
     {
-        IOChannel* ch = &channels[i];
+        const auto* ch = &channels[i];
         JsonObject o = arr.add<JsonObject>();
         o["id"] = ch->id;        
         o["name"] = ch->name;        
