@@ -26,7 +26,6 @@ public:
     uint16_t count() const;
     IIODriver* getDriver(uint16_t driverId);
     bool add(const IOChannel& channel);
-    bool update(const IOChannel& channel);
     bool remove(uint16_t id);
 private:
     static constexpr uint8_t MAX_DRIVERS = 8;
