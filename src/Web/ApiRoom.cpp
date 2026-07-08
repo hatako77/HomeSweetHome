@@ -103,46 +103,34 @@ void ApiRoom::registerRoutes(WebServerService& web)
             );
             return;
         }
-    
-        Room room;
-    
-        room.name = doc["name"] | "Room";
-    
-        bool ok = roomRepository.add(room);
-    
-        if (ok)
-            roomRepository.save();
-    
-        JsonDocument response;
-    
-        response["success"] = ok;
-    
-        if (ok)
+        Room room;    
+        room.name = doc["name"] | "Room";    
+        Room* created = roomRepository.add(room);
+        JsonDocument response;        
+        if (created)
         {
-            JsonObject data = response["data"].to<JsonObject>();
-    
-            // آخرین Room اضافه شده
-            Room* created = roomRepository.get(roomRepository.count() - 1);
-    
+            roomRepository.save();        
+            response["success"] = true;        
+            JsonObject data = response["data"].to<JsonObject>();        
             data["id"] = created->id;
             data["name"] = created->name;
         }
         else
         {
+            response["success"] = false;
             response["message"] = "Unable to create room";
         }
-    
-        String json;
-    
-        serializeJson(response, json);
-    
+        String json;    
+        serializeJson(response, json);  
+
         web.server().send(
-            ok ? 201 : 500,
+        created ? 201 : 500,
             "application/json",
             json
         );
     });
-   
+
+    
     web.server().on("/api/rooms/update", HTTP_POST, [&web]()
     {
         if (!web.server().hasArg("plain"))
@@ -150,27 +138,20 @@ void ApiRoom::registerRoutes(WebServerService& web)
             web.server().send(400, "application/json",
                 "{\"success\":false,\"message\":\"Missing body\"}");
             return;
-        }
-    
-        JsonDocument doc;
-    
+        }    
+        JsonDocument doc;    
         if (deserializeJson(doc, web.server().arg("plain")))
         {
             web.server().send(400, "application/json",
                 "{\"success\":false,\"message\":\"Invalid JSON\"}");
             return;
-        }
-    
-        Room room;
-    
+        }    
+        Room room;    
         room.id = doc["id"] | 0;
-        room.name = doc["name"] | "Room";
-    
-        bool ok = roomRepository.update(room);
-    
+        room.name = doc["name"] | "Room";    
+        bool ok = roomRepository.update(room);    
         if (ok)
-            roomRepository.save();
-    
+            roomRepository.save();    
         web.server().send(
             ok ? 200 : 404,
             "application/json",
