@@ -10,7 +10,7 @@ IOManager ioManager;
 void IOManager::begin()
 {
     driverCount = 0;    
-    drivers[driverCount++] = &pcfDriver;    
+    registerDriver(&pcfDriver);    
     for (uint16_t i = 0; i < driverCount; i++)
     {
         drivers[i]->begin();
