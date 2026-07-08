@@ -104,7 +104,7 @@ bool IOManager::read(uint16_t id) const
     return channels[id].state;
 }
 
-IOChannel* IOManager::getChannel(uint8_t id)
+IOChannel* IOManager::getChannel(uint16_t id)
 {
     for (uint16_t i = 0; i < channelCount; i++)
     {
