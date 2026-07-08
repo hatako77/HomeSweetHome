@@ -27,7 +27,7 @@ void IOManager::begin()
             IOChannel ch;
 
             ch.id = channelCount;
-            ch.name = "IO " + String(ioCount + 1);
+            ch.name = "IO " + String(channelCount  + 1);
             // TODO: Load icon from storage.
             ch.icon = IOIcon::Light;
             // TODO: Load channel configuration from storage.
