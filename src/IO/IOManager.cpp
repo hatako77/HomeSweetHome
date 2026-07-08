@@ -79,38 +79,39 @@ void IOManager::update()
 }
 bool IOManager::write(uint16_t id, bool state)
 {
-    if (id >= channelCount)
-        return false;
-    if (channels[id].type != IOType::DigitalOutput)
-        return false;
-    channels[id].state = state;
-    bool hwState = state;
-    if (channels[id].activeLow)
-        hwState = !hwState;
-    IIODriver* drv = getDriver(channels[id].address.driverId);
+    IOChannel* ch = getChannel(id);
+    if (!ch)
+        return false;    
+    if (ch->type != IOType::DigitalOutput)
+        return false;    
+    ch->state = state;    
+    bool hwState = state;    
+    if (ch->activeLow)
+        hwState = !hwState;    
+    IIODriver* drv = getDriver(ch->address.driverId);    
     if (!drv)
         return false;    
     drv->write(
-        channels[id].address.device,
-        channels[id].address.pin,
-        hwState
-    );
+        ch->address.device,
+        ch->address.pin,
+        hwState);    
     return true;
 }
+
+
 bool IOManager::read(uint16_t id) const
 {
-    if (id >= channelCount)
+const IOChannel* ch = getChannel(id);
+    if (!ch)
         return false;
-    return channels[id].state;
-}
-
-IOChannel* IOManager::getChannel(uint16_t id)
-{
-    for (uint16_t i = 0; i < channelCount; i++)
+    return ch->state;}
+    IOChannel* IOManager::getChannel(uint16_t id)
     {
-        if (channels[i].id == id)
-            return &channels[i];
-    }
+        for (uint16_t i = 0; i < channelCount; i++)
+        {
+            if (channels[i].id == id)
+                return &channels[i];
+        }
     return nullptr;
 }
 const IOChannel* IOManager::getChannel(uint16_t id) const
