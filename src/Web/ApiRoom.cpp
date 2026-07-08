@@ -1,5 +1,6 @@
 #include "Web/ApiRoom.h"
-
+#include "IO/IOManager.h"
+#include "IO/IOConfig.h"
 #include <ArduinoJson.h>
 #include "Core/Room.h"
 #include "Repositories/RoomRepository.h"
@@ -71,15 +72,15 @@ void ApiRoom::registerRoutes(WebServerService& web)
         );
     });
     
-    server.on("/api/rooms/channels", HTTP_GET, [&server]()
+    web.server().on("/api/rooms/channels", HTTP_GET, [&web]()
     {
-        if (!server.hasArg("id"))
+        if (!web.server().hasArg("id"))
         {
-            server.send(400, "text/plain", "Missing room id");
+            web.server().send(400, "text/plain", "Missing room id");
             return;
         }
     
-        uint8_t roomId = server.arg("id").toInt();
+        uint8_t roomId = web.server().arg("id").toInt();
     
         JsonDocument doc;
         JsonArray arr = doc.to<JsonArray>();
@@ -99,13 +100,17 @@ void ApiRoom::registerRoutes(WebServerService& web)
             o["id"] = ch->id;
             o["name"] = ch->name;
             o["state"] = ch->state;
-            o["type"] = (uint8_t)ch->type;
+            o["type"] = static_cast<uint8_t>(ch->type);
         }
     
-        String json;
-        serializeJson(doc, json);
+        String response;
+        serializeJson(doc, response);
     
-        server.send(200, "application/json", json);
+        web.server().send(
+            200,
+            "application/json",
+            response
+        );
     });
     
     web.server().on("/api/rooms/add", HTTP_POST, [&web]()
