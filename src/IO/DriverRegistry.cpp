@@ -4,7 +4,12 @@
 
 static PCF8574Driver pcfDriver;
 
+bool DriverRegistry::registerDriver(IIODriver* driver)
+{
+    return ioManager.registerDriver(driver);
+}
+
 void DriverRegistry::registerDrivers()
 {
-    ioManager.registerDriver(&pcfDriver);
+    registerDriver(&pcfDriver);
 }
