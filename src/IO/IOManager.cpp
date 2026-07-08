@@ -24,7 +24,7 @@ void IOManager::begin()
             for (uint16_t pin = 0; pin < drv->pinCount(device); pin++)
             {
                 IOChannel ch;    
-                ch.id = channelCount;
+                ch.id = 0;
                 ch.name = "IO " + String(channelCount  + 1);
                 ch.icon = IOIcon::Light;
                 ch.type = IOType::DigitalOutput;
@@ -69,6 +69,7 @@ void IOManager::update()
 
         channels[i].state = state;
     }
+    save();
 }
 bool IOManager::write(uint16_t id, bool state)
 {
@@ -194,11 +195,18 @@ bool IOManager::update(const IOChannel& channel)
     {
         if (channels[i].id == channel.id)
         {
-            channels[i] = channel;
+            channels[i].name       = channel.name;
+            channels[i].icon       = channel.icon;
+            channels[i].type       = channel.type;
+            channels[i].enabled    = channel.enabled;
+            channels[i].favorite   = channel.favorite;
+            channels[i].activeLow  = channel.activeLow;
+            channels[i].roomId     = channel.roomId;
+            channels[i].groupId    = channel.groupId;
             return true;
         }
     }
-
+    save();
     return false;
 }
 
@@ -213,9 +221,9 @@ bool IOManager::save() const
 
     JsonArray arr = doc.to<JsonArray>();
 
-    for (uint8_t i = 0; i < count(); i++)
+    for (uint16_t i = 0; i < channelCount; i++)
     {
-        auto* ch = getChannel(i);
+        IOChannel* ch = &channels[i];
         JsonObject o = arr.add<JsonObject>();
         o["id"] = ch->id;        
         o["name"] = ch->name;        
@@ -261,7 +269,7 @@ bool IOManager::load()
         if (i >= count())
             break;
 
-        auto* ch = getChannel(i);
+        IOChannel* ch = &channels[i];
 
         ch->name = o["name"] | ch->name;
         ch->enabled = o["enabled"] | true;
