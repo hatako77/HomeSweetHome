@@ -32,7 +32,6 @@ void setup()
     );
 
     ioManager.begin();
-    IOStorage::load(ioManager);
     web.begin();
     Serial.println("System Ready");
 }
