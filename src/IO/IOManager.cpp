@@ -10,7 +10,10 @@ IOManager ioManager;
 void IOManager::begin()
 {
     driverCount = 0;    
-    registerDriver(&pcfDriver);    
+    if (!registerDriver(&pcfDriver))
+    {
+        Serial.println("Failed to register PCF8574 driver");
+    }
     for (uint16_t i = 0; i < driverCount; i++)
     {
         drivers[i]->begin();
@@ -297,6 +300,6 @@ bool IOManager::registerDriver(IIODriver* driver)
         return false;
 
     drivers[driverCount++] = driver;
-
+    driver->begin();
     return true;
 }
