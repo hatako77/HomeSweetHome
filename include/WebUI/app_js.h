@@ -119,17 +119,31 @@ async function loadRooms()
             row.dataset.id = ch.id;
 
             row.innerHTML = `
-                <div class="channel-left">
-                    <div class="channel-icon">
-                        ${Icons[ch.icon] || Icons.generic}
-                    </div>
-
+            <div class="channel-left">
+            
+                <div class="channel-icon">
+                    ${Icons[ch.icon] || Icons.generic}
+                </div>
+            
+                <div>
+            
                     <div class="channel-name">
                         ${ch.name}
                     </div>
+            
+                    <div class="channel-type">
+                        ${ch.type}
+                    </div>
+            
                 </div>
-
+            
+            </div>
+            
+            <div class="channel-right">
+            
                 <div class="channel-state"></div>
+            
+            </div>
             `;
 
             row.onclick = async() =>
