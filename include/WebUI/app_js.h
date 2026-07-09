@@ -110,43 +110,32 @@ async function loadRooms()
         list.forEach(ch =>
         {
             const row = document.createElement("div");
-
-            row.className = "channel";
-
+            row.className = "channel tile";
             if(ch.state)
                 row.classList.add("on");
 
             row.dataset.id = ch.id;
 
             row.innerHTML = `
-            <div class="channel-left">
-            
-                <div class="channel-icon">
-                    ${Icons[ch.icon] || Icons.generic}
-                </div>
-            
-                <div>
-            
-                    <div class="channel-name">
-                        ${ch.name}
-                    </div>
-            
-                    <div class="channel-type">
-                        ${ch.type}
-                    </div>
-            
-                </div>
-            
+            <div class="tile-icon">
+                ${Icons[ch.icon] || Icons.generic}
             </div>
             
-            <div class="channel-right">
+            <div class="tile-name">
+                ${ch.name}
+            </div>
+            
+            <div class="tile-bottom">
             
                 <div class="channel-state"></div>
             
+                <div class="tile-label">
+                    ${ch.state ? "ON" : "OFF"}
+                </div>
+            
             </div>
             `;
-
-            row.onclick = async() =>
+row.onclick = async() =>
             {
                 await fetch("/api/channels/toggle?id="+ch.id,
                 {
