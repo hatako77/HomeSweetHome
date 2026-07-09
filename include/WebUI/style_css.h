@@ -254,6 +254,228 @@ h2 {
     border-radius:12px;
 
 }
+/* ===========================
+   ROOM GRID
+=========================== */
+
+#roomsContainer{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+
+gap:20px;
+
+align-items:start;
+
+}
+
+
+/* ===========================
+   ROOM CARD
+=========================== */
+
+.room-card{
+
+background:#111827;
+
+border:1px solid #1f2937;
+
+border-radius:18px;
+
+overflow:hidden;
+
+transition:.25s;
+
+box-shadow:0 8px 24px rgba(0,0,0,.25);
+
+}
+
+.room-card:hover{
+
+transform:translateY(-4px);
+
+border-color:#38bdf8;
+
+box-shadow:0 12px 28px rgba(56,189,248,.18);
+
+}
+
+.room-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:16px 18px;
+
+background:#0f172a;
+
+border-bottom:1px solid #1f2937;
+
+}
+
+.room-name{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+font-size:17px;
+
+font-weight:600;
+
+}
+
+.room-count{
+
+font-size:12px;
+
+padding:4px 10px;
+
+border-radius:30px;
+
+background:#1e293b;
+
+color:#94a3b8;
+
+}
+
+
+/* ===========================
+   CHANNEL LIST
+=========================== */
+
+.channel-list{
+
+padding:12px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:10px;
+
+min-height:80px;
+
+}
+
+
+/* ===========================
+   CHANNEL CARD
+=========================== */
+
+.channel{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:14px;
+
+border-radius:14px;
+
+background:#0b1220;
+
+cursor:pointer;
+
+transition:.2s;
+
+border:1px solid transparent;
+
+}
+
+.channel:hover{
+
+transform:scale(1.02);
+
+border-color:#38bdf8;
+
+}
+
+.channel-left{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+}
+
+.channel-icon{
+
+width:42px;
+
+height:42px;
+
+border-radius:12px;
+
+background:#1e293b;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+.channel-icon svg{
+
+width:22px;
+
+height:22px;
+
+fill:#94a3b8;
+
+}
+
+.channel-name{
+
+font-size:15px;
+
+font-weight:500;
+
+}
+
+.channel-state{
+
+width:14px;
+
+height:14px;
+
+border-radius:50%;
+
+background:#ef4444;
+
+transition:.25s;
+
+}
+
+.channel.on .channel-state{
+
+background:#22c55e;
+
+box-shadow:0 0 14px #22c55e;
+
+}
+
+.dragging{
+
+opacity:.4;
+
+transform:rotate(3deg);
+
+}
+
+
 )rawliteral";
 
 #endif
