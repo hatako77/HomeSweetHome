@@ -10,13 +10,14 @@ void registerRoutes(WebServerService& web)
 {
     auto& server = web.server();
 
-    if (!LittleFS.begin(true))
+    if(!LittleFS.begin(true))
     {
         Serial.println("LittleFS Mount Failed");
         return;
     }
 
-    server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
+    server.serveStatic("/", LittleFS, "/")
+          .setDefaultFile("index.html");
 
     server.serveStatic("/style.css", LittleFS, "/style.css");
 
