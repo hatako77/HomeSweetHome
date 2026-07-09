@@ -121,7 +121,7 @@ async function loadRooms()
             row.innerHTML = `
                 <div class="channel-left">
                     <div class="channel-icon">
-                        <i class="fa-solid fa-lightbulb"></i>
+                        ${Icons[ch.icon] || Icons.generic}
                     </div>
 
                     <div class="channel-name">
