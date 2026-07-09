@@ -1,6 +1,9 @@
 #include "Web/Pages.h"
 #include "Web/WebServerService.h"
-
+#include "WebUI/index_html.h"
+#include "WebUI/style_css.h"
+#include "WebUI/app_js.h"
+#include "WebUI/ota_html.h"
 #include <LittleFS.h>
 
 namespace Pages
