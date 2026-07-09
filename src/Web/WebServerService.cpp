@@ -8,7 +8,6 @@
 #include "Web/ApiRoom.h"
 #include "Web/ApiChannel.h"
 
-
 WebServerService web;
 extern OTAService ota;
 
@@ -18,15 +17,15 @@ void WebServerService::begin()
     registerApi();
 
     webServer.begin();
+
     Serial.println("WebServer started");
 }
 
 void WebServerService::update()
 {
-    webServer.handleClient();
 }
 
-WebServer& WebServerService::server()
+AsyncWebServer& WebServerService::server()
 {
     return webServer;
 }
