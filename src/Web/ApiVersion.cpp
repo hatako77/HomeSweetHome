@@ -12,18 +12,19 @@ void registerRoutes(WebServerService& web)
 {
     auto& server = web.server();
 
-    server.on("/api/version", HTTP_GET, [&server]()
-    {
-        JsonDocument doc;
+    server.on("/api/version", HTTP_GET,
+        [](AsyncWebServerRequest* request)
+        {
+            JsonDocument doc;
 
-        doc["app"] = APP_NAME;
-        doc["version"] = APP_VERSION;
+            doc["app"] = APP_NAME;
+            doc["version"] = APP_VERSION;
 
-        String out;
-        serializeJson(doc, out);
+            String out;
+            serializeJson(doc, out);
 
-        server.send(200, "application/json", out);
-    });
+            request->send(200, "application/json", out);
+        });
 }
 
 }
