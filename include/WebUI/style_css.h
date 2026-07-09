@@ -474,7 +474,51 @@ opacity:.4;
 transform:rotate(3deg);
 
 }
+.channel-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
+.channel-type{
+    font-size:12px;
+    color:#64748b;
+    margin-top:4px;
+}
+
+.channel.on{
+
+    background:linear-gradient(
+        90deg,
+        rgba(34,197,94,.12),
+        rgba(17,24,39,1)
+    );
+
+}
+
+.channel.on .channel-icon{
+
+    background:#14532d;
+
+}
+
+.channel.on .channel-icon svg{
+
+    fill:#22c55e;
+
+}
+
+.channel{
+
+    user-select:none;
+
+}
+
+.channel:active{
+
+    transform:scale(.97);
+
+}
 
 )rawliteral";
 
