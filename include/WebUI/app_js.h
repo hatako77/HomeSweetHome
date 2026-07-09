@@ -599,3 +599,33 @@ window.onload=()=>
 {
     init();
 };
+function heartbeat()
+{
+    if(socket && socket.readyState===1)
+    {
+        socket.send(
+            JSON.stringify(
+            {
+                type:"ping"
+            }
+        ));
+    }
+}
+
+setInterval(
+    heartbeat,
+    30000
+);
+
+window.addEventListener(
+    "beforeunload",
+    () =>
+    {
+        if(socket)
+            socket.close();
+    }
+);
+
+)rawliteral";
+
+#endif
