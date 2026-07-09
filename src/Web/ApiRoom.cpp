@@ -4,233 +4,187 @@
 #include <ArduinoJson.h>
 #include "Core/Room.h"
 #include "Repositories/RoomRepository.h"
-
+#include <ESPAsyncWebServer.h>
 
 void ApiRoom::registerRoutes(WebServerService& web)
 {
-    web.server().on("/api/rooms", HTTP_GET, [&web]()
+    auto& server = web.server();
+    server.on("/api/rooms", HTTP_GET,
+    [](AsyncWebServerRequest *request)
     {
-        // GET /api/rooms?id=1
-        if (web.server().hasArg("id"))
+        if(request->hasParam("id"))
         {
-            uint16_t id = web.server().arg("id").toInt();
+            uint16_t id =
+                request->getParam("id")->value().toInt();
     
             Room* room = roomRepository.get(id);
     
-            if (!room)
+            if(!room)
             {
-                web.server().send(
-                    404,
-                    "application/json",
-                    "{\"success\":false,\"message\":\"Room not found\"}"
-                );
+                request->send(404,
+                              "application/json",
+                              "{\"success\":false}");
                 return;
             }
     
             JsonDocument doc;
     
-            doc["success"] = true;
+            doc["id"]=room->id;
+            doc["name"]=room->name;
     
-            JsonObject data = doc["data"].to<JsonObject>();
-            data["id"] = room->id;
-            data["name"] = room->name;
+            String out;
+            serializeJson(doc,out);
     
-            String response;
-            serializeJson(doc, response);
-    
-            web.server().send(
-                200,
-                "application/json",
-                response
-            );
-    
+            request->send(200,"application/json",out);
             return;
         }
     
-        // GET /api/rooms
         JsonDocument doc;
     
-        doc["success"] = true;
+        JsonArray arr = doc.to<JsonArray>();
     
-        JsonArray data = doc["data"].to<JsonArray>();
-    
-        for (uint16_t i = 0; i < roomRepository.count(); i++)
+        for(uint16_t i=0;i<roomRepository.count();i++)
         {
             Room* room = roomRepository.get(i);
     
-            if (!room)
+            if(!room)
                 continue;
     
-            JsonObject obj = data.add<JsonObject>();
+            JsonObject o = arr.add<JsonObject>();
     
-            obj["id"] = room->id;
-            obj["name"] = room->name;
+            o["id"]=room->id;
+            o["name"]=room->name;
         }
     
-        String response;
+        String out;
     
-        serializeJson(doc, response);
+        serializeJson(doc,out);
     
-        web.server().send(
-            200,
-            "application/json",
-            response
-        );
+        request->send(200,"application/json",out);
     });
     
     
     
-    web.server().on("/api/rooms", HTTP_POST, [&web]()
+    server.on("/api/rooms",HTTP_POST,    
+    [](AsyncWebServerRequest *request){},nullptr,    
+    [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t, size_t)
     {
-        if (!web.server().hasArg("plain"))
+        JsonDocument doc;    
+        if(deserializeJson(doc,data,len))
         {
-            web.server().send(
-                400,
-                "application/json",
-                "{\"success\":false,\"message\":\"Missing body\"}"
-            );
+            request->send(400,
+                          "application/json",
+                          "{\"success\":false}");
             return;
-        }
+        }    
+        Room room;    
+        room.name=doc["name"]|"Room";    
+        Room* created=roomRepository.add(room);    
+        if(created)
+            roomRepository.save();    
+        request->send(created?201:500,
+                      "application/json",
+                      created?
+                      "{\"success\":true}":
+                      "{\"success\":false}");
+    });
     
-        JsonDocument doc;
-    
-        if (deserializeJson(doc, web.server().arg("plain")))
+    server.on("/api/rooms/update", HTTP_POST,    
+    [](AsyncWebServerRequest *request){}, nullptr,    
+    [](AsyncWebServerRequest *request, uint8_t *data,
+    size_t len, size_t, size_t)
+    {
+        JsonDocument doc;    
+        if (deserializeJson(doc, data, len))
         {
-            web.server().send(
+            request->send(
                 400,
                 "application/json",
                 "{\"success\":false,\"message\":\"Invalid JSON\"}"
             );
             return;
-        }
-        Room room;    
-        room.name = doc["name"] | "Room";    
-        Room* created = roomRepository.add(room);
-        JsonDocument response;        
-        if (created)
-        {
-            roomRepository.save();        
-            response["success"] = true;        
-            JsonObject data = response["data"].to<JsonObject>();        
-            data["id"] = created->id;
-            data["name"] = created->name;
-        }
-        else
-        {
-            response["success"] = false;
-            response["message"] = "Unable to create room";
-        }
-        String json;    
-        serializeJson(response, json);  
-
-        web.server().send(
-        created ? 201 : 500,
-            "application/json",
-            json
-        );
-    });
-
-    
-    web.server().on("/api/rooms/update", HTTP_POST, [&web]()
-    {
-        if (!web.server().hasArg("plain"))
-        {
-            web.server().send(400, "application/json",
-                "{\"success\":false,\"message\":\"Missing body\"}");
-            return;
-        }    
-        JsonDocument doc;    
-        if (deserializeJson(doc, web.server().arg("plain")))
-        {
-            web.server().send(400, "application/json",
-                "{\"success\":false,\"message\":\"Invalid JSON\"}");
-            return;
         }    
         Room room;    
-        room.id = doc["id"] | 0;
+        room.id   = doc["id"] | 0;
         room.name = doc["name"] | "Room";    
         bool ok = roomRepository.update(room);    
         if (ok)
             roomRepository.save();    
-        web.server().send(
+        request->send(
             ok ? 200 : 404,
             "application/json",
-            ok
-                ? "{\"success\":true}"
-                : "{\"success\":false,\"message\":\"Room not found\"}"
+            ok ?
+                "{\"success\":true}" :
+                "{\"success\":false,\"message\":\"Room not found\"}"
         );
     });
     
-    web.server().on("/api/rooms/channels", HTTP_GET, [&web]()
+    server.on("/api/rooms/channels",HTTP_GET,
+    [](AsyncWebServerRequest *request)
     {
-        if (!web.server().hasArg("id"))
+        if(!request->hasParam("id"))
         {
-            web.server().send(400, "text/plain", "Missing room id");
+            request->send(400,"text/plain","Missing room id");
             return;
         }
     
-        uint8_t roomId = web.server().arg("id").toInt();
+        uint16_t roomId =
+            request->getParam("id")->value().toInt();
     
         JsonDocument doc;
-        JsonArray arr = doc.to<JsonArray>();
     
-        for (uint16_t i = 0; i < ioManager.count(); i++)
+        JsonArray arr=doc.to<JsonArray>();
+    
+        for(uint16_t i=0;i<ioManager.count();i++)
         {
-            IOChannel* ch = ioManager.getChannel(i);
+            const IOChannel* ch=ioManager.getAt(i);
     
-            if (!ch)
+            if(!ch)
                 continue;
     
-            if (ch->roomId != roomId)
+            if(ch->roomId!=roomId)
                 continue;
     
-            JsonObject o = arr.add<JsonObject>();
+            JsonObject o=arr.add<JsonObject>();
     
-            o["id"] = ch->id;
-            o["name"] = ch->name;
-            o["state"] = ch->state;
-            o["type"] = static_cast<uint8_t>(ch->type);
+            o["id"]=ch->id;
+            o["name"]=ch->name;
+            o["state"]=ch->state;
         }
     
-        String response;
-        serializeJson(doc, response);
+        String out;
     
-        web.server().send(
-            200,
-            "application/json",
-            response
-        );
+        serializeJson(doc,out);
+    
+        request->send(200,"application/json",out);
     });
     
-    web.server().on("/api/rooms/add", HTTP_POST, [&web]()
+    server.on("/api/rooms/add", HTTP_POST,    
+    [](AsyncWebServerRequest *request){}, nullptr,    
+    [](AsyncWebServerRequest *request,
+    uint8_t *data, size_t len, size_t, size_t)
     {
-        if (!web.server().hasArg("plain"))
+        JsonDocument doc;    
+        if (deserializeJson(doc, data, len))
         {
-            web.server().send(400, "application/json", "{\"success\":false}");
+            request->send(
+                400,
+                "application/json",
+                "{\"success\":false}"
+            );
             return;
-        }
-    
-        JsonDocument doc;
-    
-        if (deserializeJson(doc, web.server().arg("plain")))
-        {
-            web.server().send(400, "application/json", "{\"success\":false}");
-            return;
-        }
-    
-        Room room;
-    
-        room.name = doc["name"] | "Room";
-    
-        bool ok = roomRepository.add(room);
-    
-        if (ok)
-            roomRepository.save();
-    
-        web.server().send(
-            ok ? 200 : 500,
+        }    
+        Room room;    
+        room.name = doc["name"] | "Room";    
+        Room* created = roomRepository.add(room);    
+        if (created)
+            roomRepository.save();    
+        request->send(
+            created ? 200 : 500,
             "application/json",
-            ok ? "{\"success\":true}" : "{\"success\":false}"
+            created ?
+                "{\"success\":true}" :
+                "{\"success\":false}"
         );
     });
 }
