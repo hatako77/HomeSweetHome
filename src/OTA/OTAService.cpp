@@ -1,4 +1,5 @@
-#include "OTA/OTAService.h"
+#include "Web/WebSocketService.h"
+extern WebSocketService websocket;
 
 void OTAService::setVersionURL(const String& url) {
     versionURL = url;
