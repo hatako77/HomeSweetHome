@@ -191,31 +191,33 @@ void ApiChannel::registerRoutes(WebServerService& web)
     
     
     
-server.on("/api/channels/toggle", HTTP_POST,
-[](AsyncWebServerRequest *request)
-{
-    if (!request->hasParam("id"))
+    server.on("/api/channels/toggle", HTTP_POST,
+    [](AsyncWebServerRequest *request)
     {
-        request->send(400, "application/json", "{\"success\":false}");
-        return;
-    }
-
-    uint16_t id =
-        request->getParam("id")->value().toInt();
-    bool ok = ioManager.toggle(id);
-    if(ok)
-    {
-        ioManager.save();    
-        Message msg("channel","state");
-        
-        msg.json["id"] = id;
-        msg.json["state"] = state;
-        
-        websocket.send(msg);    }
-    request->send(
-        ok ? 200 : 404,
-        "application/json",
-        ok ? "{\"success\":true}" : "{\"success\":false}"
-    );
-});
+        if (!request->hasParam("id"))
+        {
+            request->send(400, "application/json", "{\"success\":false}");
+            return;
+        }
+    
+        uint16_t id =
+            request->getParam("id")->value().toInt();
+        bool ok = ioManager.toggle(id);
+        if(ok)
+        {
+            ioManager.save();    
+            if(auto* channel = ioManager.getChannel(id))
+            {
+                Message msg("channel","state");
+                msg.json["id"] = channel->id;
+                msg.json["state"] = channel->state;
+                websocket.send(msg);
+            }
+        }    
+        request->send(
+            ok ? 200 : 404,
+            "application/json",
+            ok ? "{\"success\":true}" : "{\"success\":false}"
+        );
+    });
 }
