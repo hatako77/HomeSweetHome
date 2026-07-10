@@ -1,6 +1,7 @@
 #include "Web/WebSocketService.h"
 #include <ArduinoJson.h>
 #include "OTA/OTAService.h"
+#include "Web/Message.h"
 
 extern OTAService ota;
 WebSocketService websocket;
@@ -8,42 +9,42 @@ extern WebSocketService websocket;
 
 void WebSocketService::notifyOTA(const OTAStatus& st)
 {
-    JsonDocument doc;
-    doc["type"] = "ota";
-    doc["running"] = st.running;
-    doc["finished"] = st.finished;
-    doc["success"] = st.success;
-    doc["downloaded"] = st.downloaded;
-    doc["total"] = st.total;
-    doc["percent"] = st.percent;
-    doc["speed"] = st.speedKB;
-    doc["eta"] = st.eta;
-    doc["state"] = st.state;
-    doc["error"] = st.error;
-    doc["current"] = ota.getCurrentVersion();
-    doc["remote"]  = ota.getRemoteVersion();
-    String json;
-    serializeJson(doc, json);
-    ws.textAll(json);
+    extern OTAService ota;
+    Message msg("ota", "progress");
+    msg.json["running"] = st.running;
+    msg.json["finished"] = st.finished;
+    msg.json["success"] = st.success;
+    msg.json["downloaded"] = st.downloaded;
+    msg.json["total"] = st.total;
+    msg.json["percent"] = st.percent;
+    msg.json["speed"] = st.speedKB;
+    msg.json["eta"] = st.eta;
+    msg.json["state"] = st.state;
+    msg.json["error"] = st.error;
+    msg.json["current"] = ota.getCurrentVersion();
+    msg.json["remote"]  = ota.getRemoteVersion();
+    // بعداً از این برای تشخیص Check و Update استفاده می‌کنیم
+    msg.json["update"] =
+        ota.getRemoteVersion() != ota.getCurrentVersion();
+    ws.textAll(msg.serialize());
 }
+
+
 void WebSocketService::notifyReload()
 {
-    JsonDocument doc;
-    doc["type"] = "reload";
-    String json;
-    serializeJson(doc, json);
-    ws.textAll(json);
+    Message msg("room", "reload");
+
+    ws.textAll(msg.serialize());
 }
 
 void WebSocketService::notifyChannel(uint16_t id, bool state)
 {
-    JsonDocument doc;
-    doc["type"] = "channel";
-    doc["id"] = id;
-    doc["state"] = state;
-    String json;
-    serializeJson(doc, json);
-    ws.textAll(json);
+    Message msg("channel", "state");
+
+    msg.json["id"] = id;
+    msg.json["state"] = state;
+
+    ws.textAll(msg.serialize());
 }
 
 void WebSocketService::begin(AsyncWebServer& server)
