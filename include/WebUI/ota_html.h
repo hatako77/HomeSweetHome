@@ -254,137 +254,204 @@ Update Firmware
 
 </button>
 <script>
+<script>
 
+let socket;
 let rebootTimer = null;
-let statusTimer = null;
 
-// ==========================
-async function checkVersion()
+//==========================
+function connectWS()
 {
-    try
+    const protocol =
+        location.protocol === "https:"
+        ? "wss://"
+        : "ws://";
+
+    socket = new WebSocket(
+        protocol + location.host + "/ws"
+    );
+
+    socket.onopen = () =>
     {
-        const res = await fetch("/api/ota/version");
-        const r = await res.json();
+        console.log("OTA WebSocket Connected");
 
-        document.getElementById("current").innerHTML = r.current;
-        document.getElementById("remote").innerHTML = r.remote;
+        socket.send(JSON.stringify({
+            cmd:"ota.check"
+        }));
+    };
 
-        if(r.update)
+    socket.onclose = () =>
+    {
+        console.log("OTA WebSocket Closed");
+
+        setTimeout(
+            connectWS,
+            2000
+        );
+    };
+
+    socket.onmessage = (event)=>
+    {
+        let msg;
+
+        try
         {
-            document.getElementById("updateBtn").disabled = false;
-            document.getElementById("message").innerHTML = "New firmware available";
+            msg = JSON.parse(event.data);
         }
-        else
+        catch
         {
-            document.getElementById("updateBtn").disabled = true;
-            document.getElementById("message").innerHTML = "Firmware is up to date";
+            return;
         }
+
+        if(msg.type=="hello")
+            return;
+
+        if(msg.type!="ota")
+            return;
+
+        updateOTA(msg);
+    };
+}
+
+//==========================
+function updateOTA(s)
+{
+    document.getElementById("state").innerHTML =
+        s.state;
+
+    document.getElementById("progress").style.width =
+        s.percent + "%";
+
+    document.getElementById("percent").innerHTML =
+        s.percent + "%";
+
+    let down =
+        (s.downloaded/1024/1024).toFixed(2);
+
+    let total =
+        (s.total/1024/1024).toFixed(2);
+
+    document.getElementById("size").innerHTML =
+        down + " MB / " + total + " MB";
+
+    document.getElementById("speed").innerHTML =
+        s.speed.toFixed(1) + " KB/s";
+
+    document.getElementById("eta").innerHTML =
+        s.eta > 0
+        ? "ETA : " + s.eta + " sec"
+        : "";
+
+    document.getElementById("message").innerHTML =
+        s.state;
+
+    if(s.current)
+        document.getElementById("current").innerHTML =
+            s.current;
+
+    if(s.remote)
+        document.getElementById("remote").innerHTML =
+            s.remote;
+
+    if(s.error!="")
+    {
+        document
+            .getElementById("error")
+            .classList
+            .remove("hidden");
+
+        document
+            .getElementById("error")
+            .innerHTML =
+            s.error;
+
+        document
+            .getElementById("updateBtn")
+            .disabled = false;
+
+        return;
     }
-    catch(e)
+
+    if(s.state=="Update Available")
     {
-        document.getElementById("message").innerHTML = "Version check failed";
-        console.log(e);
+        document
+            .getElementById("updateBtn")
+            .disabled = false;
+
+        document
+            .getElementById("message")
+            .innerHTML =
+            "New firmware available";
+    }
+
+    if(s.state=="Up To Date")
+    {
+        document
+            .getElementById("updateBtn")
+            .disabled = true;
+
+        document
+            .getElementById("message")
+            .innerHTML =
+            "Firmware is up to date";
+    }
+    if(s.finished && s.success)
+    {
+        document
+            .getElementById("success")
+            .classList
+            .remove("hidden");
+
+        let sec = 5;
+
+        rebootTimer = setInterval(()=>
+        {
+            document
+                .getElementById("message")
+                .innerHTML =
+                "Restarting in " + sec + " sec";
+
+            sec--;
+
+            if(sec < 0)
+            {
+                clearInterval(rebootTimer);
+
+                location.href = "/";
+            }
+
+        },1000);
+
+        return;
     }
 }
-// ==========================
-async function startOTA(){
 
-    document.getElementById("updateBtn").disabled=true;
+//==========================
+function startOTA()
+{
+    document
+        .getElementById("updateBtn")
+        .disabled = true;
 
-    document.getElementById("error").classList.add("hidden");
-    document.getElementById("success").classList.add("hidden");
+    document
+        .getElementById("error")
+        .classList
+        .add("hidden");
+
+    document
+        .getElementById("success")
+        .classList
+        .add("hidden");
 
     socket.send(JSON.stringify({
         cmd:"ota.update"
     }));
-    statusTimer=setInterval(updateStatus,250);
-
 }
-
-// ==========================
-async function updateStatus(){
-
-    try{
-
-        const res=await fetch("/api/ota/status");
-
-        const s=await res.json();
-
-        document.getElementById("state").innerHTML=s.state;
-
-        document.getElementById("progress").style.width=s.percent+"%";
-
-        document.getElementById("percent").innerHTML=s.percent+"%";
-
-        let down=(s.downloaded/1024/1024).toFixed(2);
-        let total=(s.total/1024/1024).toFixed(2);
-
-        document.getElementById("size").innerHTML=
-            down+" MB / "+total+" MB";
-
-        document.getElementById("speed").innerHTML=
-            s.speed.toFixed(1)+" KB/s";
-
-        if(s.eta>0)
-            document.getElementById("eta").innerHTML=
-                "ETA : "+s.eta+" sec";
-        else
-            document.getElementById("eta").innerHTML=
-                "";
-
-        document.getElementById("message").innerHTML=s.state;
-
-        if(s.error!=""){
-
-            clearInterval(statusTimer);
-
-            document.getElementById("error").classList.remove("hidden");
-
-            document.getElementById("error").innerHTML=s.error;
-
-            document.getElementById("updateBtn").disabled=false;
-
-            return;
-
-        }
-
-        if(s.finished && s.success){
-
-            clearInterval(statusTimer);
-
-            document.getElementById("success").classList.remove("hidden");
-
-            let sec=5;
-
-            rebootTimer=setInterval(function(){
-
-                document.getElementById("message").innerHTML=
-                "Restarting in "+sec+" sec";
-
-                sec--;
-
-                if(sec<0){
-
-                    clearInterval(rebootTimer);
-
-                    location.href="/";
-
-                }
-
-            },1000);
-
-        }
-
-    }
-    catch(e){
-
-    }
-
-}
-
-checkVersion();
+//==========================
+connectWS();
 
 </script>
+
 
 </div>
 
