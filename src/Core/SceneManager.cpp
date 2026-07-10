@@ -136,23 +136,19 @@ bool SceneManager::update(const Scene& scene)
     return true;
 }
 
-    server.on("/api/scenes/remove",HTTP_POST,[](AsyncWebServerRequest *request)
+bool SceneManager::remove(uint16_t id)
+{
+    for(uint16_t i=0;i<sceneCount;i++)
     {
-        if(!request->hasParam("id", true))
-        {
-            request->send(
-                400,
-                "application/json",
-                "{\"success\":false}"
-            );
-            return;
-        }    
-        uint16_t id = request->getParam("id", true)->value().toInt();    
-        bool ok = sceneManager.remove(id);    
-        request->send(ok ? 200 : 404,"application/json",ok? "{\"success\":true}": "{\"success\":false}");
-    });
-
-
+    if(!request->hasParam("id", true))
+    {
+        request->send(400,"application/json","{\"success\":false}");
+        return;
+    }    
+    uint16_t id = request->getParam("id", true)->value().toInt();    
+    bool ok = sceneManager.remove(id);    
+    request->send(ok ? 200 : 404,"application/json",ok? "{\"success\":true}": "{\"success\":false}");
+});
 
 
 Scene* SceneManager::get(uint16_t id)
