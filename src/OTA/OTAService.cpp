@@ -1,5 +1,7 @@
 #include "OTA/OTAService.h"
 #include "Web/WebSocketService.h"
+#include "Web/Message.h"
+
 
 extern WebSocketService websocket;
 
