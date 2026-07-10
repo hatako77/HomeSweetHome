@@ -18,7 +18,6 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 
 </head>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
-<script src="/app.js"></script>
 <body>
 
 <!-- TOP BAR -->
