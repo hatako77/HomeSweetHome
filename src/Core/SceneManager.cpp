@@ -34,13 +34,25 @@ bool SceneManager::remove(uint16_t)
     return false;
 }
 
-Scene* SceneManager::get(uint16_t)
+Scene* SceneManager::get(uint16_t id)
 {
+    for(uint16_t i = 0; i < sceneCount; i++)
+    {
+        if(scenes[i].id == id)
+            return &scenes[i];
+    }
+
     return nullptr;
 }
 
-const Scene* SceneManager::get(uint16_t) const
+const Scene* SceneManager::get(uint16_t id) const
 {
+    for(uint16_t i = 0; i < sceneCount; i++)
+    {
+        if(scenes[i].id == id)
+            return &scenes[i];
+    }
+
     return nullptr;
 }
 
