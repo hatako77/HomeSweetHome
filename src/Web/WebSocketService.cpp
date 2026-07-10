@@ -1,8 +1,38 @@
 #include "Web/WebSocketService.h"
 #include <ArduinoJson.h>
 
+
 WebSocketService websocket;
 
+void WebSocketService::notifyOTA(const OTAStatus& st)
+{
+    JsonDocument doc;
+
+    doc["type"] = "ota";
+
+    doc["running"] = st.running;
+    doc["finished"] = st.finished;
+    doc["success"] = st.success;
+
+    doc["downloaded"] = st.downloaded;
+    doc["total"] = st.total;
+
+    doc["percent"] = st.percent;
+
+    doc["speed"] = st.speedKB;
+
+    doc["eta"] = st.eta;
+
+    doc["state"] = st.state;
+
+    doc["error"] = st.error;
+
+    String json;
+
+    serializeJson(doc, json);
+
+    ws.textAll(json);
+}
 void WebSocketService::notifyReload()
 {
     JsonDocument doc;
