@@ -1,9 +1,5 @@
 #include "OTA/OTAService.h"
-#include "Web/WebSocketService.h"
-#include "Web/Message.h"
-
-
-extern WebSocketService websocket;
+#include "Web/Notifier.h"
 
 void OTAService::setVersionURL(const String& url)
 {
@@ -14,31 +10,16 @@ void OTAService::setCurrentVersion(const String& version)
 {
     currentVersion = version;
 }
-void OTAService::sendStatus(const String& action)
+
+void OTAService::sendStatus()
 {
-    Message msg("ota", action);
-
-    msg.json["running"]    = status.running;
-    msg.json["finished"]   = status.finished;
-    msg.json["success"]    = status.success;
-
-    msg.json["downloaded"] = status.downloaded;
-    msg.json["total"]      = status.total;
-
-    msg.json["percent"]    = status.percent;
-
-    msg.json["speed"]      = status.speedKB;
-    msg.json["eta"]        = status.eta;
-
-    msg.json["state"]      = status.state;
-    msg.json["error"]      = status.error;
-
-    msg.json["current"]    = currentVersion;
-    msg.json["remote"]     = remoteVersion;
-    msg.json["update"]     = isNewVersion(remoteVersion, currentVersion);
-
-    websocket.send(msg);
+    Notifier::otaStatus(
+        status,
+        currentVersion,
+        remoteVersion
+    );
 }
+
 void OTAService::startCheck()
 {
     xTaskCreate(
