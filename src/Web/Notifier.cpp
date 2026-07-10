@@ -6,8 +6,7 @@ extern WebSocketService websocket;
 
 void Notifier::reload()
 {
-    Message msg("reload");
-
+    Message msg("system","reload");
     websocket.send(msg);
 }
 void Notifier::sceneAdded(const Scene& scene)
