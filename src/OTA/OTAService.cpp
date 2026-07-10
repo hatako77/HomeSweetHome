@@ -234,3 +234,21 @@ bool OTAService::updateFirmware() {
 
     return downloadAndUpdate(firmwareURL);
 }
+void OTAService::checkTask(void* parameter)
+{
+    OTAService* self = static_cast<OTAService*>(parameter);
+
+    self->checkForUpdate();
+
+    vTaskDelete(nullptr);
+}
+
+void OTAService::updateTask(void* parameter)
+{
+    OTAService* self = static_cast<OTAService*>(parameter);
+
+    self->updateFirmware();
+
+    vTaskDelete(nullptr);
+}
+
