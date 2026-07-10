@@ -1,6 +1,6 @@
 #ifndef OTA_SERVICE_H
 #define OTA_SERVICE_H
-#include "OTA/OTAStatus.h"
+#include "OTAStatus.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Update.h>
