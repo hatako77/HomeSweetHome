@@ -4,7 +4,7 @@
 #include "IO/IOManager.h"
 #include "IO/TypeHelper.h"
 #include "IO/IconHelper.h"
-
+#include "Web/WebSocketService.h"
 
 
 void ApiChannel::registerRoutes(WebServerService& web)
@@ -202,12 +202,15 @@ server.on("/api/channels/toggle", HTTP_POST,
 
     uint16_t id =
         request->getParam("id")->value().toInt();
-
     bool ok = ioManager.toggle(id);
-
-    if (ok)
-        ioManager.save();
-
+    if(ok)
+    {
+        ioManager.save();    
+        websocket.notifyChannel(
+            id,
+            ioManager.read(id)
+        );
+    }
     request->send(
         ok ? 200 : 404,
         "application/json",
