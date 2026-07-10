@@ -5,6 +5,9 @@
 #include "IO/DriverRegistry.h"
 #include "IO/TypeHelper.h"
 #include "IO/IconHelper.h"
+#include "Web/Notifier.h"
+
+
 IOManager ioManager;
 
 void IOManager::begin()
