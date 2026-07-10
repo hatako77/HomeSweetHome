@@ -280,15 +280,15 @@ function renderRooms()
 
 async function loadRooms()
 {
-    const roomResult=
+    const roomResult =
         await api("/api/rooms");
 
-    const channelResult=
+    const channelResult =
         await api("/api/channels");
 
-    rooms=roomResult.data || [];
+    rooms = roomResult || [];
 
-    channels=channelResult || [];
+    channels = channelResult || [];
 
     renderRooms();
 }
