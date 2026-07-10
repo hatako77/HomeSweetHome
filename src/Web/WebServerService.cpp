@@ -7,25 +7,18 @@
 #include "OTA/OTAService.h"
 #include "Web/ApiRoom.h"
 #include "Web/ApiChannel.h"
+#include "Web/WebSocketService.h"
 
 WebServerService web;
 extern OTAService ota;
 
 void WebServerService::begin()
 {
-    Serial.println("1");
-
     registerPages();
-
-    Serial.println("2");
-
     registerApi();
-
-    Serial.println("3");
-
+    websocket.begin(webServer);
     webServer.begin();
-
-    Serial.println("4");
+    Serial.println("WebServer started");
 }
 
 void WebServerService::update()
