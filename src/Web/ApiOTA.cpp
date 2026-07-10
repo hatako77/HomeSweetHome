@@ -12,6 +12,7 @@ namespace ApiOTA
 
     void registerRoutes(WebServerService& web)
     {
+        Serial.println("ApiOTA Registered");
         auto& server = web.server();    
         server.on("/api/ota/version", HTTP_GET,
             [](AsyncWebServerRequest *request)
