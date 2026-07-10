@@ -68,7 +68,7 @@ void Notifier::otaStatus(
     const String& current,
     const String& remote)
 {
-    Message msg("ota");
+    Message msg("ota","status");
 
     msg.json["running"] = status.running;
     msg.json["finished"] = status.finished;
