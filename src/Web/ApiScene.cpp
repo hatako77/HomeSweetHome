@@ -9,7 +9,20 @@ extern WebSocketService websocket;
 
 void ApiScene::registerRoutes(AsyncWebServer& server)
 {
+server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
+  {
+      if(!request->hasParam("id", true))
+      {
+          request->send(400,"application/json","{\"success\":false}");
+          return;
+      }  
+      uint16_t id =request->getParam("id", true)->value().toInt();  
+      bool ok =sceneManager.execute(id);  
+      request->send(ok ? 200 : 404,"application/json",ok? "{\"success\":true}": "{\"success\":false}");
+  });
 
+
+  
   server.on("/api/scenes/remove",HTTP_POST,[](AsyncWebServerRequest *request)
   {
       if(!request->hasParam("id", true))
