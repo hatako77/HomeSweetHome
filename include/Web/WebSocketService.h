@@ -1,6 +1,6 @@
 #ifndef WEB_SOCKET_SERVICE_H
 #define WEB_SOCKET_SERVICE_H
-
+#include "Web/Message.h"
 #include <ESPAsyncWebServer.h>
 #include "OTA/OTAStatus.h"
 
@@ -9,10 +9,7 @@ class WebSocketService
 public:
     void begin(AsyncWebServer& server);
     void broadcast(const String& json);
-    void notifyChannel(uint16_t id, bool state);
-    void notifyReload();
-    void notifyOTA(const OTAStatus& status);
-
+    void send(const Message& message);
 
 private:
     AsyncWebSocket ws{"/ws"};
