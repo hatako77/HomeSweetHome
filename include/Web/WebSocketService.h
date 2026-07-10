@@ -9,6 +9,10 @@ public:
     void begin(AsyncWebServer& server);
     void broadcast(const String& json);
     void notifyChannel(uint16_t id, bool state);
+    void notifyReload();
+
+
+
 private:
     AsyncWebSocket ws{"/ws"};
 
