@@ -11,11 +11,116 @@ void SceneManager::begin()
 
 bool SceneManager::load()
 {
+    sceneCount = 0;
+    nextId = 1;
+
+    if (!FileStorage::exists(Paths::Scenes))
+        return true;
+
+    File file = FileStorage::open(Paths::Scenes, "r");
+
+    if (!file)
+        return false;
+
+    JsonDocument doc;
+
+    DeserializationError error =
+        deserializeJson(doc, file);
+
+    file.close();
+
+    if (error)
+        return false;
+
+    JsonArray scenesArray =
+        doc.as<JsonArray>();
+
+    for (JsonObject sceneObj : scenesArray)
+    {
+        if (sceneCount >= MAX_SCENES)
+            break;
+
+        Scene& scene =
+            scenes[sceneCount++];
+
+        scene.id =
+            sceneObj["id"] | nextId;
+
+        scene.name =
+            sceneObj["name"] | "";
+
+        scene.enabled =
+            sceneObj["enabled"] | true;
+
+        scene.actionCount = 0;
+
+        JsonArray actions =
+            sceneObj["actions"].as<JsonArray>();
+
+        for (JsonObject action : actions)
+        {
+            if (scene.actionCount >= Scene::MAX_ACTIONS)
+                break;
+
+            SceneAction& a =
+                scene.actions[scene.actionCount++];
+
+            a.channelId =
+                action["channelId"] | 0;
+
+            a.state =
+                action["state"] | false;
+        }
+
+        if (scene.id >= nextId)
+            nextId = scene.id + 1;
+    }
+
     return true;
 }
 
 bool SceneManager::save()
 {
+    File file = FileStorage::open(Paths::Scenes, "w");
+
+    if (!file)
+        return false;
+
+    JsonDocument doc;
+
+    JsonArray scenesArray = doc.to<JsonArray>();
+
+    for (uint16_t i = 0; i < sceneCount; i++)
+    {
+        JsonObject sceneObj =
+            scenesArray.add<JsonObject>();
+
+        sceneObj["id"]      = scenes[i].id;
+        sceneObj["name"]    = scenes[i].name;
+        sceneObj["enabled"] = scenes[i].enabled;
+
+        JsonArray actions =
+            sceneObj["actions"].to<JsonArray>();
+
+        for(uint8_t j=0;
+            j<scenes[i].actionCount;
+            j++)
+        {
+            JsonObject a =
+                actions.add<JsonObject>();
+
+            a["channelId"] =
+                scenes[i].actions[j].channelId;
+
+            a["state"] =
+                scenes[i].actions[j].state;
+        }
+    }
+
+    serializeJson(doc,file);
+
+    file.close();
+
     return true;
 }
 
