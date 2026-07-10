@@ -9,6 +9,46 @@ extern WebSocketService websocket;
 
 void ApiScene::registerRoutes(AsyncWebServer& server)
 {
+
+
+  server.on("/api/scenes/save", HTTP_POST, 
+    [](AsyncWebServerRequest *request){}, nullptr,
+    [](AsyncWebServerRequest *request, uint8_t *data,
+     size_t len, size_t index, size_t total)
+  {
+      JsonDocument doc;  
+      if(deserializeJson(doc,data))
+      {
+          request->send(400, "application/json", "{\"success\":false}");
+          return;
+      }  
+      Scene scene;  
+      scene.id = doc["id"] | 0;  
+      strlcpy(scene.name, doc["name"] | "", sizeof(scene.name));  
+      strlcpy(scene.icon, doc["icon"] | "", sizeof(scene.icon));  
+      scene.favorite = doc["favorite"] | false;  
+      scene.enabled = doc["enabled"] | true;  
+      JsonArray actions = doc["actions"].as<JsonArray>();  
+      scene.actionCount = 0;  
+      for(JsonObject a : actions)
+      {
+          if(scene.actionCount >= Scene::MAX_ACTIONS) break;  
+          SceneAction& action = scene.actions[scene.actionCount++];  
+          action.channelId = a["channelId"] | 0;  
+          action.state = a["state"] | false;  
+          action.delayMs = a["delayMs"] | 0;
+      }  
+      bool ok = sceneManager.saveScene(scene);  
+      request->send(ok ? 200 : 500, "application/json", ok
+              ? "{\"success\":true}"
+              : "{\"success\":false}"
+      );
+  });
+
+
+
+
+  
   
   server.on("/api/scenes", HTTP_GET, [](AsyncWebServerRequest *request)
   {
