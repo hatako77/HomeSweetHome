@@ -80,7 +80,41 @@ function $(id)
 {
     return document.getElementById(id);
 }
+function updateOTA(status)
+{
+    const state =
+        document.getElementById("otaState");
 
+    const progress =
+        document.getElementById("otaProgress");
+
+    const percent =
+        document.getElementById("otaPercent");
+
+    const speed =
+        document.getElementById("otaSpeed");
+
+    const eta =
+        document.getElementById("otaEta");
+
+    if(state)
+        state.innerText = status.state;
+
+    if(progress)
+        progress.value = status.percent;
+
+    if(percent)
+        percent.innerText =
+            status.percent + "%";
+
+    if(speed)
+        speed.innerText =
+            status.speed.toFixed(1) + " KB/s";
+
+    if(eta)
+        eta.innerText =
+            status.eta + " s";
+}
 function updateTile(tile, ch)
 {
     if(ch.state)
@@ -361,6 +395,10 @@ function connectWebSocket()
         if(msg.type==="reload")
         {
             loadRooms();
+        }
+        if(msg.type==="ota")
+        {
+            updateOTA(msg);
         }
     };
 }
