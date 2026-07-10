@@ -31,8 +31,9 @@ public:
     OTAStatus& getStatus() {
         return status;
     }
-    
-void setVersionURL(const String& url);
+    void startCheck();
+    void startUpdate();
+    void setVersionURL(const String& url);
     void setCurrentVersion(const String& version);
     String getRemoteVersion() const {
     return remoteVersion;
