@@ -79,6 +79,22 @@ bool SceneManager::load()
     return true;
 }
 
+Scene* SceneManager::getAt(uint16_t index)
+{
+    if(index>=sceneCount)
+        return nullptr;
+
+    return &scenes[index];
+}
+
+const Scene* SceneManager::getAt(uint16_t index) const
+{
+    if(index>=sceneCount)
+        return nullptr;
+
+    return &scenes[index];
+}
+
 bool SceneManager::save()
 {
     File file = FileStorage::open(Paths::Scenes, "w");
