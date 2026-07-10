@@ -112,7 +112,8 @@ bool IOManager::write(uint16_t id, bool state)
     drv->write(
         ch->address.device,
         ch->address.pin,
-        hwState);    
+        hwState);  
+    Notifier::channelChanged(*ch);
     return true;
 }
 
