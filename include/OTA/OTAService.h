@@ -34,7 +34,8 @@ public:
 
     static void checkTask(void* parameter);
     static void updateTask(void* parameter);
-
+    void setVersionURL(const String& url);
+    void setCurrentVersion(const String& version);
     OTAStatus& getStatus()
     {
         return status;
