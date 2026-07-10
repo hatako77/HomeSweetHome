@@ -206,11 +206,12 @@ server.on("/api/channels/toggle", HTTP_POST,
     if(ok)
     {
         ioManager.save();    
-        websocket.notifyChannel(
-            id,
-            ioManager.read(id)
-        );
-    }
+        Message msg("channel","state");
+        
+        msg.json["id"] = id;
+        msg.json["state"] = state;
+        
+        websocket.send(msg);    }
     request->send(
         ok ? 200 : 404,
         "application/json",
