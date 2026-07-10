@@ -9,6 +9,30 @@ extern WebSocketService websocket;
 
 void ApiScene::registerRoutes(AsyncWebServer& server)
 {
+  
+  server.on("/api/scenes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+      JsonDocument doc;  
+      JsonArray array = doc.to<JsonArray>();  
+      for(uint16_t i=0; i<sceneManager.count(); i++)
+      {
+          const Scene* scene = sceneManager.getAt(i);  
+          if(scene == nullptr) continue;  
+          JsonObject obj = array.add<JsonObject>();  
+          obj["id"] = scene->id;  
+          obj["name"] = scene->name;  
+          obj["icon"] = scene->icon;  
+          obj["favorite"] = scene->favorite; 
+          obj["enabled"] = scene->enabled;  
+          obj["actions"] = scene->actionCount;
+      }  
+      String json;  
+      serializeJson(doc, json);  
+      request->send(200, "application/json", json);
+  });
+
+
+  
   server.on("/api/scenes", HTTP_GET,[](AsyncWebServerRequest* request)
   {
       JsonDocument doc;  
@@ -29,6 +53,8 @@ void ApiScene::registerRoutes(AsyncWebServer& server)
       serializeJson(doc,json);  
       request->send(200, "application/json", json);
   }); 
+
+
 
   
   server.on("/api/scenes/run", HTTP_POST,[](AsyncWebServerRequest* request)
@@ -52,6 +78,10 @@ void ApiScene::registerRoutes(AsyncWebServer& server)
       );
   });
 
+
+
+
+  
   server.on("/api/scenes/get", HTTP_GET, [](AsyncWebServerRequest *request)
   {
       if(!request->hasParam("id"))
