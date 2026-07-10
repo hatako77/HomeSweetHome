@@ -129,26 +129,19 @@ function createChannelTile(ch)
         tile.classList.add("on");
 
     tile.innerHTML=`
-
-<div class="tile-icon">
-${icon(ch.icon)}
-</div>
-
-<div class="tile-name">
-${ch.name}
-</div>
-
-<div class="tile-bottom">
-
-<div class="channel-state"></div>
-
-<div class="tile-label">
-${ch.state ? "ON" : "OFF"}
-</div>
-
-</div>
-
-`;
+        <div class="tile-icon">
+        ${icon(ch.icon)}
+        </div>        
+        <div class="tile-name">
+        ${ch.name}
+        </div>        
+        <div class="tile-bottom">        
+        <div class="channel-state"></div>        
+        <div class="tile-label">
+        ${ch.state ? "ON" : "OFF"}
+        </div>        
+        </div>        
+        `;
 
     tile.onclick=async()=>
     {
@@ -157,10 +150,6 @@ ${ch.state ? "ON" : "OFF"}
             {
                 method:"POST"
             });
-
-        ch.state=!ch.state;
-
-        updateTile(tile,ch);
     };
 
     return tile;
