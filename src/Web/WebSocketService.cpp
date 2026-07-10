@@ -67,6 +67,17 @@ void WebSocketService::onEvent(
 
         case WS_EVT_DATA:
             // بعداً استفاده می‌کنیم
+            String cmd = doc["cmd"] | "";
+            if(cmd == "ota.check")
+            {
+                ota.startCheck();
+            }            
+            if(cmd == "ota.update")
+            {
+                ota.startUpdate();
+            }
+
+            
             break;
 
         case WS_EVT_PONG:
