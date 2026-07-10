@@ -19,18 +19,54 @@ bool SceneManager::save()
     return true;
 }
 
-bool SceneManager::add(const Scene&)
+bool SceneManager::add(const Scene& scene)
 {
-    return false;
+    if(sceneCount >= MAX_SCENES)
+        return false;
+
+    if(get(scene.id) != nullptr)
+        return false;
+
+    scenes[sceneCount++] = scene;
+
+    save();
+
+    return true;
 }
 
-bool SceneManager::update(const Scene&)
+bool SceneManager::update(const Scene& scene)
 {
-    return false;
+    Scene* s = get(scene.id);
+
+    if(s == nullptr)
+        return false;
+
+    *s = scene;
+
+    save();
+
+    return true;
 }
 
-bool SceneManager::remove(uint16_t)
+bool SceneManager::remove(uint16_t id)
 {
+    for(uint16_t i=0;i<sceneCount;i++)
+    {
+        if(scenes[i].id==id)
+        {
+            for(uint16_t j=i;j<sceneCount-1;j++)
+            {
+                scenes[j]=scenes[j+1];
+            }
+
+            sceneCount--;
+
+            save();
+
+            return true;
+        }
+    }
+
     return false;
 }
 
