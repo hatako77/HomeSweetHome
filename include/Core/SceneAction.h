@@ -7,6 +7,7 @@ struct SceneAction
 {
     uint16_t channelId = 0;
     bool state = false;
+    uint32_t delayMs = 0;
 };
 
 #endif
