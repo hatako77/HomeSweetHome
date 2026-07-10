@@ -4,6 +4,15 @@ void OTAService::setVersionURL(const String& url) {
     versionURL = url;
 }
 
+void OTAService::startCheck() {
+    xTaskCreate( checkTask, "ota_check",
+        8192, this, 1, nullptr);        
+}
+void OTAService::startUpdate() {
+    xTaskCreate(updateTask, "ota_update",
+        12288, this, 1, nullptr);       
+}
+
 void OTAService::setCurrentVersion(const String& version) {
     currentVersion = version;
 }
