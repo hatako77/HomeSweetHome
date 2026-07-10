@@ -22,40 +22,30 @@ bool SceneManager::load()
     DeserializationError error =
         deserializeJson(doc, file);
     file.close();
-
     if (error) return false;
-
     JsonArray scenesArray = doc.as<JsonArray>();
-
     for (JsonObject sceneObj : scenesArray)
     {
         if (sceneCount >= MAX_SCENES) break;
-
         Scene& scene = scenes[sceneCount++];
-
         scene.id = sceneObj["id"] | nextId;
         scene.name = sceneObj["name"] | "";
         scene.enabled = sceneObj["enabled"] | true;
         scene.actionCount = 0;
         scene.icon = sceneObj["icon"] | "bolt";        
-        scene.favorite = sceneObj["favorite"] | false;       
-
+        scene.favorite = sceneObj["favorite"] | false;
         JsonArray actions = sceneObj["actions"].as<JsonArray>();
-
         for (JsonObject action : actions)
         {
             if (scene.actionCount >= Scene::MAX_ACTIONS) break;
-
             SceneAction& a = scene.actions[scene.actionCount++];
             a.delayMs   = action["delayMs"] | 0;
             a.channelId = action["channelId"] | 0;
             a.state     = action["state"] | false;
         }
-
         if (scene.id >= nextId)
             nextId = scene.id + 1;
     }
-
     return true;
 }
 
@@ -87,8 +77,7 @@ bool SceneManager::save()
         sceneObj["name"] = scenes[i].name;        
         sceneObj["icon"] = scenes[i].icon;        
         sceneObj["favorite"] = scenes[i].favorite;        
-        sceneObj["enabled"] = scenes[i].enabled;
-        
+        sceneObj["enabled"] = scenes[i].enabled;        
         JsonArray actions = sceneObj["actions"].to<JsonArray>();
         for(uint8_t j=0; j<scenes[i].actionCount; j++)
         {
@@ -98,7 +87,6 @@ bool SceneManager::save()
             a["delayMs"]   = scenes[i].actions[j].delayMs;
         }
     }
-
     serializeJson(doc,file);
     file.close();
     return true;
@@ -108,28 +96,21 @@ bool SceneManager::add(const Scene& scene)
 {
     if(sceneCount >= MAX_SCENES)
         return false;
-
     if(get(scene.id) != nullptr)
         return false;
-
     scenes[sceneCount++] = scene;
-
     save();
-
+    Notifier::sceneAdded(scene);
     return true;
 }
 
 bool SceneManager::update(const Scene& scene)
 {
     Scene* s = get(scene.id);
-
-    if(s == nullptr)
-        return false;
-
+    if(s == nullptr) return false;
     *s = scene;
-
     save();
-
+    Notifier::sceneUpdated(*s);
     return true;
 }
 
@@ -143,15 +124,12 @@ bool SceneManager::remove(uint16_t id)
             {
                 scenes[j]=scenes[j+1];
             }
-
             sceneCount--;
-
             save();
-
+            Notifier::sceneRemoved(id);
             return true;
         }
     }
-
     return false;
 }
 
@@ -202,5 +180,6 @@ bool SceneManager::execute(uint16_t id)
         }
     }
     ioManager.save();
+    Notifier::sceneExecuted(scene->id);
     return true;
 }
