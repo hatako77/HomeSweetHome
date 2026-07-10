@@ -10,7 +10,15 @@ class OTAService {
 public:
     bool checkForUpdate();
     bool updateFirmware();
-
+    String getCurrentVersion() const
+    {
+        return currentVersion;
+    }
+    
+    String getRemoteVersion() const
+    {
+        return remoteVersion;
+    }
     void startCheck();
     void startUpdate();
 
