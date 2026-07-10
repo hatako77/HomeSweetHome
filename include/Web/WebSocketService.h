@@ -8,7 +8,7 @@ class WebSocketService
 public:
     void begin(AsyncWebServer& server);
     void broadcast(const String& json);
-
+    void notifyChannel(uint16_t id, bool state);
 private:
     AsyncWebSocket ws{"/ws"};
 
