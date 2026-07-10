@@ -13,54 +13,38 @@ bool SceneManager::load()
 {
     sceneCount = 0;
     nextId = 1;
-
     if (!FileStorage::exists(Paths::Scenes))
         return true;
-
     File file = FileStorage::open(Paths::Scenes, "r");
-
     if (!file)
         return false;
-
     JsonDocument doc;
-
     DeserializationError error =
         deserializeJson(doc, file);
-
     file.close();
 
-    if (error)
-        return false;
+    if (error) return false;
 
-    JsonArray scenesArray =
-        doc.as<JsonArray>();
+    JsonArray scenesArray = doc.as<JsonArray>();
 
     for (JsonObject sceneObj : scenesArray)
     {
-        if (sceneCount >= MAX_SCENES)
-            break;
+        if (sceneCount >= MAX_SCENES) break;
 
-        Scene& scene =
-            scenes[sceneCount++];
+        Scene& scene = scenes[sceneCount++];
 
-        scene.id =
-            sceneObj["id"] | nextId;
-
-        scene.name =
-            sceneObj["name"] | "";
-
-        scene.enabled =
-            sceneObj["enabled"] | true;
-
+        scene.id = sceneObj["id"] | nextId;
+        scene.name = sceneObj["name"] | "";
+        scene.enabled = sceneObj["enabled"] | true;
         scene.actionCount = 0;
+        scene.icon = sceneObj["icon"] | "bolt";        
+        scene.favorite = sceneObj["favorite"] | false;       
 
-        JsonArray actions =
-            sceneObj["actions"].as<JsonArray>();
+        JsonArray actions = sceneObj["actions"].as<JsonArray>();
 
         for (JsonObject action : actions)
         {
-            if (scene.actionCount >= Scene::MAX_ACTIONS)
-                break;
+            if (scene.actionCount >= Scene::MAX_ACTIONS) break;
 
             SceneAction& a = scene.actions[scene.actionCount++];
             a.delayMs   = action["delayMs"] | 0;
@@ -98,19 +82,17 @@ bool SceneManager::save()
     JsonArray scenesArray = doc.to<JsonArray>();
     for (uint16_t i = 0; i < sceneCount; i++)
     {
-        JsonObject sceneObj =
-            scenesArray.add<JsonObject>();
-        sceneObj["id"]      = scenes[i].id;
-        sceneObj["name"]    = scenes[i].name;
+        JsonObject sceneObj = scenesArray.add<JsonObject>();
+        sceneObj["id"]   = scenes[i].id;
+        sceneObj["name"] = scenes[i].name;        
+        sceneObj["icon"] = scenes[i].icon;        
+        sceneObj["favorite"] = scenes[i].favorite;        
         sceneObj["enabled"] = scenes[i].enabled;
-        JsonArray actions =
-            sceneObj["actions"].to<JsonArray>();
-        for(uint8_t j=0;
-            j<scenes[i].actionCount;
-            j++)
+        
+        JsonArray actions = sceneObj["actions"].to<JsonArray>();
+        for(uint8_t j=0; j<scenes[i].actionCount; j++)
         {
-            JsonObject a =
-                actions.add<JsonObject>();
+            JsonObject a   = actions.add<JsonObject>();
             a["channelId"] = scenes[i].actions[j].channelId;
             a["state"]     = scenes[i].actions[j].state;
             a["delayMs"]   = scenes[i].actions[j].delayMs;
@@ -118,9 +100,7 @@ bool SceneManager::save()
     }
 
     serializeJson(doc,file);
-
     file.close();
-
     return true;
 }
 
