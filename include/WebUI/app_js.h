@@ -325,6 +325,7 @@ function connectWebSocket()
 
     socket.onmessage = (event) =>
     {
+        console.log("WS RAW:", event.data);
 
         let msg;
 
