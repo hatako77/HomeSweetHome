@@ -11,6 +11,7 @@ namespace Pages
 
     void registerRoutes(WebServerService& web)
     {
+        Serial.println("Pages Register");
         auto& server = web.server();
     
         if(!LittleFS.begin(true))
