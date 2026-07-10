@@ -16,7 +16,7 @@ public:
         json["action"] = action;
     }
 
-    String serialize()
+    String serialize() const
     {
         String s;
         serializeJson(json, s);
