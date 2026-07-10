@@ -55,7 +55,7 @@ void Notifier::sceneExecuted(uint16_t id)
 
 void Notifier::channelChanged(const IOChannel& channel)
 {
-    Message msg("channel");
+    Message msg("channel","changed");
 
     msg.json["id"] = channel.id;
     msg.json["state"] = channel.state;
