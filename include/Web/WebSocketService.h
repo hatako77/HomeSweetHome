@@ -2,7 +2,7 @@
 #define WEB_SOCKET_SERVICE_H
 
 #include <ESPAsyncWebServer.h>
-
+#include "OTA/OTAService.h"
 class WebSocketService
 {
 public:
@@ -10,7 +10,7 @@ public:
     void broadcast(const String& json);
     void notifyChannel(uint16_t id, bool state);
     void notifyReload();
-
+    void notifyOTA(const OTAStatus& status);
 
 
 private:
