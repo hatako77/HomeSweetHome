@@ -10,6 +10,41 @@ extern WebSocketService websocket;
 void ApiScene::registerRoutes(AsyncWebServer& server)
 {
 
+  server.on("/api/scenes/get", HTTP_GET,[](AsyncWebServerRequest *request)
+    {
+    if(!request->hasParam("id"))
+      {
+          request->send(400,"application/json","{\"success\":false}");
+          return;
+      }  
+      uint16_t id = request->getParam("id")->value().toInt();  
+      const Scene* scene = sceneManager.get(id);  
+      if(scene == nullptr)
+      {
+          request->send(404, "application/json", "{\"success\":false}");
+          return;
+      }  
+      JsonDocument doc;  
+      doc["id"] = scene->id;  
+      doc["name"] = scene->name;  
+      doc["icon"] = scene->icon;  
+      doc["favorite"] = scene->favorite;  
+      doc["enabled"] = scene->enabled;  
+      JsonArray actions = doc["actions"].to<JsonArray>();  
+      for(uint8_t i=0;i<scene->actionCount;i++)
+      {
+          JsonObject a = actions.add<JsonObject>();  
+          a["channelId"] = scene->actions[i].channelId;  
+          a["state"] = scene->actions[i].state;  
+          a["delayMs"] = scene->actions[i].delayMs;
+      }  
+      String json;  
+      serializeJson(doc,json);  
+      request->send(200,"application/json",json);
+  });
+
+  
+
 
   server.on("/api/scenes/save",HTTP_POST,[](AsyncWebServerRequest *request){},nullptr,[](AsyncWebServerRequest *request,
   uint8_t *data, size_t len, size_t index, size_t total)
