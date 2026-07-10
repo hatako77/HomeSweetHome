@@ -37,7 +37,7 @@ void setup()
     Serial.println();
     Serial.println("WiFi connected");
     Serial.println(WiFi.localIP());
-
+    Serial.println("THIS IS NEW FIRMWARE");
     ota.setCurrentVersion(APP_VERSION);
     ota.setVersionURL(
         "https://github.com/hatako77/HomeSweetHome/releases/latest/download/version.json"
