@@ -3,8 +3,9 @@
 
 #include "Web/Message.h"
 #include "Web/WebSocketService.h"
-#include "IO/IOChannel.h"
+#include "IO/IOConfig.h"
 #include "OTA/OTAService.h"
+#include "Core/Scene.h"
 
 class Notifier
 {
