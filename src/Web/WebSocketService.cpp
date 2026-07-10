@@ -1,6 +1,21 @@
 #include "Web/WebSocketService.h"
+#include <ArduinoJson.h>
 
 WebSocketService websocket;
+
+void WebSocketService::notifyChannel(uint16_t id, bool state)
+{
+    JsonDocument doc;
+
+    doc["type"] = "channel";
+    doc["id"] = id;
+    doc["state"] = state;
+
+    String json;
+    serializeJson(doc, json);
+
+    ws.textAll(json);
+}
 
 void WebSocketService::begin(AsyncWebServer& server)
 {
