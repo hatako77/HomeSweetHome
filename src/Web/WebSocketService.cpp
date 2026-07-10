@@ -4,6 +4,7 @@
 
 extern OTAService ota;
 WebSocketService websocket;
+extern WebSocketService websocket;
 
 void WebSocketService::notifyOTA(const OTAStatus& st)
 {
