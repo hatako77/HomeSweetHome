@@ -9,15 +9,12 @@ class Scene
 public:
 
     static constexpr uint8_t MAX_ACTIONS = 64;
-
     uint16_t id = 0;
-
     String name;
-
+    String icon = "bolt";
+    bool favorite = false;
     bool enabled = true;
-
     uint8_t actionCount = 0;
-
     SceneAction actions[MAX_ACTIONS];
 };
 
