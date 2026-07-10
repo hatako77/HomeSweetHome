@@ -12,6 +12,25 @@ void SceneManager::begin()
 {
 }
 
+bool SceneManager::saveScene(Scene& scene)
+{
+    if(scene.id == 0)
+    {
+        scene.id = nextId++;
+        if(sceneCount >= MAX_SCENES) return false;
+        scenes[sceneCount++] = scene;
+        save();
+        Notifier::sceneAdded(scene);
+        return true;
+    }
+    Scene* existing = get(scene.id);
+    if(existing == nullptr) return false;
+    *existing = scene;
+    save();
+    Notifier::sceneUpdated(scene);
+    return true;
+}
+
 bool SceneManager::load()
 {
     sceneCount = 0;
