@@ -11,25 +11,24 @@ void ApiScene::registerRoutes(AsyncWebServer& server)
 {
 
 
-  server.on("/api/scenes/save", HTTP_POST, 
-    [](AsyncWebServerRequest *request){}, nullptr,
-    [](AsyncWebServerRequest *request, uint8_t *data,
-     size_t len, size_t index, size_t total)
+  server.on("/api/scenes/save",HTTP_POST,[](AsyncWebServerRequest *request){},nullptr,[](AsyncWebServerRequest *request,
+  uint8_t *data, size_t len, size_t index, size_t total)
   {
       JsonDocument doc;  
-      if(deserializeJson(doc,data))
+      DeserializationError err = deserializeJson(doc, data, len);  
+      if(err)
       {
-          request->send(400, "application/json", "{\"success\":false}");
+          request->send(400,"application/json","{\"success\":false}");
           return;
       }  
       Scene scene;  
-      scene.id = doc["id"] | 0;  
-      strlcpy(scene.name, doc["name"] | "", sizeof(scene.name));  
-      strlcpy(scene.icon, doc["icon"] | "", sizeof(scene.icon));  
+      scene.id = doc["id"] | 0; 
+      scene.name = doc["name"] | ""; 
+      scene.icon = doc["icon"] | "bolt";  
       scene.favorite = doc["favorite"] | false;  
       scene.enabled = doc["enabled"] | true;  
-      JsonArray actions = doc["actions"].as<JsonArray>();  
       scene.actionCount = 0;  
+      JsonArray actions = doc["actions"].as<JsonArray>();  
       for(JsonObject a : actions)
       {
           if(scene.actionCount >= Scene::MAX_ACTIONS) break;  
@@ -39,10 +38,7 @@ void ApiScene::registerRoutes(AsyncWebServer& server)
           action.delayMs = a["delayMs"] | 0;
       }  
       bool ok = sceneManager.saveScene(scene);  
-      request->send(ok ? 200 : 500, "application/json", ok
-              ? "{\"success\":true}"
-              : "{\"success\":false}"
-      );
+      request->send(ok ? 200 : 500,"application/json", ok ? "{\"success\":true}" : "{\"success\":false}");
   });
 
 
