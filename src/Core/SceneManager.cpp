@@ -163,23 +163,13 @@ uint16_t SceneManager::count() const
 bool SceneManager::execute(uint16_t id)
 {
     Scene* scene = get(id);
-
-    if(scene == nullptr)
-        return false;
-
+    if(scene == nullptr) return false;
     for(uint8_t i = 0; i < scene->actionCount; i++)
     {
         SceneAction& action = scene->actions[i];    
         if(action.delayMs > 0) delay(action.delayMs);    
-        ioManager.write(action.channelId, action.state);    
-        IOChannel* channel = ioManager.getChannel(action.channelId);    
-        if(channel)
-        {
-            channel->state = action.state;    
-            Notifier::channelChanged(*channel);
-        }
-    }
+        ioManager.write(action.channelId, action.state );
+    }    
     ioManager.save();
-    Notifier::sceneExecuted(scene->id);
     return true;
 }
