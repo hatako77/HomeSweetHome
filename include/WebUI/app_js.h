@@ -81,6 +81,17 @@ function $(id)
     return document.getElementById(id);
 }
 
+function updateTile(tile, ch)
+{
+    if(ch.state)
+        tile.classList.add("on");
+    else
+        tile.classList.remove("on");
+
+    tile.querySelector(".tile-label").textContent =
+        ch.state ? "ON" : "OFF";
+}
+
 function icon(name)
 {
     return Icons[name] || Icons.generic;
