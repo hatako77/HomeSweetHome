@@ -13,12 +13,19 @@ extern OTAService ota;
 
 void WebServerService::begin()
 {
+    Serial.println("1");
+
     registerPages();
+
+    Serial.println("2");
+
     registerApi();
+
+    Serial.println("3");
 
     webServer.begin();
 
-    Serial.println("WebServer started");
+    Serial.println("4");
 }
 
 void WebServerService::update()
