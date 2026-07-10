@@ -108,6 +108,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.running = false;
         status.finished = true;
         status.success = false;
+        websocket.notifyOTA(status);
         return false;
     }
 
@@ -122,6 +123,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         http.end();
         status.finished = true;
         status.success = false;
+        websocket.notifyOTA(status);
         return false;
     }
 
@@ -156,6 +158,7 @@ bool OTAService::downloadAndUpdate(const String& url)
                         http.end();
                         status.finished = true;
                         status.success = false;
+                        websocket.notifyOTA(status);
                         return false;
                     }
 
@@ -163,6 +166,7 @@ bool OTAService::downloadAndUpdate(const String& url)
 
                 status.percent =
                     (status.downloaded*100)/status.total;
+                websocket.notifyOTA(status);
             }
         }
 
@@ -172,7 +176,7 @@ bool OTAService::downloadAndUpdate(const String& url)
                 status.downloaded-lastBytes;
 
             status.speedKB = diff/1024.0;
-
+            websocket.notifyOTA(status);
             if(status.speedKB>0)
             {
                 status.eta =
@@ -189,7 +193,7 @@ bool OTAService::downloadAndUpdate(const String& url)
     }
 
     status.state="Verifying";
-
+    websocket.notifyOTA(status);
     if(!Update.end())
     {
         status.error="Verification failed";
@@ -199,6 +203,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         http.end();
         status.finished = true;
         status.success = false;
+        websocket.notifyOTA(status);
         return false;
     }
 
@@ -211,6 +216,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         http.end();
         status.finished = true;
         status.success = false;
+        websocket.notifyOTA(status);
         return false;
     }
 
@@ -226,7 +232,7 @@ bool OTAService::downloadAndUpdate(const String& url)
     status.speedKB = 0;
     status.eta = 0;
     status.state="Completed";
-
+    websocket.notifyOTA(status);
     return true;
 }
 
