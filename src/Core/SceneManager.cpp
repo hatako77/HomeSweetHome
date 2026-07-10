@@ -1,6 +1,9 @@
 #include "Core/SceneManager.h"
 #include "IO/IOManager.h"
 #include "Web/Notifier.h"
+#include "Core/FileStorage.h"
+#include "Core/Paths.h"
+
 
 extern IOManager ioManager;
 SceneManager sceneManager;
