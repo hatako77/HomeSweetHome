@@ -17,17 +17,16 @@ namespace ApiOTA
         server.on("/api/ota/version", HTTP_GET,
             [](AsyncWebServerRequest *request)
             {
-                JsonDocument doc;    
-                doc["current"] = ota.getCurrentVersion();
-                doc["remote"] = ota.getRemoteVersion();
-                doc["update"] = ota.checkForUpdate();    
+                JsonDocument doc;
+            
+                doc["current"] = "test";
+                doc["remote"] = "test";
+                doc["update"] = false;
+            
                 String out;
-                serializeJson(doc, out);    
-                request->send(
-                    200,
-                    "application/json",
-                    out
-                );
+                serializeJson(doc, out);
+            
+                request->send(200, "application/json", out);
             });
     
         server.on("/api/ota/status",
