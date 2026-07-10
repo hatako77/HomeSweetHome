@@ -294,9 +294,9 @@ async function startOTA(){
     document.getElementById("error").classList.add("hidden");
     document.getElementById("success").classList.add("hidden");
 
-    await fetch("/api/ota/update",{
-        method:"POST"
-    });
+    socket.send(JSON.stringify({
+        cmd:"ota.update"
+    }));
     statusTimer=setInterval(updateStatus,250);
 
 }
