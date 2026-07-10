@@ -31,6 +31,7 @@ public:
         return status;
     }
 private:
+    void sendStatus(const String& action = "progress");
     String versionURL;
     String currentVersion;
     OTAStatus status;
