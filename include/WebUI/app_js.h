@@ -325,6 +325,8 @@ function connectWebSocket()
 
     socket.onmessage = (event) =>
     {
+        const msg = JSON.parse(event.data);
+        console.log(msg);
         let msg;
 
         try
