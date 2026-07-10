@@ -2,7 +2,8 @@
 #define WEB_SOCKET_SERVICE_H
 
 #include <ESPAsyncWebServer.h>
-#include "OTA/OTAService.h"
+#include "OTA/OTAStatus.h"
+
 class WebSocketService
 {
 public:
