@@ -7,44 +7,9 @@ extern OTAService ota;
 WebSocketService websocket;
 extern WebSocketService websocket;
 
-void WebSocketService::notifyOTA(const OTAStatus& st)
+void WebSocketService::send(const Message& message)
 {
-    extern OTAService ota;
-    Message msg("ota", "progress");
-    msg.json["running"] = st.running;
-    msg.json["finished"] = st.finished;
-    msg.json["success"] = st.success;
-    msg.json["downloaded"] = st.downloaded;
-    msg.json["total"] = st.total;
-    msg.json["percent"] = st.percent;
-    msg.json["speed"] = st.speedKB;
-    msg.json["eta"] = st.eta;
-    msg.json["state"] = st.state;
-    msg.json["error"] = st.error;
-    msg.json["current"] = ota.getCurrentVersion();
-    msg.json["remote"]  = ota.getRemoteVersion();
-    // بعداً از این برای تشخیص Check و Update استفاده می‌کنیم
-    msg.json["update"] =
-        ota.getRemoteVersion() != ota.getCurrentVersion();
-    ws.textAll(msg.serialize());
-}
-
-
-void WebSocketService::notifyReload()
-{
-    Message msg("room", "reload");
-
-    ws.textAll(msg.serialize());
-}
-
-void WebSocketService::notifyChannel(uint16_t id, bool state)
-{
-    Message msg("channel", "state");
-
-    msg.json["id"] = id;
-    msg.json["state"] = state;
-
-    ws.textAll(msg.serialize());
+    ws.textAll(message.serialize());
 }
 
 void WebSocketService::begin(AsyncWebServer& server)
