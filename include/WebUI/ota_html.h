@@ -394,7 +394,7 @@ function updateOTA(s)
             .innerHTML =
             "Firmware is up to date";
     }
-    if(s.finished && s.success)
+    if(s.state == "Completed")
     {
         document
             .getElementById("success")
