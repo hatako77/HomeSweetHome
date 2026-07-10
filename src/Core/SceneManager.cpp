@@ -1,5 +1,8 @@
 #include "Core/SceneManager.h"
+#include "Core/IOManager.h"
+#include "Web/Notifier.h"
 
+extern IOManager ioManager;
 SceneManager sceneManager;
 
 void SceneManager::begin()
@@ -46,7 +49,34 @@ uint16_t SceneManager::count() const
     return sceneCount;
 }
 
-bool SceneManager::execute(uint16_t)
+bool SceneManager::execute(uint16_t id)
 {
-    return false;
+    Scene* scene = get(id);
+
+    if(scene == nullptr)
+        return false;
+
+    for(uint8_t i = 0; i < scene->actionCount; i++)
+    {
+        const SceneAction& action = scene->actions[i];
+
+        IOChannel* channel =
+            ioManager.getChannel(action.channelId);
+
+        if(channel == nullptr)
+            continue;
+
+        ioManager.write(
+            action.channelId,
+            action.state
+        );
+
+        channel->state = action.state;
+
+        Notifier::channelChanged(*channel);
+    }
+
+    ioManager.save();
+
+    return true;
 }
