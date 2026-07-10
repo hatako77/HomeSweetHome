@@ -19,7 +19,8 @@ public:
     const Scene* get(uint16_t id) const;
     uint16_t count() const;
     bool execute(uint16_t id);
-
+    Scene* getAt(uint16_t index);    
+    const Scene* getAt(uint16_t index) const;
 private:
 
     Scene scenes[MAX_SCENES];
