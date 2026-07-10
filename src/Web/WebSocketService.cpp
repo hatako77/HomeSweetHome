@@ -1,7 +1,8 @@
 #include "Web/WebSocketService.h"
 #include <ArduinoJson.h>
+#include "OTA/OTAService.h"
 
-
+extern OTAService ota;
 WebSocketService websocket;
 
 void WebSocketService::notifyOTA(const OTAStatus& st)
@@ -96,9 +97,54 @@ void WebSocketService::onEvent(
             break;
 
         case WS_EVT_DATA:
-            // Reserved for future commands
+        {
+            AwsFrameInfo* info = (AwsFrameInfo*)arg;
+        
+            if (!info->final)
+                break;
+        
+            if (info->index != 0)
+                break;
+        
+            if (info->opcode != WS_TEXT)
+                break;
+        
+            String json;
+        
+            json.reserve(len);
+        
+            for (size_t i = 0; i < len; i++)
+            {
+                json += (char)data[i];
+            }
+        
+            JsonDocument doc;
+        
+            DeserializationError err =
+                deserializeJson(doc, json);
+        
+            if (err)
+            {
+                Serial.println("WS Invalid JSON");
+                break;
+            }
+        
+            String cmd = doc["cmd"] | "";
+        
+            Serial.print("WS Command: ");
+            Serial.println(cmd);
+        
+            if (cmd == "ota.check")
+            {
+                ota.startCheck();
+            }
+            else if (cmd == "ota.update")
+            {
+                ota.startUpdate();
+            }
+        
             break;
-
+        }
         case WS_EVT_PONG:
             break;
 
