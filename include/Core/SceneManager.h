@@ -12,6 +12,7 @@ public:
     void begin();
     bool load();
     bool save();
+    bool saveScene(Scene& scene);
     bool add(const Scene& scene);
     bool update(const Scene& scene);
     bool remove(uint16_t id);
