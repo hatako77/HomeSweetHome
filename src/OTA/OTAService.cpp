@@ -236,19 +236,49 @@ bool OTAService::updateFirmware() {
 }
 void OTAService::checkTask(void* parameter)
 {
-    OTAService* self = static_cast<OTAService*>(parameter);
+    OTAService* self =
+        static_cast<OTAService*>(parameter);
 
-    self->checkForUpdate();
+    self->status.running = true;
+    self->status.finished = false;
+    self->status.success = false;
+
+    self->status.state = "Checking";
+
+    websocket.notifyOTA(self->status);
+
+    bool available =
+        self->checkForUpdate();
+
+    self->status.running = false;
+    self->status.finished = true;
+    self->status.success = available;
+
+    self->status.state =
+        available ? "Update Available"
+                  : "Up To Date";
+
+    websocket.notifyOTA(self->status);
 
     vTaskDelete(nullptr);
 }
-
 void OTAService::updateTask(void* parameter)
 {
-    OTAService* self = static_cast<OTAService*>(parameter);
+    OTAService* self =
+        static_cast<OTAService*>(parameter);
 
     self->updateFirmware();
 
+    websocket.notifyOTA(
+        self->status
+    );
+
+    if(self->status.success)
+    {
+        delay(2000);
+
+        ESP.restart();
+    }
+
     vTaskDelete(nullptr);
 }
-
