@@ -5,7 +5,7 @@
 #include "IO/TypeHelper.h"
 #include "IO/IconHelper.h"
 #include "Web/WebSocketService.h"
-
+#include "Web/Notifier.h"
 
 void ApiChannel::registerRoutes(WebServerService& web)
 {
@@ -208,10 +208,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             ioManager.save();    
             if(auto* channel = ioManager.getChannel(id))
             {
-                Message msg("channel","state");
-                msg.json["id"] = channel->id;
-                msg.json["state"] = channel->state;
-                websocket.send(msg);
+                Notifier::channelChanged(*channel);
             }
         }    
         request->send(
