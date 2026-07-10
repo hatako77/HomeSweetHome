@@ -3,6 +3,18 @@
 
 WebSocketService websocket;
 
+void WebSocketService::notifyReload()
+{
+    JsonDocument doc;
+
+    doc["type"] = "reload";
+
+    String json;
+    serializeJson(doc, json);
+
+    ws.textAll(json);
+}
+
 void WebSocketService::notifyChannel(uint16_t id, bool state)
 {
     JsonDocument doc;
