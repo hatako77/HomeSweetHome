@@ -76,7 +76,7 @@ bool OTAService::checkForUpdate()
     status.error = "";
     status.state = "Checking";
 
-    websocket.notifyOTA(status);
+    sendStatus();
 
     if (WiFi.status() != WL_CONNECTED)
     {
@@ -85,7 +85,7 @@ bool OTAService::checkForUpdate()
         status.state = "Error";
         status.error = "WiFi not connected";
 
-        websocket.notifyOTA(status);
+        sendStatus();
 
         return false;
     }
@@ -115,7 +115,7 @@ bool OTAService::checkForUpdate()
         status.state = "Error";
         status.error = "HTTP " + String(code);
 
-        websocket.notifyOTA(status);
+        sendStatus();
 
         http.end();
 
@@ -138,7 +138,7 @@ bool OTAService::checkForUpdate()
         status.state = "Error";
         status.error = err.c_str();
 
-        websocket.notifyOTA(status);
+        sendStatus();
 
         return false;
     }
@@ -161,7 +161,7 @@ bool OTAService::checkForUpdate()
         ? "Update Available"
         : "Up To Date";
 
-    websocket.notifyOTA(status);
+    sendStatus();
 
     return available;
 }
@@ -182,7 +182,7 @@ bool OTAService::downloadAndUpdate(const String& url)
     status.error = "";
     status.state = "Connecting";
 
-    websocket.notifyOTA(status);
+    sendStatus();
 
     HTTPClient http;
 
@@ -203,7 +203,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.state = "Error";
         status.error = "HTTP " + String(code);
 
-        websocket.notifyOTA(status);
+        sendStatus();
 
         http.end();
 
@@ -221,7 +221,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.state = "Error";
         status.error = "Not enough flash";
 
-        websocket.notifyOTA(status);
+        sendStatus();
 
         http.end();
 
@@ -239,7 +239,7 @@ bool OTAService::downloadAndUpdate(const String& url)
 
     status.state = "Downloading";
 
-    websocket.notifyOTA(status);
+    sendStatus();
 
     while(http.connected() &&
           status.downloaded < status.total)
@@ -270,7 +270,7 @@ bool OTAService::downloadAndUpdate(const String& url)
                     status.error =
                         Update.errorString();
 
-                    websocket.notifyOTA(status);
+                    sendStatus();
 
                     http.end();
 
@@ -287,7 +287,7 @@ bool OTAService::downloadAndUpdate(const String& url)
                 {
                     lastPercent = status.percent;
 
-                    websocket.notifyOTA(status);
+                    sendStatus();
                 }
             }
         }
@@ -313,7 +313,7 @@ bool OTAService::downloadAndUpdate(const String& url)
                 status.eta = 0;
             }
 
-            websocket.notifyOTA(status);
+            sendStatus();
 
             lastBytes = status.downloaded;
             lastMillis = millis();
@@ -324,7 +324,7 @@ bool OTAService::downloadAndUpdate(const String& url)
 
     status.state = "Verifying";
 
-    websocket.notifyOTA(status);
+    sendStatus();
 
     if(!Update.end())
     {
@@ -336,7 +336,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.error =
             Update.errorString();
 
-        websocket.notifyOTA(status);
+        sendStatus();
 
         http.end();
 
@@ -353,7 +353,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.error =
             "Update not finished";
 
-        websocket.notifyOTA(status);
+        sendStatus();
 
         http.end();
 
@@ -372,7 +372,7 @@ bool OTAService::downloadAndUpdate(const String& url)
 
     status.state = "Completed";
 
-    websocket.notifyOTA(status);
+    sendStatus();
 
     return true;
 }
@@ -387,7 +387,7 @@ bool OTAService::updateFirmware()
         status.state = "Error";
         status.error = "Firmware URL is empty";
 
-        websocket.notifyOTA(status);
+        sendStatus();
 
         return false;
     }
