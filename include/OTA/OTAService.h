@@ -28,21 +28,17 @@ class OTAService {
 public:
     bool checkForUpdate();
     bool updateFirmware();
-    OTAStatus& getStatus() {
-        return status;
-    }
+
     void startCheck();
     void startUpdate();
-    void setVersionURL(const String& url);
-    void setCurrentVersion(const String& version);
-    String getRemoteVersion() const {
-    return remoteVersion;
-    }
 
-    String getCurrentVersion() const {
-    return currentVersion;
-    }
+    static void checkTask(void* parameter);
+    static void updateTask(void* parameter);
 
+    OTAStatus& getStatus()
+    {
+        return status;
+    }
 private:
     String versionURL;
     String currentVersion;
