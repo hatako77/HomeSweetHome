@@ -254,7 +254,6 @@ Update Firmware
 
 </button>
 <script>
-<script>
 
 let socket;
 let rebootTimer = null;
