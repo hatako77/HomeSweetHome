@@ -26,6 +26,12 @@ void WebSocketService::onEvent(
     {
         case WS_EVT_CONNECT:
             Serial.printf("WS Client %u Connected\n", client->id());
+        
+            client->text(R"({
+                "type":"hello",
+                "message":"Connected"
+            })");
+            
             break;
 
         case WS_EVT_DISCONNECT:
