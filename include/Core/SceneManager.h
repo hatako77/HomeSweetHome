@@ -2,7 +2,7 @@
 #define SCENE_MANAGER_H
 
 #include "Core/Scene.h"
-#include "Core/IOManager.h"
+#include "IO/IOManager.h"
 
 class SceneManager
 {
