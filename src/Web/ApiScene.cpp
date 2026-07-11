@@ -63,7 +63,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
           JsonObject a = actions.add<JsonObject>();  
           a["channelId"] = scene->actions[i].channelId;  
           a["state"] = scene->actions[i].state;  
-          a["delayMs"] = scene->actions[i].delayMs;
+          a["durationMs"] = scene->actions[i].durationMs;
       }  
       String json;  
       serializeJson(doc,json);  
@@ -97,7 +97,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
           SceneAction& action = scene.actions[scene.actionCount++];  
           action.channelId = a["channelId"] | 0;  
           action.state = a["state"] | false;  
-          action.delayMs = a["delayMs"] | 0;
+          action.durationMs = a["durationMs"] | 0;
       }  
       bool ok = sceneManager.saveScene(scene);  
       request->send(ok ? 200 : 500,"application/json", ok ? "{\"success\":true}" : "{\"success\":false}");
@@ -206,7 +206,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
           JsonObject a = actions.add<JsonObject>();  
           a["channelId"] = scene->actions[i].channelId;  
           a["state"] = scene->actions[i].state;  
-          a["delayMs"] = scene->actions[i].delayMs;
+          a["durationMs"] = scene->actions[i].durationMs;
       }  
       String json;  
       serializeJson(doc,json);  
