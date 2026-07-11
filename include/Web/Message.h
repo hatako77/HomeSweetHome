@@ -1,27 +1,38 @@
-#ifndef MESSAGE_H
-#define MESSAGE_H
+#pragma once
 
+#include <Arduino.h>
 #include <ArduinoJson.h>
 
 class Message
 {
 public:
 
-    JsonDocument json;
+    String type;
+    String action;
 
-    Message(const String& type,
-            const String& action)
+    JsonDocument data;
+
+    Message(
+        const String& t,
+        const String& a)
+        : type(t),
+          action(a)
     {
-        json["type"] = type;
-        json["action"] = action;
     }
 
     String serialize() const
     {
-        String s;
-        serializeJson(json, s);
-        return s;
+        JsonDocument doc;
+
+        doc["type"] = type;
+        doc["action"] = action;
+
+        doc["data"] = data.as<JsonVariantConst>();
+
+        String json;
+
+        serializeJson(doc, json);
+
+        return json;
     }
 };
-
-#endif
