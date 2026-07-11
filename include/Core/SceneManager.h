@@ -15,7 +15,7 @@ struct SceneTimer
 class SceneManager
 {
 public:
-
+    void removeTimer(uint16_t channelId);
     static constexpr uint8_t MAX_SCENES = 32;
     void begin();
     bool load();
