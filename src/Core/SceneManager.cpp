@@ -11,7 +11,16 @@ SceneManager sceneManager;
 void SceneManager::begin()
 {
 }
-
+void SceneManager::removeTimer(uint16_t channelId)
+{
+    for(auto& timer:timers)
+    {
+        if(timer.active&&timer.channelId==channelId)
+        {
+            timer.active=false;
+        }
+    }
+}
 void SceneManager::update()
 {
     uint32_t now=millis();
