@@ -11,9 +11,24 @@ SceneManager sceneManager;
 void SceneManager::begin()
 {
 }
+
 void SceneManager::update()
 {
-
+    uint32_t now=millis();
+    for(auto& timer:timers)
+    {
+        if(!timer.active)
+            continue;
+        if((int32_t)(now-timer.expiresAt)>=0)
+        {
+            timer.active=false;
+            IOChannel* channel=ioManager.getChannel(timer.channelId);
+            if(channel&&channel->state!=timer.targetState)
+            {
+                ioManager.write(timer.channelId,timer.targetState);
+            }
+        }
+    }
 }
 
 void SceneManager::addTimer(uint16_t channelId,bool targetState,uint32_t durationMs)
