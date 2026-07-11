@@ -53,4 +53,5 @@ void loop()
 {
     ioManager.update();
     web.update();
+    sceneManager.update();
 }
