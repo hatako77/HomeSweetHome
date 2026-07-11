@@ -11,7 +11,15 @@ SceneManager sceneManager;
 void SceneManager::begin()
 {
 }
+void SceneManager::update()
+{
 
+}
+
+void SceneManager::addTimer(uint16_t channelId,bool targetState,uint32_t durationMs)
+{
+
+}
 bool SceneManager::saveScene(Scene& scene)
 {
     if(scene.id == 0)
