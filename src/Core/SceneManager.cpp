@@ -247,6 +247,7 @@ bool SceneManager::execute(uint16_t id)
     {
         SceneAction& action = scene->actions[i];    
         if(action.durationMs > 0) delay(action.durationMs);    
+        removeTimer(action.channelId);
         if(ioManager.write(action.channelId,action.state))
         {
             if(action.durationMs>0)
