@@ -18,8 +18,29 @@ void SceneManager::update()
 
 void SceneManager::addTimer(uint16_t channelId,bool targetState,uint32_t durationMs)
 {
-
+    uint32_t expiresAt=millis()+durationMs;
+    for(auto& timer:timers)
+    {
+        if(timer.active&&timer.channelId==channelId)
+        {
+            timer.targetState=targetState;
+            timer.expiresAt=expiresAt;
+            return;
+        }
+    }
+    for(auto& timer:timers)
+    {
+        if(!timer.active)
+        {
+            timer.active=true;
+            timer.channelId=channelId;
+            timer.targetState=targetState;
+            timer.expiresAt=expiresAt;
+            return;
+        }
+    }
 }
+
 bool SceneManager::saveScene(Scene& scene)
 {
     if(scene.id == 0)
