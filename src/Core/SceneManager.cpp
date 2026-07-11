@@ -69,7 +69,7 @@ bool SceneManager::load()
         {
             if (scene.actionCount >= Scene::MAX_ACTIONS) break;
             SceneAction& a = scene.actions[scene.actionCount++];
-            a.delayMs   = action["delayMs"] | 0;
+            a.durationMs   = action["durationMs"] | 0;
             a.channelId = action["channelId"] | 0;
             a.state     = action["state"] | false;
         }
@@ -114,7 +114,7 @@ bool SceneManager::save()
             JsonObject a   = actions.add<JsonObject>();
             a["channelId"] = scenes[i].actions[j].channelId;
             a["state"]     = scenes[i].actions[j].state;
-            a["delayMs"]   = scenes[i].actions[j].delayMs;
+            a["durationMs"]   = scenes[i].actions[j].durationMs;
         }
     }
     serializeJson(doc,file);
@@ -201,7 +201,7 @@ bool SceneManager::execute(uint16_t id)
     for(uint8_t i = 0; i < scene->actionCount; i++)
     {
         SceneAction& action = scene->actions[i];    
-        if(action.delayMs > 0) delay(action.delayMs);    
+        if(action.durationMs > 0) delay(action.durationMs);    
         ioManager.write(action.channelId, action.state );
     }    
     ioManager.save();
