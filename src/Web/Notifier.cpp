@@ -13,11 +13,11 @@ void Notifier::sceneAdded(const Scene& scene)
 {
     Message msg("scene","added");
 
-    msg.json["id"] = scene.id;
-    msg.json["name"] = scene.name;
-    msg.json["icon"] = scene.icon;
-    msg.json["favorite"] = scene.favorite;
-    msg.json["enabled"] = scene.enabled;
+    msg.data["id"] = scene.id;
+    msg.data["name"] = scene.name;
+    msg.data["icon"] = scene.icon;
+    msg.data["favorite"] = scene.favorite;
+    msg.data["enabled"] = scene.enabled;
 
     websocket.send(msg);
 }
@@ -26,11 +26,11 @@ void Notifier::sceneUpdated(const Scene& scene)
 {
     Message msg("scene","updated");
 
-    msg.json["id"] = scene.id;
-    msg.json["name"] = scene.name;
-    msg.json["icon"] = scene.icon;
-    msg.json["favorite"] = scene.favorite;
-    msg.json["enabled"] = scene.enabled;
+    msg.data["id"] = scene.id;
+    msg.data["name"] = scene.name;
+    msg.data["icon"] = scene.icon;
+    msg.data["favorite"] = scene.favorite;
+    msg.data["enabled"] = scene.enabled;
 
     websocket.send(msg);
 }
@@ -39,7 +39,7 @@ void Notifier::sceneRemoved(uint16_t id)
 {
     Message msg("scene","removed");
 
-    msg.json["id"] = id;
+    msg.data["id"] = id;
 
     websocket.send(msg);
 }
@@ -48,7 +48,7 @@ void Notifier::sceneExecuted(uint16_t id)
 {
     Message msg("scene","executed");
 
-    msg.json["id"] = id;
+    msg.data["id"] = id;
 
     websocket.send(msg);
 }
@@ -57,8 +57,8 @@ void Notifier::channelChanged(const IOChannel& channel)
 {
     Message msg("channel","changed");
 
-    msg.json["id"] = channel.id;
-    msg.json["state"] = channel.state;
+    msg.data["id"] = channel.id;
+    msg.data["state"] = channel.state;
 
     websocket.send(msg);
 }
@@ -70,22 +70,22 @@ void Notifier::otaStatus(
 {
     Message msg("ota","status");
 
-    msg.json["running"] = status.running;
-    msg.json["finished"] = status.finished;
-    msg.json["success"] = status.success;
+    msg.data["running"] = status.running;
+    msg.data["finished"] = status.finished;
+    msg.data["success"] = status.success;
 
-    msg.json["downloaded"] = status.downloaded;
-    msg.json["total"] = status.total;
+    msg.data["downloaded"] = status.downloaded;
+    msg.data["total"] = status.total;
 
-    msg.json["percent"] = status.percent;
-    msg.json["speed"] = status.speedKB;
-    msg.json["eta"] = status.eta;
+    msg.data["percent"] = status.percent;
+    msg.data["speed"] = status.speedKB;
+    msg.data["eta"] = status.eta;
 
-    msg.json["state"] = status.state;
-    msg.json["error"] = status.error;
+    msg.data["state"] = status.state;
+    msg.data["error"] = status.error;
 
-    msg.json["current"] = current;
-    msg.json["remote"] = remote;
+    msg.data["current"] = current;
+    msg.data["remote"] = remote;
 
     websocket.send(msg);
 }
