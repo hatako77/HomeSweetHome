@@ -152,7 +152,10 @@ bool SceneManager::save()
         sceneObj["name"] = scenes[i].name;        
         sceneObj["icon"] = scenes[i].icon;        
         sceneObj["favorite"] = scenes[i].favorite;        
-        sceneObj["enabled"] = scenes[i].enabled;        
+        sceneObj["enabled"] = scenes[i].enabled;  
+        sceneObj["notificationSend"] = scenes[i].notificationSend;  
+        sceneObj["notificationText"] = scenes[i].notificationText;  
+        
         JsonArray actions = sceneObj["actions"].to<JsonArray>();
         for(uint8_t j=0; j<scenes[i].actionCount; j++)
         {
