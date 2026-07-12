@@ -261,10 +261,10 @@ bool SceneManager::execute(uint16_t id)
             }
         }    
     } 
-    if(scene->notificationSend)
-    {
-        notificationService.send(scene->notificationText);
-    }
+    //if(scene->notificationSend)
+    //{
+    //    notificationService.send(scene->notificationText);
+    //}
     ioManager.save();
     return true;
 }
