@@ -255,7 +255,11 @@ bool SceneManager::execute(uint16_t id)
                 addTimer(action.channelId,!action.state,action.durationMs);
             }
         }    
-    }    
+    } 
+    if(scene->notificationSend)
+    {
+        notificationService.send(scene->notificationText);
+    }
     ioManager.save();
     return true;
 }
