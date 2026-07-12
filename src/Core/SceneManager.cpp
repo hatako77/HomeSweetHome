@@ -109,6 +109,8 @@ bool SceneManager::load()
         scene.actionCount = 0;
         scene.icon = sceneObj["icon"] | "bolt";        
         scene.favorite = sceneObj["favorite"] | false;
+        scene.notificationSend=sceneObj["notificationSend"]|false;
+        strlcpy(scene.notificationText,sceneObj["notificationText"]|"",sizeof(scene.notificationText));
         JsonArray actions = sceneObj["actions"].as<JsonArray>();
         for (JsonObject action : actions)
         {
