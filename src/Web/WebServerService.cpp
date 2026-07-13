@@ -8,6 +8,7 @@
 #include "Web/ApiRoom.h"
 #include "Web/ApiChannel.h"
 #include "Web/WebSocketService.h"
+#include "Web/ApiScene.h"
 
 WebServerService web;
 extern OTAService ota;
