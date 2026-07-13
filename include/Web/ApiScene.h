@@ -1,9 +1,9 @@
 #pragma once
 
-#include <ESPAsyncWebServer.h>
+#include "Web/WebServerService.h"
 
 class ApiScene
 {
 public:
-    static void registerRoutes(AsyncWebServer& server);
+    static void registerRoutes(WebServerService& server);
 };
