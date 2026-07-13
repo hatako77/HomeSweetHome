@@ -79,7 +79,7 @@ let socket=null;
 function showDashboard()
 {
     document.getElementById("content").innerHTML=`
-        <h2>Dashboard</h2>
+        <h1>Dashboard</h1>
 
         <div class="dashboard-grid">
 
@@ -106,6 +106,7 @@ function showDashboard()
         </div>
     `;
 }
+
 
 function initSidebar()
 {
