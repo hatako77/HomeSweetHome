@@ -8,6 +8,7 @@
 #include "Web/ApiRoom.h"
 #include "Web/ApiChannel.h"
 #include "Web/WebSocketService.h"
+#include "Web/ApiSystem.h"
 
 WebServerService web;
 extern OTAService ota;
@@ -43,4 +44,7 @@ void WebServerService::registerApi()
     ApiSettings::registerRoutes(*this);
     ApiRoom::registerRoutes(*this);
     ApiChannel::registerRoutes(*this);
+    ApiSystem::registerRoutes(*this);
+    ApiScene::registerRoutes(*this);
+
 }
