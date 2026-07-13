@@ -5,7 +5,7 @@
 #include "Web/WebServerService.h"
 #include "Core/DemoData.h"
 #include <LittleFS.h>
-#include "Repositories/RoomRepository.h"
+#include "Core/RoomManager.h"
 #include "Core/SceneManager.h"
 // =========================
 // WiFi
@@ -38,7 +38,7 @@ void setup()
     ota.setVersionURL(
         "https://github.com/hatako77/HomeSweetHome/releases/latest/download/version.json"
     );
-    roomRepository.begin();
+    roomManager.begin();
     ioManager.begin();
     DemoData::create();
     web.begin();
