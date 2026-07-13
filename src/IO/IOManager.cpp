@@ -38,7 +38,6 @@ void IOManager::begin()
                 ch.address.device = device;
                 ch.address.pin = pin;    
                 ch.roomId = 0;
-                ch.groupId = 0;
                 ch.favorite = false;    
                 add(ch);
             }
@@ -230,7 +229,6 @@ bool IOManager::update(const IOChannel& channel)
             channels[i].favorite   = channel.favorite;
             channels[i].activeLow  = channel.activeLow;
             channels[i].roomId     = channel.roomId;
-            channels[i].groupId    = channel.groupId;
             return true;
         }
     }
@@ -261,7 +259,6 @@ bool IOManager::save() const
         o["type"] = static_cast<uint8_t>(ch->type);
         o["icon"] = static_cast<uint8_t>(ch->icon);        
         o["roomId"] = ch->roomId;
-        o["groupId"] = ch->groupId;        
         o["driverId"] = ch->address.driverId;
         o["device"] = ch->address.device;
         o["pin"] = ch->address.pin;
@@ -310,7 +307,6 @@ bool IOManager::load()
             ch->icon = icon;
         ch->favorite = o["favorite"] | false;
         ch->roomId = o["roomId"] | 0;
-        ch->groupId = o["groupId"] | 0;
         ch->favorite = o["favorite"] | false;
         ch->address.driverId = o["driverId"] | 0;
         ch->address.device = o["device"] | 0;
