@@ -76,6 +76,51 @@ let rooms=[];
 let channels=[];
 let socket=null;
 
+function initSidebar()
+{
+    document.getElementById("sidebar").innerHTML = `
+        <div class="sidebar-menu">
+
+            <button class="menu-item active">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </button>
+
+            <button class="menu-item">
+                <i class="fa-solid fa-door-open"></i>
+                <span>Rooms</span>
+            </button>
+
+            <button class="menu-item">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Scenes</span>
+            </button>
+
+            <button class="menu-item">
+                <i class="fa-solid fa-clock"></i>
+                <span>Schedules</span>
+            </button>
+
+            <button class="menu-item">
+                <i class="fa-solid fa-person-rays"></i>
+                <span>Sensors</span>
+            </button>
+
+            <button class="menu-item">
+                <i class="fa-solid fa-upload"></i>
+                <span>OTA</span>
+            </button>
+
+            <button class="menu-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </button>
+
+        </div>
+    `;
+}
+
+
 function $(id)
 {
     return document.getElementById(id);
@@ -638,6 +683,8 @@ window.addEventListener(
 window.onload=()=>
 {
     init();
+    initSidebar();
+    document.getElementById("content").innerHTML = `<h2>Dashboard</h2>`;
 };
 function heartbeat()
 {
