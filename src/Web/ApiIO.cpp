@@ -86,7 +86,6 @@ namespace ApiIO
                 obj["type"] = typeToString(ch->type);
                 obj["icon"] = iconToString(ch->icon);
                 obj["roomId"] = ch->roomId;
-                obj["groupId"] = ch->groupId;
                 obj["driverId"] = ch->address.driverId;
                 obj["device"] = ch->address.device;
                 obj["pin"] = ch->address.pin;
