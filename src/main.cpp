@@ -6,6 +6,7 @@
 #include "Core/DemoData.h"
 #include <LittleFS.h>
 #include "Repositories/RoomRepository.h"
+#include "Core/SceneManager.h"
 // =========================
 // WiFi
 // =========================
@@ -17,23 +18,18 @@ OTAService ota;
 void setup()
 {
     Serial.begin(115200);
-
     if (!LittleFS.begin(true))
     {
         Serial.println("LittleFS Mount Failed");
         while (true);
     }
-
     WiFi.begin(ssid, password);
-
     Serial.print("Connecting WiFi");
-
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
         Serial.print(".");
     }
-
     Serial.println();
     Serial.println("WiFi connected");
     Serial.println(WiFi.localIP());
