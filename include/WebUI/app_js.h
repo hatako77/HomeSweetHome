@@ -166,14 +166,6 @@ function $(id)
 {
     return document.getElementById(id);
 }
-function updateOTA(status)
-{
-    if(state) state.innerText = status.state ?? "";    
-    if(progress) progress.value = status.percent ?? 0;    
-    if(percent) percent.innerText = (status.percent ?? 0) + "%";    
-    if(speed) speed.innerText = (status.speed ?? 0) + " KB/s";    
-    if(eta) eta.innerText = (status.eta ?? 0) + " s";
-}
 function updateTile(tile, ch)
 {
     if(ch.state)
@@ -458,7 +450,7 @@ function connectWebSocket()
         if(msg.type==="ota")
         {
             console.log(JSON.stringify(msg,null,2));
-            updateOTA(msg.data);
+           
         }
     };
 }
