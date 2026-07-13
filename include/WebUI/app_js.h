@@ -78,35 +78,34 @@ let socket=null;
 
 function showDashboard()
 {
-    document.getElementById("content").innerHTML = `
-        <h1>Dashboard</h1>
+    document.getElementById("content").innerHTML=`
+        <h2>Dashboard</h2>
 
         <div class="dashboard-grid">
 
-            <div class="card">
+            <div class="dashboard-card">
                 <h3>Firmware</h3>
-                <span id="fwVersion">-</span>
+                <div class="value" id="fwVersion">-</div>
             </div>
 
-            <div class="card">
+            <div class="dashboard-card">
                 <h3>Rooms</h3>
-                <span id="roomCount">-</span>
+                <div class="value" id="roomCount">-</div>
             </div>
 
-            <div class="card">
+            <div class="dashboard-card">
                 <h3>Scenes</h3>
-                <span id="sceneCount">-</span>
+                <div class="value" id="sceneCount">-</div>
             </div>
 
-            <div class="card">
+            <div class="dashboard-card">
                 <h3>Channels</h3>
-                <span id="channelCount">-</span>
+                <div class="value" id="channelCount">-</div>
             </div>
 
         </div>
     `;
 }
-
 
 function initSidebar()
 {
