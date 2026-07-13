@@ -458,7 +458,7 @@ function connectWebSocket()
         if(msg.type==="ota")
         {
             console.log(JSON.stringify(msg,null,2));
-            updateOTA(msg);
+            updateOTA(msg.data);
         }
     };
 }
