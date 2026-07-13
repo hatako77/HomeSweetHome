@@ -308,7 +308,7 @@ function connectWS()
         if(msg.type!="ota")
             return;
 
-        updateOTA(msg);
+        updateOTA(msg.data);
     };
 }
 
@@ -325,16 +325,16 @@ function updateOTA(s)
         s.percent + "%";
 
     let down =
-        (s.downloaded/1024/1024).toFixed(2);
+        (s.downloaded/1024/1024);
 
     let total =
-        (s.total/1024/1024).toFixed(2);
+        (s.total/1024/1024);
 
     document.getElementById("size").innerHTML =
         down + " MB / " + total + " MB";
 
     document.getElementById("speed").innerHTML =
-        s.speed.toFixed(1) + " KB/s";
+        s.speed + " KB/s";
 
     document.getElementById("eta").innerHTML =
         s.eta > 0
