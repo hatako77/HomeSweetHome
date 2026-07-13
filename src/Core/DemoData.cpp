@@ -1,21 +1,21 @@
 #include "Core/DemoData.h"
 
-#include "Repositories/RoomRepository.h"
+#include "Repositories/roomManager.h"
 #include "IO/IOManager.h"
 
 void DemoData::create()
 {
-    //if (roomRepository.count() == 0)
+    //if (roomManager.count() == 0)
     //{
-        roomRepository.add({0,"Living Room"});
-        roomRepository.add({0,"Kitchen"});
-        roomRepository.add({0,"Master Bedroom"});
-        roomRepository.add({0,"Bedroom"});
-        roomRepository.add({0,"Bathroom"});
-        roomRepository.add({0,"WC"});
-        roomRepository.add({0,"Hallway"});
-        roomRepository.add({0,"Yard"});
-        roomRepository.save();
+        roomManager.add({0,"Living Room"});
+        roomManager.add({0,"Kitchen"});
+        roomManager.add({0,"Master Bedroom"});
+        roomManager.add({0,"Bedroom"});
+        roomManager.add({0,"Bathroom"});
+        roomManager.add({0,"WC"});
+        roomManager.add({0,"Hallway"});
+        roomManager.add({0,"Yard"});
+        roomManager.save();
     //}
 
     if (ioManager.count() == 0)
