@@ -1,3 +1,8 @@
+#pragma once
+
+#include <Arduino.h>
+#include "Core/Room.h"
+
 class RoomManager
 {
 public:
