@@ -12,6 +12,54 @@ body {
   color: #e5e7eb;
 }
 
+.menu-item{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 18px;
+    border:none;
+    border-radius:12px;
+    background:#222;
+    color:#fff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.menu-item:hover{
+    background:#333;
+}
+
+.menu-item.active{
+    background:#3b82f6;
+}
+
+.menu-item i{
+    width:20px;
+    text-align:center;
+}
+
+.layout{
+    display:flex;
+    height:calc(100vh - 70px);
+}
+
+#sidebar{
+    width:260px;
+    flex-shrink:0;
+}
+
+#content{
+    flex:1;
+    overflow:auto;
+    padding:20px;
+}
+
+.sidebar-menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
 /* TOP BAR */
 .topbar {
   display: flex;
