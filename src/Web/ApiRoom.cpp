@@ -3,7 +3,7 @@
 #include "IO/IOConfig.h"
 #include <ArduinoJson.h>
 #include "Core/Room.h"
-#include "Repositories/RoomRepository.h"
+#include "Core/RoomManager.h"
 #include <ESPAsyncWebServer.h>
 
 void ApiRoom::registerRoutes(WebServerService& web)
@@ -17,7 +17,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
             uint16_t id =
                 request->getParam("id")->value().toInt();
     
-            Room* room = roomRepository.get(id);
+            Room* room = roomManager.get(id);
     
             if(!room)
             {
@@ -43,9 +43,9 @@ void ApiRoom::registerRoutes(WebServerService& web)
     
         JsonArray arr = doc.to<JsonArray>();
     
-        for(uint16_t i=0;i<roomRepository.count();i++)
+        for(uint16_t i=0;i<roomManager.count();i++)
         {
-            Room* room = roomRepository.get(i);
+            Room* room = roomManager.get(i);
     
             if(!room)
                 continue;
@@ -79,9 +79,9 @@ void ApiRoom::registerRoutes(WebServerService& web)
         }    
         Room room;    
         room.name=doc["name"]|"Room";    
-        Room* created=roomRepository.add(room);    
+        Room* created=roomManager.add(room);    
         if(created)
-            roomRepository.save();    
+            roomManager.save();    
         request->send(created?201:500,
                       "application/json",
                       created?
@@ -107,9 +107,9 @@ void ApiRoom::registerRoutes(WebServerService& web)
         Room room;    
         room.id   = doc["id"] | 0;
         room.name = doc["name"] | "Room";    
-        bool ok = roomRepository.update(room);    
+        bool ok = roomManager.update(room);    
         if (ok)
-            roomRepository.save();    
+            roomManager.save();    
         request->send(
             ok ? 200 : 404,
             "application/json",
@@ -176,9 +176,9 @@ void ApiRoom::registerRoutes(WebServerService& web)
         }    
         Room room;    
         room.name = doc["name"] | "Room";    
-        Room* created = roomRepository.add(room);    
+        Room* created = roomManager.add(room);    
         if (created)
-            roomRepository.save();    
+            roomManager.save();    
         request->send(
             created ? 200 : 500,
             "application/json",
