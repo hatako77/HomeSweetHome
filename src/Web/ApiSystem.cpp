@@ -3,10 +3,8 @@
 #include "Core/RoomManager.h"
 #include "Core/SceneManager.h"
 #include "IO/IOManager.h"
-
 #include <WiFi.h>
-
-#include "version.h"
+#include "Core/version.h"
 
 void ApiSystem::registerRoutes(WebServerService& server)
 {
