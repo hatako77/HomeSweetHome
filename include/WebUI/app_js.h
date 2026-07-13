@@ -191,15 +191,15 @@ function updateOTA(status)
 
     if(percent)
         percent.innerText =
-            status.percent + "%";
+            (status.percent ?? 0).toFixed(1) + "%";
 
     if(speed)
         speed.innerText =
-            status.speed.toFixed(1) + " KB/s";
+            (status.speed ?? 0).toFixed(1) + " KB/s";
 
     if(eta)
         eta.innerText =
-            status.eta + " s";
+            (status.eta ?? 0).toFixed(1) + " s";
 }
 function updateTile(tile, ch)
 {
@@ -484,6 +484,7 @@ function connectWebSocket()
         }
         if(msg.type==="ota")
         {
+            console.log(JSON.stringify(msg,null,2));
             updateOTA(msg);
         }
     };
