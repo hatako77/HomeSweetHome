@@ -76,6 +76,38 @@ let rooms=[];
 let channels=[];
 let socket=null;
 
+function showDashboard()
+{
+    document.getElementById("content").innerHTML = `
+        <h1>Dashboard</h1>
+
+        <div class="dashboard-grid">
+
+            <div class="card">
+                <h3>Firmware</h3>
+                <span id="fwVersion">-</span>
+            </div>
+
+            <div class="card">
+                <h3>Rooms</h3>
+                <span id="roomCount">-</span>
+            </div>
+
+            <div class="card">
+                <h3>Scenes</h3>
+                <span id="sceneCount">-</span>
+            </div>
+
+            <div class="card">
+                <h3>Channels</h3>
+                <span id="channelCount">-</span>
+            </div>
+
+        </div>
+    `;
+}
+
+
 function initSidebar()
 {
     document.getElementById("sidebar").innerHTML = `
@@ -726,6 +758,7 @@ window.onload=()=>
 {
     init();
     initSidebar();
+    showDashboard();
     document.getElementById("content").innerHTML = `<h2>Dashboard</h2>`;
 };
 function heartbeat()
