@@ -7,9 +7,10 @@
 extern SceneManager sceneManager;
 extern WebSocketService websocket;
 
-void ApiScene::registerRoutes(AsyncWebServer& server)
+void ApiScene::registerRoutes(WebServerService& server)
 {
-server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
+  AsyncWebServer& web = server.server();
+  web.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
   {
       if(!request->hasParam("id", true))
       {
@@ -23,7 +24,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
 
 
   
-  server.on("/api/scenes/remove",HTTP_POST,[](AsyncWebServerRequest *request)
+  web.on("/api/scenes/remove",HTTP_POST,[](AsyncWebServerRequest *request)
   {
       if(!request->hasParam("id", true))
       {
@@ -37,7 +38,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
 
 
   
-  server.on("/api/scenes/get", HTTP_GET,[](AsyncWebServerRequest *request)
+  web.on("/api/scenes/get", HTTP_GET,[](AsyncWebServerRequest *request)
     {
     if(!request->hasParam("id"))
       {
@@ -75,7 +76,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
   
 
 
-  server.on("/api/scenes/save",HTTP_POST,[](AsyncWebServerRequest *request){},nullptr,[](AsyncWebServerRequest *request,
+  web.on("/api/scenes/save",HTTP_POST,[](AsyncWebServerRequest *request){},nullptr,[](AsyncWebServerRequest *request,
   uint8_t *data, size_t len, size_t index, size_t total)
   {
       JsonDocument doc;  
@@ -116,7 +117,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
 
   
   
-  server.on("/api/scenes", HTTP_GET, [](AsyncWebServerRequest *request)
+  web.on("/api/scenes", HTTP_GET, [](AsyncWebServerRequest *request)
   {
       JsonDocument doc;  
       JsonArray array = doc.to<JsonArray>();  
@@ -141,7 +142,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
 
 
   
-  server.on("/api/scenes", HTTP_GET,[](AsyncWebServerRequest* request)
+  web.on("/api/scenes", HTTP_GET,[](AsyncWebServerRequest* request)
   {
       JsonDocument doc;  
       JsonArray array = doc.to<JsonArray>();  
@@ -167,7 +168,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
 
 
   
-  server.on("/api/scenes/run", HTTP_POST,[](AsyncWebServerRequest* request)
+  web.on("/api/scenes/run", HTTP_POST,[](AsyncWebServerRequest* request)
   {
       if(!request->hasParam("id", true))
       {
@@ -192,7 +193,7 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
 
 
   
-  server.on("/api/scenes/get", HTTP_GET, [](AsyncWebServerRequest *request)
+  web.on("/api/scenes/get", HTTP_GET, [](AsyncWebServerRequest *request)
   {
       if(!request->hasParam("id"))
       {
