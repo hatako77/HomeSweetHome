@@ -683,6 +683,41 @@ function initSortable()
     });
 }
 
+function showDashboard()
+{
+    document.getElementById("content").innerHTML="<h2>Dashboard</h2>";
+}
+
+function showRooms()
+{
+    document.getElementById("content").innerHTML="<h2>Rooms</h2>";
+}
+
+function showScenes()
+{
+    document.getElementById("content").innerHTML="<h2>Scenes</h2>";
+}
+
+function showSchedules()
+{
+    document.getElementById("content").innerHTML="<h2>Schedules</h2>";
+}
+
+function showSensors()
+{
+    document.getElementById("content").innerHTML="<h2>Sensors</h2>";
+}
+
+function showOTA()
+{
+    document.getElementById("content").innerHTML="<h2>OTA</h2>";
+}
+
+function showSettings()
+{
+    document.getElementById("content").innerHTML="<h2>Settings</h2>";
+}
+
 function init()
 {
     loadVersion();
