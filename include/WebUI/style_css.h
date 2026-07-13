@@ -11,7 +11,31 @@ body {
   background: #0b1220;
   color: #e5e7eb;
 }
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:20px;
+    margin-top:20px;
+}
 
+.dashboard-card{
+    background:#1f1f1f;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+
+.dashboard-card h3{
+    margin:0;
+    font-size:16px;
+    color:#bbb;
+}
+
+.dashboard-card .value{
+    margin-top:15px;
+    font-size:30px;
+    font-weight:bold;
+}
 .menu-item{
     width:100%;
     display:flex;
