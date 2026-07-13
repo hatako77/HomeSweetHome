@@ -57,8 +57,8 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
       doc["icon"] = scene->icon;  
       doc["favorite"] = scene->favorite;  
       doc["enabled"] = scene->enabled; 
-      obj["notificationSend"]=scene->notificationSend;
-      obj["notificationText"]=scene->notificationText;
+      doc["notificationSend"]=scene->notificationSend;
+      doc["notificationText"]=scene->notificationText;
       JsonArray actions = doc["actions"].to<JsonArray>();  
       for(uint8_t i=0;i<scene->actionCount;i++)
       {
@@ -212,8 +212,8 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
       doc["icon"] = scene->icon;
       doc["favorite"] = scene->favorite;
       doc["enabled"] = scene->enabled;  
-      obj["notificationSend"]=scene->notificationSend;
-      obj["notificationText"]=scene->notificationText;
+      doc["notificationSend"]=scene->notificationSend;
+      doc["notificationText"]=scene->notificationText;
     
       JsonArray actions = doc["actions"].to<JsonArray>();  
       for(uint8_t i=0;i<scene->actionCount;i++)
