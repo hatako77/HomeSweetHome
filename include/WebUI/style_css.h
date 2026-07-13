@@ -4,6 +4,27 @@
 #include <pgmspace.h>
 
 const char STYLE_CSS[] PROGMEM = R"rawliteral(
+@media (max-width:768px){
+
+    #sidebar{
+        width:70px;
+        padding:12px 8px;
+    }
+    .menu-item{
+        justify-content:center;
+        padding:14px;
+    }
+    .menu-item span{
+        display:none;
+    }
+    .menu-item i{
+        margin:0;
+        font-size:20px;
+    }
+    #content{
+        padding:20px;
+    }
+}
 
 body {
   margin: 0;
@@ -71,14 +92,16 @@ body {
     border-radius:14px;
     cursor:pointer;
     transition:.2s;
+    background:#1f2535;
+    color:#fff;
 }
 
 .menu-item:hover{
-    background:#2b2b2b;
+      background:#2b3248;
 }
 
 .menu-item.active{
-    background:#3f7df4;
+    background:#3d7bfd;
 }
 
 .menu-item i{
@@ -99,8 +122,9 @@ body {
 }
 
 #content{
+    border-left:1px solid rgba(255,255,255,.08);
     flex:1;
-    padding:30px;
+    padding:40px;
     overflow:auto;
 }
 
