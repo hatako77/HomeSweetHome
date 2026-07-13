@@ -56,7 +56,9 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
       doc["name"] = scene->name;  
       doc["icon"] = scene->icon;  
       doc["favorite"] = scene->favorite;  
-      doc["enabled"] = scene->enabled;  
+      doc["enabled"] = scene->enabled; 
+      obj["notificationSend"]=scene->notificationSend;
+      obj["notificationText"]=scene->notificationText;
       JsonArray actions = doc["actions"].to<JsonArray>();  
       for(uint8_t i=0;i<scene->actionCount;i++)
       {
@@ -89,6 +91,12 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
       scene.icon = doc["icon"] | "bolt";  
       scene.favorite = doc["favorite"] | false;  
       scene.enabled = doc["enabled"] | true;  
+      scene.notificationSend=doc["notificationSend"]|false;  
+      strlcpy(
+          scene.notificationText,
+          doc["notificationText"]|"",
+          sizeof(scene.notificationText)
+      );
       scene.actionCount = 0;  
       JsonArray actions = doc["actions"].as<JsonArray>();  
       for(JsonObject a : actions)
@@ -123,6 +131,8 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
           obj["favorite"] = scene->favorite; 
           obj["enabled"] = scene->enabled;  
           obj["actions"] = scene->actionCount;
+          obj["notificationSend"]=scene->notificationSend;
+          obj["notificationText"]=scene->notificationText;
       }  
       String json;  
       serializeJson(doc, json);  
@@ -146,6 +156,8 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
           obj["favorite"] = scene->favorite;
           obj["enabled"] = scene->enabled;
           obj["actions"] = scene->actionCount;
+          obj["notificationSend"]=scene->notificationSend;
+          obj["notificationText"]=scene->notificationText;
       }  
       String json;  
       serializeJson(doc,json);  
@@ -200,6 +212,9 @@ server.on("/api/scenes/execute",HTTP_POST,[](AsyncWebServerRequest *request)
       doc["icon"] = scene->icon;
       doc["favorite"] = scene->favorite;
       doc["enabled"] = scene->enabled;  
+      obj["notificationSend"]=scene->notificationSend;
+      obj["notificationText"]=scene->notificationText;
+    
       JsonArray actions = doc["actions"].to<JsonArray>();  
       for(uint8_t i=0;i<scene->actionCount;i++)
       {
