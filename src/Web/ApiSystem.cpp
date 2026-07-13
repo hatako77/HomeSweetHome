@@ -4,7 +4,7 @@
 #include "Core/SceneManager.h"
 #include "IO/IOManager.h"
 #include <WiFi.h>
-#include "Core/version.h"
+#include "Core/Version.h"
 
 void ApiSystem::registerRoutes(WebServerService& server)
 {
