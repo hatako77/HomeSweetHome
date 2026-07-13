@@ -171,7 +171,7 @@ function updateOTA(status)
     if(state) state.innerText = status.state ?? "";    
     if(progress) progress.value = status.percent ?? 0;    
     if(percent) percent.innerText = (status.percent ?? 0) + "%";    
-    if(speed) speed.innerText = ((status.speed ?? 0)).toFixed(1) + " KB/s";    
+    if(speed) speed.innerText = (status.speed ?? 0) + " KB/s";    
     if(eta) eta.innerText = (status.eta ?? 0) + " s";
 }
 function updateTile(tile, ch)
