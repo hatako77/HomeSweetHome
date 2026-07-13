@@ -33,31 +33,13 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 
 <main class="container">
 
-<!-- SYSTEM CARD -->
-<section class="card glow">
-  <h2><i class="fa-solid fa-microchip"></i> System</h2>
+<div class="layout">
 
-  <div class="info">
-    <div><i class="fa-solid fa-bolt"></i> Device: Running</div>
-  </div>
+    <aside id="sidebar"></aside>
 
-  <a class="btn" href="/ota">
-    <i class="fa-solid fa-upload"></i> Firmware Update
-  </a>
-</section>
+    <section id="content"></section>
 
-<!-- IO DEVICES -->
-<!-- ROOMS -->
-<section>
-
-    <h2 class="section-title">
-        <i class="fa-solid fa-house"></i>
-        Rooms
-    </h2>
-
-    <div id="roomsContainer"></div>
-
-</section>
+</div>
 </main>
 
 <script src="/app.js"></script>
