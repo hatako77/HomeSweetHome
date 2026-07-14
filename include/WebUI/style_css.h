@@ -4,7 +4,8 @@
 #include <pgmspace.h>
 
 const char STYLE_CSS[] PROGMEM = R"rawliteral(
-@media (max-width:768px){
+@media (max-width:768px)
+{
 
     #sidebar{
         width:70px !important;
@@ -26,6 +27,41 @@ const char STYLE_CSS[] PROGMEM = R"rawliteral(
     }
     #content{
         padding:16px;
+    }
+        #roomsContainer{
+        grid-template-columns:1fr;
+        gap:14px;
+    }
+
+    .room-card{
+        border-radius:14px;
+    }
+    .tile{    
+        height:100px;
+        padding:10px;    
+    }    
+    .tile-icon{    
+        width:42px;
+        height:42px;    
+    }    
+    .tile-icon svg{    
+        width:22px;
+        height:22px;    
+    }    
+    .tile-name{    
+        font-size:12px;    
+    }
+    #content{
+        padding:15px;
+    }
+    #sidebar{    
+        width:68px !important;
+        padding:10px 6px;
+        border-right:none;    
+    }
+    .layout{
+    display:flex;
+    min-height:calc(100vh - 60px);
     }
 
 }
