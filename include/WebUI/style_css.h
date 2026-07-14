@@ -25,7 +25,7 @@ const char STYLE_CSS[] PROGMEM = R"rawliteral(
         font-size:20px;
     }
     #content{
-        padding:20px;
+        padding:16px;
     }
 
 }
@@ -126,10 +126,11 @@ body {
 }
 
 #content{
-    border-left:1px solid rgba(255,255,255,.08);
     flex:1;
-    padding:40px;
+    padding:30px;
     overflow:auto;
+    min-width:0;
+    border-left:1px solid rgba(255,255,255,.08);
 }
 
 .sidebar-menu{
@@ -167,10 +168,11 @@ body {
 }
 
 /* LAYOUT */
-.container {
-  padding: 15px;
-  max-width: 900px;
-  margin: auto;
+.container{
+    padding:0;
+    width:100%;
+    max-width:none;
+    margin:0;
 }
 
 /* CARDS */
