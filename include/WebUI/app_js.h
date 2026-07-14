@@ -108,90 +108,6 @@ function showDashboard()
 }
 
 
-function initSidebar()
-{
-    document.getElementById("sidebar").innerHTML = `
-        <div class="sidebar-menu">
-
-            <button class="menu-item active">
-                <i class="fa-solid fa-house"></i>
-                <span>Dashboard</span>
-            </button>
-
-            <button class="menu-item">
-                <i class="fa-solid fa-door-open"></i>
-                <span>Rooms</span>
-            </button>
-
-            <button class="menu-item">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span>Scenes</span>
-            </button>
-
-            <button class="menu-item">
-                <i class="fa-solid fa-clock"></i>
-                <span>Schedules</span>
-            </button>
-
-            <button class="menu-item">
-                <i class="fa-solid fa-person-rays"></i>
-                <span>Sensors</span>
-            </button>
-
-            <button class="menu-item">
-                <i class="fa-solid fa-upload"></i>
-                <span>OTA</span>
-            </button>
-
-            <button class="menu-item">
-                <i class="fa-solid fa-gear"></i>
-                <span>Settings</span>
-            </button>
-
-        </div>
-    `;
-    document.querySelectorAll(".menu-item").forEach(button =>
-    {
-        button.onclick = function ()
-        {
-            document.querySelectorAll(".menu-item")
-                .forEach(x => x.classList.remove("active"));
-    
-            this.classList.add("active");
-    
-            switch(this.dataset.page)
-            {
-                case "dashboard":
-                    showDashboard();
-                    break;
-    
-                case "rooms":
-                    showRooms();
-                    break;
-    
-                case "scenes":
-                    showScenes();
-                    break;
-    
-                case "schedules":
-                    showSchedules();
-                    break;
-    
-                case "sensors":
-                    showSensors();
-                    break;
-    
-                case "ota":
-                    showOTA();
-                    break;
-    
-                case "settings":
-                    showSettings();
-                    break;
-            }
-        };
-    });
-}
 
 
 function $(id)
@@ -757,7 +673,6 @@ window.addEventListener(
 window.onload=()=>
 {
     init();
-    initSidebar();
     showDashboard();
     document.getElementById("content").innerHTML = `<h2>Dashboard</h2>`;
 };
