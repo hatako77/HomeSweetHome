@@ -22,13 +22,14 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
     ...
 </header>
 
-<main class="app">
+<div class="layout">
 
     <aside id="sidebar"></aside>
 
-    <section id="content"></section>
+    <main id="content">
+    </main>
 
-</main>
+</div>
 
 <script src="/app.js"></script>
 
