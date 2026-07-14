@@ -7,12 +7,15 @@ const char STYLE_CSS[] PROGMEM = R"rawliteral(
 @media (max-width:768px){
 
     #sidebar{
-        width:70px;
-        padding:12px 8px;
+        width:70px !important;
+        padding:10px 6px;
     }
     .menu-item{
+        width:56px;
+        height:56px;
+        padding:0;
         justify-content:center;
-        padding:14px;
+        align-items:center;
     }
     .menu-item span{
         display:none;
@@ -24,6 +27,7 @@ const char STYLE_CSS[] PROGMEM = R"rawliteral(
     #content{
         padding:20px;
     }
+
 }
 
 body {
