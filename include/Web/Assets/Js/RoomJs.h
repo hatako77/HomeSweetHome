@@ -142,6 +142,9 @@ async function moveChannel(channelId,roomId)
     });
     if(result&&result.success)
         initRooms();
+        renderRooms();
+        updateDashboard();
+
 }
 
 function findRoom(id)
@@ -162,7 +165,9 @@ function findChannel(id)
 
 function refreshRooms()
 {
-    initRooms();
+        initRooms();
+        renderRooms();
+        updateDashboard();
 }
 
 function updateRoomCounter(roomId)
@@ -188,7 +193,9 @@ function refreshRoomCounters()
 
 function refreshData()
 {
-    initRooms();
+        initRooms();
+        renderRooms();
+        updateDashboard();
 }
 
 function addRoom(room)
