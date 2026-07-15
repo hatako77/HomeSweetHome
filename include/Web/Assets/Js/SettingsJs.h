@@ -5,7 +5,7 @@
 
 const char SETTINGS_JS[] PROGMEM=R"rawliteral(
 
-async function showSettings()
+async function initSettings()
 {
 	$("content").innerHTML=`
 		<h2>Settings</h2>
