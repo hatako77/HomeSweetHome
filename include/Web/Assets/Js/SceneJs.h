@@ -3,7 +3,7 @@
 
 #include <pgmspace.h>
 
-const char SCENES_JS[] PROGMEM=R"rawliteral(
+const char SCENE_JS[] PROGMEM=R"rawliteral(
 
 let scenes=[];
 
