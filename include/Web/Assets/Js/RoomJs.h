@@ -177,7 +177,8 @@ function updateChannel(channel)
 
 function toggleChannel(id)
 {
-    wsSend("channel","toggle",{id});
+        console.log("toggleChannel", id);
+        wsSend("channel","toggle",{id});
 }
 
 function enableDrag(list)
