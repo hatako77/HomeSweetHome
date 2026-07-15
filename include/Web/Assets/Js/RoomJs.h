@@ -138,7 +138,7 @@ function enableDrag(list)
 
 async function moveChannel(channelId,roomId)
 {
-    const result=await apiPost("/api/channel/move",
+    const result=await apiPost("/api/channels/move",
     {
         channelId:channelId,
         roomId:roomId
