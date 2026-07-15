@@ -22,7 +22,7 @@ function getRooms()
 
 async function showRooms()
 {
-    await initRooms();
+    App.currentPage = "rooms";
 
     $("content").innerHTML = `
         <h2>Rooms</h2>
@@ -197,7 +197,7 @@ function findChannel(id)
 
 function refreshRooms()
 {
-    showRooms();
+        renderRooms();
 }
 
 function updateRoomCounter(roomId)
