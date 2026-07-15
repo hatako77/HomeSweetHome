@@ -28,7 +28,7 @@ function showScenes()
 		</div>
 		<div id="scenesContainer"></div>
 	`;
-	loadScenes();
+	initScenes();
 }
 
 function renderScenes()
@@ -85,7 +85,7 @@ function newScene()
 async function deleteScene(id)
 {
 	await apiPost("/api/scenes/remove?id="+id);
-	loadScenes();
+	initScenes();
 }
 
 )rawliteral";
