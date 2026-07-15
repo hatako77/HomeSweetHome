@@ -43,7 +43,7 @@ function connectWebSocket()
 
     socket.onerror = error =>
     {
-        console.log(error);
+        console.error(error);
     };
 
     socket.onmessage = event =>
@@ -59,35 +59,33 @@ function connectWebSocket()
             return;
         }
 
+        console.log("WS:", msg);
+
         switch(msg.type)
         {
+            //--------------------------------------------------
+            // CHANNEL
+            //--------------------------------------------------
+
             case "channel":
 
-                if(msg.data)
-                    updateChannel(msg.data);
+                handleChannelMessage(msg);
 
                 break;
+
+            //--------------------------------------------------
+            // ROOM
+            //--------------------------------------------------
 
             case "room":
 
-                if(msg.data)
-                    updateRoom(msg.data);
+                handleRoomMessage(msg);
 
                 break;
 
-            case "roomAdded":
-
-                if(msg.data)
-                    addRoom(msg.data);
-
-                break;
-
-            case "roomRemoved":
-
-                if(msg.data)
-                    removeRoom(msg.data.id);
-
-                break;
+            //--------------------------------------------------
+            // OTA
+            //--------------------------------------------------
 
             case "ota":
 
@@ -96,29 +94,110 @@ function connectWebSocket()
 
                 break;
 
+            //--------------------------------------------------
+            // SYSTEM
+            //--------------------------------------------------
+
+            case "system":
+
+                if(msg.action === "reload")
+                    location.reload();
+
+                break;
+
+            //--------------------------------------------------
+            // NOTIFICATION
+            //--------------------------------------------------
+
             case "notification":
 
-                if(msg.data && typeof showToast === "function")
-                    showToast(msg.data.text);
+                if(msg.data?.text)
+                    toastInfo(msg.data.text);
 
                 break;
         }
     };
 }
 
-function wsSend(type, action, data = {})
+function handleChannelMessage(msg)
+{
+    if(!msg.data)
+        return;
+
+    switch(msg.action)
+    {
+        case "changed":
+
+            updateChannel(msg.data);
+
+            break;
+
+        case "added":
+
+            addChannel(msg.data.roomId,msg.data);
+
+            break;
+
+        case "removed":
+
+            removeChannel(msg.data.id);
+
+            break;
+    }
+
+    if(App.currentPage==="rooms")
+        renderRooms();
+
+    if(App.currentPage==="dashboard")
+        updateDashboard();
+}
+
+function handleRoomMessage(msg)
+{
+    if(!msg.data)
+        return;
+
+    switch(msg.action)
+    {
+        case "added":
+
+            addRoom(msg.data);
+
+            break;
+
+        case "updated":
+
+            updateRoom(msg.data);
+
+            break;
+
+        case "removed":
+
+            removeRoom(msg.data.id);
+
+            break;
+    }
+
+    if(App.currentPage==="rooms")
+        renderRooms();
+
+    if(App.currentPage==="dashboard")
+        updateDashboard();
+}
+
+function wsSend(type,action,data={})
 {
     if(!socket)
         return;
 
-    if(socket.readyState !== WebSocket.OPEN)
+    if(socket.readyState!==WebSocket.OPEN)
         return;
 
     socket.send(JSON.stringify(
     {
-        type,
-        action,
-        data
+        type:type,
+        action:action,
+        data:data
     }));
 }
 
