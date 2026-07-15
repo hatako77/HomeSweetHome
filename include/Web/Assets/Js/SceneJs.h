@@ -1,5 +1,5 @@
-#ifndef SCENES_JS_H
-#define SCENES_JS_H
+#ifndef SCENE_JS_H
+#define SCENE_JS_H
 
 #include <pgmspace.h>
 
