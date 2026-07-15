@@ -5,51 +5,67 @@
 
 const char STATE_JS[] PROGMEM = R"rawliteral(
 
-window.State =
+window.App = window.App || {};
+
+App.state =
 {
     rooms: [],
+    channels: [],
     scenes: [],
     schedules: [],
     sensors: [],
     settings: {},
-    ota: {},
-
-    async loadRooms()
+    dashboard:
     {
-        const data = await apiGet("/api/rooms");
-        this.rooms = data || [];
-        return this.rooms;
-    },
-
-    async loadScenes()
-    {
-        const data = await apiGet("/api/scenes");
-        this.scenes = data || [];
-        return this.scenes;
-    },
-
-    async loadSchedules()
-    {
-        const data = await apiGet("/api/schedules");
-        this.schedules = data || [];
-        return this.schedules;
-    },
-
-    async loadSensors()
-    {
-        const data = await apiGet("/api/sensors");
-        this.sensors = data || [];
-        return this.sensors;
-    },
-
-    async loadSettings()
-    {
-        const data = await apiGet("/api/settings");
-        this.settings = data || {};
-        return this.settings;
+        roomCount: 0,
+        channelCount: 0,
+        onCount: 0,
+        offCount: 0
     }
 };
 
+App.currentPage = "dashboard";
+
+App.setState = function(key, value)
+{
+    this.state[key] = value;
+};
+
+App.getState = function(key)
+{
+    return this.state[key];
+};
+
+App.updateDashboardState = function()
+{
+    const rooms = this.state.rooms ?? [];
+
+    let channelCount = 0;
+    let onCount = 0;
+
+    rooms.forEach(room =>
+    {
+        const channels = room.channels ?? [];
+
+        channelCount += channels.length;
+
+        channels.forEach(channel =>
+        {
+            if(channel.state)
+                onCount++;
+        });
+    });
+
+    this.state.dashboard =
+    {
+        roomCount: rooms.length,
+        channelCount,
+        onCount,
+        offCount: channelCount - onCount
+    };
+};
+
+#endif
 )rawliteral";
 
 #endif
