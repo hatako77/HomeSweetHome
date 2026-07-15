@@ -71,7 +71,13 @@ bool RoomManager::remove(uint16_t id)
 
     return false;
 }
+Room* RoomManager::getAt(uint16_t index)
+{
+    if(index >= roomCount)
+        return nullptr;
 
+    return &rooms[index];
+}
 bool RoomManager::save()
 {
     File file = FileStorage::open(Paths::Rooms, "w");
