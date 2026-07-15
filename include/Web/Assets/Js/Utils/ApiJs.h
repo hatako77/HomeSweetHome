@@ -9,14 +9,25 @@ async function api(url, options = {})
 {
     try
     {
-        const response = await fetch(url, options);
+        const response = await fetch(url,
+        {
+            cache: "no-store",
+            ...options
+        });
+
+        if(response.status === 401)
+        {
+            throw new Error("Unauthorized");
+        }
 
         if(!response.ok)
-            throw new Error(response.status);
+        {
+            throw new Error(response.statusText || response.status);
+        }
 
         const text = await response.text();
 
-        if(text.length === 0)
+        if(text === "")
             return null;
 
         try
@@ -32,33 +43,67 @@ async function api(url, options = {})
     {
         console.error("API ERROR:", url, error);
 
+        if(typeof showToast === "function")
+        {
+            showToast("Connection error", "error");
+        }
+
         return null;
     }
 }
 
 async function apiGet(url)
 {
-    return await api(url);
+    return api(url,
+    {
+        method: "GET"
+    });
 }
 
 async function apiPost(url, body = null)
 {
     const options =
     {
-        method: "POST"
+        method: "POST",
+        headers:
+        {
+            "Content-Type":"application/json"
+        }
     };
 
     if(body != null)
     {
-        options.headers =
-        {
-            "Content-Type":"application/json"
-        };
-
         options.body = JSON.stringify(body);
     }
 
-    return await api(url, options);
+    return api(url, options);
+}
+
+async function apiPut(url, body = null)
+{
+    const options =
+    {
+        method: "PUT",
+        headers:
+        {
+            "Content-Type":"application/json"
+        }
+    };
+
+    if(body != null)
+    {
+        options.body = JSON.stringify(body);
+    }
+
+    return api(url, options);
+}
+
+async function apiDelete(url)
+{
+    return api(url,
+    {
+        method: "DELETE"
+    });
 }
 
 )rawliteral";
