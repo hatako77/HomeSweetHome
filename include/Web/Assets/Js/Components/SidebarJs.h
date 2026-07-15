@@ -55,43 +55,14 @@ function bindSidebar()
 {
     document.querySelectorAll(".menu-item").forEach(button=>
     {
-        button.onclick=function()
+        button.onclick=()=>
         {
             document.querySelectorAll(".menu-item")
                 .forEach(x=>x.classList.remove("active"));
-
-            this.classList.add("active");
-
-            switch(this.dataset.page)
-            {
-                case "dashboard":
-                    showDashboard();
-                    break;
-
-                case "rooms":
-                    showRooms();
-                    break;
-
-                case "scenes":
-                    showScenes();
-                    break;
-
-                case "schedules":
-                    showSchedules();
-                    break;
-
-                case "sensors":
-                    showSensors();
-                    break;
-
-                case "ota":
-                    showOTA();
-                    break;
-
-                case "settings":
-                    showSettings();
-                    break;
-            }
+        
+            button.classList.add("active");
+        
+            Router.navigate(button.dataset.page);
         };
     });
 }
