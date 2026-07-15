@@ -5,7 +5,7 @@
 
 const char TOAST_JS[] PROGMEM=R"rawliteral(
 
-function toast(message,type="info")
+function initToast(message,type="info")
 {
 	let container=$("toastContainer");
 	if(!container)
