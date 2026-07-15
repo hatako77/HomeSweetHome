@@ -3,7 +3,7 @@
 
 #include <pgmspace.h>
 
-const char SCHEDULES_JS[] PROGMEM=R"rawliteral(
+const char SCHEDULE_JS[] PROGMEM=R"rawliteral(
 
 let schedules=[];
 
