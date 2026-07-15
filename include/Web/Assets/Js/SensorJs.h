@@ -7,7 +7,7 @@ const char SENSOR_JS[] PROGMEM=R"rawliteral(
 
 let sensors=[];
 
-async function loadSensors()
+async function initSensors()
 {
 	const data=await apiGet("/api/sensors");
 	if(!data)
