@@ -61,3 +61,6 @@ function updateDashboard()
     $("dashboardOn").innerText=onCount;
     $("dashboardOffline").innerText=channelCount-onCount;
 }
+)rawliteral";
+
+#endif
