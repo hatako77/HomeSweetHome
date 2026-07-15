@@ -193,22 +193,28 @@ function handleRoomMessage(msg)
         updateDashboard();
 }
 
-function wsSend(type,action,data={})
+function wsSend(type, action, data = {})
 {
+    console.log("wsSend");
+
     if(!socket)
-        return;
-
-    if(socket.readyState!==WebSocket.OPEN)
-        return;
-
-    socket.send(JSON.stringify(
     {
-        type:type,
-        action:action,
-        data:data
-    }));
-}
+        console.log("socket null");
+        return;
+    }
 
+    console.log("ready =", socket.readyState);
+
+    const msg = {
+        type,
+        action,
+        data
+    };
+
+    console.log(msg);
+
+    socket.send(JSON.stringify(msg));
+}
 )rawliteral";
 
 #endif
