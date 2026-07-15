@@ -19,6 +19,7 @@
 #include "Web/Assets/Css/OTACss.h"
 #include "Web/Assets/Css/ResponsiveCss.h"
 
+#include "Web/Assets/Js/RouterJs.h"
 #include "Web/Assets/Js/StateJs.h"
 #include "Web/Assets/Js/AppJs.h"
 #include "Web/Assets/Js/DashboardJs.h"
@@ -86,6 +87,7 @@ namespace Pages
 		{
 			AsyncResponseStream* response=request->beginResponseStream("application/javascript");		
 			response->print(STATE_JS);
+			response->print(ROUTER_JS);
 			response->print(APP_JS);
 			response->print(DOM_JS);
 			response->print(API_JS);
