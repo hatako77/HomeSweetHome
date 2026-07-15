@@ -48,7 +48,7 @@ if(msg.data)
 updateChannel(msg.data);
 break;
 case "room":
-loadRooms();
+initRooms();
 break;
 case "ota":
 if(msg.data)
