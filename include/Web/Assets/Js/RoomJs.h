@@ -8,12 +8,12 @@ let rooms = [];
 
 async function initRooms()
 {
-    const data=await apiGet("/api/rooms");
+    const data = await apiGet("/api/rooms");
+
     if(!data)
         return;
-    rooms=data;
-    renderRooms();
-    updateDashboard();
+
+    rooms = data;
 }
 
 function showRooms()
