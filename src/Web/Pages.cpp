@@ -2,8 +2,6 @@
 #include "Web/WebServerService.h"
 #include "WebUI/index_html.h"
 #include "WebUI/ota_html.h"
-#include "Web/Assets/Css/Css.h"
-#include "Web/Assets/Js/Js.h"
 #include <LittleFS.h>
 
 #include "Web/Assets/Css/BaseCss.h"
