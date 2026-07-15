@@ -7,7 +7,7 @@ const char SCHEDULE_JS[] PROGMEM=R"rawliteral(
 
 let schedules=[];
 
-async function loadSchedules()
+async function initSchedules()
 {
 	const data=await apiGet("/api/schedules");
 	if(!data)
