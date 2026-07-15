@@ -7,11 +7,9 @@ const char ROUTER_JS[] PROGMEM = R"rawliteral(
 
 const Router =
 {
-    current:"dashboard",
-
     async navigate(page)
     {
-        this.current=page;
+        App.currentPage = page;
 
         switch(page)
         {
@@ -42,7 +40,14 @@ const Router =
             case "settings":
                 await showSettings();
                 break;
+
+            default:
+                await initDashboard();
+                break;
         }
+
+        if(typeof setActiveMenu === "function")
+            setActiveMenu(page);
     }
 };
 
