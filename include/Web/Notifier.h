@@ -11,6 +11,7 @@ class Notifier
 {
 public:
     static void reload();
+    static void roomsChanged();
     static void channelChanged(const IOChannel& channel);
     static void sceneAdded(const Scene& scene);
     static void sceneUpdated(const Scene& scene);    
