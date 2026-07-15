@@ -28,6 +28,8 @@ async function initRooms()
     });
 
     App.state.rooms = data;
+    console.log(data.length);
+    console.log(App.state.rooms);
 }
 
 
