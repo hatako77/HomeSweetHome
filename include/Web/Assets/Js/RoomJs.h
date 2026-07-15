@@ -1,9 +1,9 @@
-#ifndef ROOMS_JS_H
-#define ROOMS_JS_H
+#ifndef ROOM_JS_H
+#define ROOM_JS_H
 
 #include <pgmspace.h>
 
-const char ROOMS_JS[] PROGMEM = R"rawliteral(
+const char ROOM_JS[] PROGMEM = R"rawliteral(
 
 async function loadRooms()
 {
