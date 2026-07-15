@@ -75,7 +75,9 @@ void Notifier::channelChanged(const IOChannel& channel)
     msg.data["activeLow"] = channel.activeLow;
     msg.data["type"]      = (uint8_t)channel.type;
     msg.data["icon"]      = (uint8_t)channel.icon;
-
+    msg.data["roomId"]    = channel.roomId;
+    msg.data["name"]      = channel.name;
+    msg.data["icon"]      = (uint8_t)channel.icon;
     websocket.send(msg);
 }
 
