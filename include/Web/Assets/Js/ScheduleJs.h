@@ -1,5 +1,5 @@
-#ifndef SCHEDULES_JS_H
-#define SCHEDULES_JS_H
+#ifndef SCHEDULE_JS_H
+#define SCHEDULE_JS_H
 
 #include <pgmspace.h>
 
