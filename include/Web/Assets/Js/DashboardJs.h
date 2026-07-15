@@ -53,7 +53,7 @@ function updateDashboard()
 
     let channelCount=0;
     let onCount=0;
-
+    console.log(rooms);
     rooms.forEach(room=>
     {
         channelCount+=room.channels.length;
