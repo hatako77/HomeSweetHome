@@ -5,7 +5,7 @@
 
 const char DASHBOARD_JS[] PROGMEM = R"rawliteral(
 
-function showDashboard()
+function initDashboard()
 {
     $("content").innerHTML=`
     <h2>Dashboard</h2>
