@@ -9,9 +9,7 @@ async function initDashboard()
 {
     try
     {
-        await initRooms();
-
-        $("content").innerHTML=`
+        $("content").innerHTML = `
         <h2>Dashboard</h2>
 
         <div class="dashboard-grid">
@@ -49,28 +47,35 @@ async function initDashboard()
 
 function updateDashboard()
 {
-    if(!$("dashboardRooms")) return;
-    const roomCount=rooms.length;
+    if(!$("dashboardRooms"))
+        return;
 
-    let channelCount=0;
-    let onCount=0;
-    console.log(rooms);
-    rooms.forEach(room=>
+    const rooms = App.state.rooms ?? [];
+
+    const roomCount = rooms.length;
+
+    let channelCount = 0;
+    let onCount = 0;
+
+    rooms.forEach(room =>
     {
-        channelCount+=room.channels.length;
+        const channels = room.channels ?? [];
 
-        room.channels.forEach(channel=>
+        channelCount += channels.length;
+
+        channels.forEach(channel =>
         {
             if(channel.state)
                 onCount++;
         });
     });
 
-    $("dashboardRooms").innerText=roomCount;
-    $("dashboardChannels").innerText=channelCount;
-    $("dashboardOn").innerText=onCount;
-    $("dashboardOffline").innerText=channelCount-onCount;
+    $("dashboardRooms").innerText = roomCount;
+    $("dashboardChannels").innerText = channelCount;
+    $("dashboardOn").innerText = onCount;
+    $("dashboardOffline").innerText = channelCount - onCount;
 }
+
 )rawliteral";
 
 #endif
