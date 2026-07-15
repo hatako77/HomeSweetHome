@@ -25,7 +25,7 @@
 #include "Web/Assets/Js/SceneJs.h"
 #include "Web/Assets/Js/ScheduleJs.h"
 #include "Web/Assets/Js/SensorJs.h"
-#include "Web/Assets/Js/OtaJs.h"
+#include "Web/Assets/Js/OTAJs.h"
 #include "Web/Assets/Js/SettingsJs.h"
 
 namespace Pages
