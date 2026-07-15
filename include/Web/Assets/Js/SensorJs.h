@@ -22,7 +22,7 @@ function showSensors()
 		<h2>Sensors</h2>
 		<div id="sensorsContainer"></div>
 	`;
-	loadSensors();
+	initSensors();
 }
 
 function renderSensors()
@@ -53,7 +53,7 @@ function createSensorCard(sensor)
 
 function refreshSensors()
 {
-	loadSensors();
+	initSensors();
 }
 
 )rawliteral";
