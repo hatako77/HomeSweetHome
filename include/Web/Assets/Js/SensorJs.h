@@ -1,9 +1,9 @@
-#ifndef SENSORS_JS_H
-#define SENSORS_JS_H
+#ifndef SENSOR_JS_H
+#define SENSOR_JS_H
 
 #include <pgmspace.h>
 
-const char SENSORS_JS[] PROGMEM=R"rawliteral(
+const char SENSOR_JS[] PROGMEM=R"rawliteral(
 
 let sensors=[];
 
