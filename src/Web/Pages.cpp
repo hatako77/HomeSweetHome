@@ -83,30 +83,83 @@ namespace Pages
 			request->send(response);
 		});
 
-		server.on("/app.js",HTTP_GET,[](AsyncWebServerRequest* request)
+
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
 		{
-			AsyncResponseStream* response=request->beginResponseStream("application/javascript");		
-			response->print(STATE_JS);
-			response->print(ROUTER_JS);
-			response->print(APP_JS);
-			response->print(DOM_JS);
-			response->print(API_JS);
-			response->print(ICONS_JS);
-			response->print(WEBSOCKET_JS);			
-			response->print(SIDEBAR_JS);
-			response->print(DIALOG_JS);
-			response->print(MODAL_JS);
-			response->print(TOAST_JS);
-			response->print(LOADER_JS);			
-			response->print(DASHBOARD_JS);
-			response->print(ROOM_JS);
-			response->print(SCENE_JS);
-			response->print(SCHEDULE_JS);
-			response->print(SENSOR_JS);
-			response->print(OTA_JS);
-			response->print(SETTINGS_JS);
-			request->send(response);
+		    request->send(200,"application/javascript",STATE_JS);
 		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",ROUTER_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",APP_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",DOM_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",API_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",ICONS_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",WEBSOCKET_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",SIDEBAR_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",DIALOG_JS);
+		});		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",MODAL_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",TOAST_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",LOADER_JS);
+		});		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",DASHBOARD_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",ROOM_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",SCENE_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",SCHEDULE_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",SENSOR_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",OTA_JS);
+		});
+		server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
+		{
+		    request->send(200,"application/javascript",SETTINGS_JS);
+		});
+
+		
 
 		server.on("/ota", HTTP_GET,
 		[](AsyncWebServerRequest* request)
