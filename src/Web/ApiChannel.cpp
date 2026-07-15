@@ -173,7 +173,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
         if(ok)
         {
             ioManager.save();
-
+            Notifier::roomsChanged();
             IOChannel* ch = ioManager.getChannel(channelId);
 
             if(ch)
