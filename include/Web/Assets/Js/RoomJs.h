@@ -34,6 +34,9 @@ async function showRooms()
 
 function renderRooms()
 {
+    if(App.currentPage !== "rooms")
+        return;
+
     const container = $("roomsContainer");
 
     if(!container)
@@ -57,6 +60,7 @@ function createRoomCard(room)
                 <i class="fa-solid fa-house"></i>
                 ${room.name}
             </div>
+
             <div class="room-count">
                 ${(room.channels ?? []).length}
             </div>
@@ -164,17 +168,13 @@ function enableDrag(list)
 
 async function moveChannel(channelId, roomId)
 {
-    const result = await apiPost("/api/channels/move",
+    await apiPost("/api/channels/move",
     {
         channelId,
         roomId
     });
 
-    if(result?.success)
-    {
-        await initRooms();
-        renderRooms();
-    }
+    // منتظر WebSocket می‌مانیم.
 }
 
 function findRoom(id)
@@ -197,7 +197,7 @@ function findChannel(id)
 
 function refreshRooms()
 {
-        renderRooms();
+    renderRooms();
 }
 
 function updateRoomCounter(roomId)
