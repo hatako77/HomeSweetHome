@@ -7,6 +7,7 @@ const char ROOM_JS[] PROGMEM = R"rawliteral(
 
 async function initRooms()
 {
+    console.log("initRooms");
     const data = await apiGet("/api/rooms");
 
     if(!data)
@@ -49,6 +50,7 @@ async function showRooms()
 
 function renderRooms()
 {
+    console.log("renderRooms");
     if(App.currentPage !== "rooms")
         return;
 
