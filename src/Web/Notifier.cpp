@@ -49,7 +49,7 @@ void Notifier::sceneRemoved(uint16_t id)
 
 void Notifier::roomsChanged()
 {
-    Message msg("room","reload");
+    Message msg("room","changed");
     websocket.send(msg);
 }
 
