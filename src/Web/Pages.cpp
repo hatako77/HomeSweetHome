@@ -19,7 +19,6 @@
 #include "Web/Assets/Css/OTACss.h"
 #include "Web/Assets/Css/ResponsiveCss.h"
 
-#include "Web/Assets/Js/AppJs.h"
 #include "Web/Assets/Js/DashboardJs.h"
 #include "Web/Assets/Js/RoomJs.h"
 #include "Web/Assets/Js/SceneJs.h"
