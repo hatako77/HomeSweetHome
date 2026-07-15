@@ -27,6 +27,15 @@
 #include "Web/Assets/Js/SensorJs.h"
 #include "Web/Assets/Js/OTAJs.h"
 #include "Web/Assets/Js/SettingsJs.h"
+#include "Web/Assets/Js/Utils/DomJs.h"
+#include "Web/Assets/Js/Utils/ApiJs.h"
+#include "Web/Assets/Js/Utils/IconsJs.h"
+#include "Web/Assets/Js/Utils/WebSocketJs.h"
+#include "Web/Assets/Js/Components/SidebarJs.h"
+#include "Web/Assets/Js/Components/DialogJs.h"
+#include "Web/Assets/Js/Components/ModalJs.h"
+#include "Web/Assets/Js/Components/ToastJs.h"
+#include "Web/Assets/Js/Components/LoaderJs.h"
 
 namespace Pages
 {
@@ -76,6 +85,22 @@ namespace Pages
 		{
 			AsyncResponseStream* response=request->beginResponseStream("application/javascript");		
 			response->print(APP_JS);
+			response->print(DOM_JS);
+			response->print(API_JS);
+			response->print(ICONS_JS);
+			response->print(WEBSOCKET_JS);			
+			response->print(SIDEBAR_JS);
+			response->print(DIALOG_JS);
+			response->print(MODAL_JS);
+			response->print(TOAST_JS);
+			response->print(LOADER_JS);			
+			response->print(DASHBOARD_JS);
+			response->print(ROOM_JS);
+			response->print(SCENE_JS);
+			response->print(SCHEDULE_JS);
+			response->print(SENSOR_JS);
+			response->print(OTA_JS);
+			response->print(SETTINGS_JS);
 			response->print(DASHBOARD_JS);
 			response->print(ROOM_JS);
 			response->print(SCENE_JS);
