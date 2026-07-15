@@ -14,7 +14,6 @@ public:
     const Room* get(uint16_t id) const;
 
     Room* getAt(uint16_t index);
-    const Room* getAt(uint16_t index) const;
 
     Room* add(const Room& room);
     bool update(const Room& room);
