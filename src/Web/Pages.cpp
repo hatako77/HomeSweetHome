@@ -101,12 +101,6 @@ namespace Pages
 			response->print(SENSOR_JS);
 			response->print(OTA_JS);
 			response->print(SETTINGS_JS);
-			response->print(DASHBOARD_JS);
-			response->print(ROOM_JS);
-			response->print(SCHEDULE_JS);
-			response->print(SENSOR_JS);
-			response->print(OTA_JS);
-			response->print(SETTINGS_JS);		
 			request->send(response);
 		});
 
