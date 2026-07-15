@@ -7,7 +7,7 @@ const char SCENE_JS[] PROGMEM=R"rawliteral(
 
 let scenes=[];
 
-async function loadScenes()
+async function initScenes()
 {
 	const data=await apiGet("/api/scenes");
 	if(!data)
