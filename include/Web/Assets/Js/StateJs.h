@@ -65,7 +65,7 @@ App.updateDashboardState = function()
     };
 };
 
-#endif
+
 )rawliteral";
 
 #endif
