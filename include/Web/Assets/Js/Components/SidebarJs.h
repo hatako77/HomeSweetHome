@@ -1,5 +1,5 @@
 #ifndef SIDEBAR_JS_H
-#define SIDEBAR_JS_H
+#define SIDEBARY_JS_H
 
 #include <pgmspace.h>
 
@@ -7,7 +7,12 @@ const char SIDEBAR_JS[] PROGMEM = R"rawliteral(
 
 function initSidebar()
 {
-    $("sidebar").innerHTML=`
+    const sidebar = $("sidebar");
+
+    if(!sidebar)
+        return;
+
+    sidebar.innerHTML = `
     <div class="sidebar-menu">
 
         <div class="menu-item active" data-page="dashboard">
@@ -53,17 +58,25 @@ function initSidebar()
 
 function bindSidebar()
 {
-    document.querySelectorAll(".menu-item").forEach(button=>
+    $$$(".menu-item").forEach(button =>
     {
-        button.onclick=()=>
+        button.onclick = () =>
         {
-            document.querySelectorAll(".menu-item")
-                .forEach(x=>x.classList.remove("active"));
-        
-            button.classList.add("active");
-        
+            setActiveMenu(button.dataset.page);
+
             Router.navigate(button.dataset.page);
         };
+    });
+}
+
+function setActiveMenu(page)
+{
+    $$$(".menu-item").forEach(item =>
+    {
+        item.classList.toggle(
+            "active",
+            item.dataset.page === page
+        );
     });
 }
 
