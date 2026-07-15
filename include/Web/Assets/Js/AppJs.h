@@ -7,7 +7,7 @@ const char APP_JS[] PROGMEM = R"rawliteral(
 'use strict';
 
 window.App={
-	version:'1.0.0',
+	version:'2.0.0',
 	ws:null,
 	api:{},
 	dom:{},
