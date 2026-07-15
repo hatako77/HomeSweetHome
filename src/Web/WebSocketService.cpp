@@ -125,6 +125,34 @@ void WebSocketService::onEvent(
 
             if(type == "channel")
             {
+                uint16_t id = data["id"] | 0;
+                if(action == "toggle")
+                {
+                    if(ioManager.toggle(id))
+                    {
+                        ioManager.save();            
+                        IOChannel* ch = ioManager.getChannel(id);            
+                        if(ch) Notifier::channelChanged(*ch);
+                    }
+                }
+                else if(action == "on")
+                {
+                    if(ioManager.on(id))
+                    {
+                        ioManager.save();            
+                        IOChannel* ch = ioManager.getChannel(id);            
+                        if(ch) Notifier::channelChanged(*ch);
+                    }
+                }
+                else if(action == "off")
+                {
+                    if(ioManager.off(id))
+                    {
+                        ioManager.save();            
+                        IOChannel* ch = ioManager.getChannel(id);            
+                        if(ch) Notifier::channelChanged(*ch);
+                    }
+                }            
                 return;
             }
 
