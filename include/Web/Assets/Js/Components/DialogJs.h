@@ -5,7 +5,7 @@
 
 const char DIALOG_JS[] PROGMEM=R"rawliteral(
 
-function showDialog(title,content,buttons="")
+function initDialog(title,content,buttons="")
 {
 	closeDialog();
 
