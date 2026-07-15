@@ -78,9 +78,20 @@ function connectWebSocket()
             //--------------------------------------------------
 
             case "room":
-
-                handleRoomMessage(msg);
-
+                if(msg.action==="reload")
+                {
+                    initRooms().then(()=>
+                    {
+                        if(App.currentPage==="rooms")
+                            renderRooms();
+                        if(App.currentPage==="dashboard")
+                            updateDashboard();
+                    });
+                }
+                else if(msg.action==="updated")
+                {
+                    updateRoom(msg.data);
+                }
                 break;
 
             //--------------------------------------------------
