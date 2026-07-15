@@ -37,7 +37,10 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 }
 
 @media(max-width:768px){
+	body{
+		    height: 70%;
 
+	}
 	.topbar{
 		padding:0 14px;
 	}
@@ -84,7 +87,10 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 }
 
 @media(max-width:480px){
+	body{
+		    height: 70%;
 
+	}
 	.channel-list{
 		grid-template-columns:1fr;
 	}
