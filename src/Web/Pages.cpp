@@ -85,6 +85,7 @@ namespace Pages
 		server.on("/app.js",HTTP_GET,[](AsyncWebServerRequest* request)
 		{
 			AsyncResponseStream* response=request->beginResponseStream("application/javascript");		
+			response->print(STATE_JS);
 			response->print(APP_JS);
 			response->print(DOM_JS);
 			response->print(API_JS);
