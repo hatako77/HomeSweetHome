@@ -12,8 +12,23 @@ async function initRooms()
     if(!data)
         return;
 
+    data.sort((a,b)=>
+        a.name.localeCompare(b.name,"fa")
+    );
+
+    data.forEach(room=>
+    {
+        if(room.channels)
+        {
+            room.channels.sort((a,b)=>
+                a.name.localeCompare(b.name,"fa")
+            );
+        }
+    });
+
     App.state.rooms = data;
 }
+
 
 function getRooms()
 {
