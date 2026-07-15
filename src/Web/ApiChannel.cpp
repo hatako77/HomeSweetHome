@@ -22,27 +22,27 @@ void ApiChannel::registerRoutes(WebServerService& web)
     {
         if(request->hasParam("id"))
         {
-            uint16_t id=request->getParam("id")->value().toInt();
+            uint16_t id = request->getParam("id")->value().toInt();
 
-            const IOChannel* ch=ioManager.getChannel(id);
+            const IOChannel* ch = ioManager.getChannel(id);
 
             if(!ch)
             {
-                request->send(404,"application/json",
-                    "{\"success\":false}");
+                request->send(404,"application/json","{\"success\":false}");
                 return;
             }
 
             JsonDocument doc;
 
-            doc["id"]=ch->id;
-            doc["name"]=ch->name;
-            doc["roomId"]=ch->roomId;
-            doc["state"]=ch->state;
-            doc["enabled"]=ch->enabled;
-            doc["favorite"]=ch->favorite;
-            doc["type"]=(uint8_t)ch->type;
-            doc["icon"]=(uint8_t)ch->icon;
+            doc["id"]        = ch->id;
+            doc["name"]      = ch->name;
+            doc["roomId"]    = ch->roomId;
+            doc["state"]     = ch->state;
+            doc["enabled"]   = ch->enabled;
+            doc["favorite"]  = ch->favorite;
+            doc["activeLow"] = ch->activeLow;
+            doc["type"]      = (uint8_t)ch->type;
+            doc["icon"]      = (uint8_t)ch->icon;
 
             String json;
             serializeJson(doc,json);
@@ -52,26 +52,26 @@ void ApiChannel::registerRoutes(WebServerService& web)
         }
 
         JsonDocument doc;
-
-        JsonArray arr=doc.to<JsonArray>();
+        JsonArray arr = doc.to<JsonArray>();
 
         for(uint16_t i=0;i<ioManager.count();i++)
         {
-            const IOChannel* ch=ioManager.getAt(i);
+            const IOChannel* ch = ioManager.getAt(i);
 
             if(!ch)
                 continue;
 
-            JsonObject o=arr.add<JsonObject>();
+            JsonObject o = arr.add<JsonObject>();
 
-            o["id"]=ch->id;
-            o["name"]=ch->name;
-            o["roomId"]=ch->roomId;
-            o["state"]=ch->state;
-            o["enabled"]=ch->enabled;
-            o["favorite"]=ch->favorite;
-            o["type"]=(uint8_t)ch->type;
-            o["icon"]=(uint8_t)ch->icon;
+            o["id"]        = ch->id;
+            o["name"]      = ch->name;
+            o["roomId"]    = ch->roomId;
+            o["state"]     = ch->state;
+            o["enabled"]   = ch->enabled;
+            o["favorite"]  = ch->favorite;
+            o["activeLow"] = ch->activeLow;
+            o["type"]      = (uint8_t)ch->type;
+            o["icon"]      = (uint8_t)ch->icon;
         }
 
         String json;
@@ -81,7 +81,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
     });
 
     //--------------------------------------------------
-    // POST /api/channels/update
+    // UPDATE
     //--------------------------------------------------
 
     server.on("/api/channels/update",
@@ -98,50 +98,53 @@ void ApiChannel::registerRoutes(WebServerService& web)
 
         if(deserializeJson(doc,data,len))
         {
-            request->send(400,"application/json",
-                "{\"success\":false}");
+            request->send(400,"application/json","{\"success\":false}");
             return;
         }
 
-        IOChannel* current=ioManager.getChannel(doc["id"]|0);
+        IOChannel* current = ioManager.getChannel(doc["id"]|0);
 
         if(!current)
         {
-            request->send(404,"application/json",
-                "{\"success\":false}");
+            request->send(404,"application/json","{\"success\":false}");
             return;
         }
 
-        IOChannel updated=*current;
+        IOChannel updated = *current;
 
-        updated.name=doc["name"]|updated.name;
-        updated.roomId=doc["roomId"]|updated.roomId;
-        updated.enabled=doc["enabled"]|updated.enabled;
-        updated.favorite=doc["favorite"]|updated.favorite;
-        updated.activeLow=doc["activeLow"]|updated.activeLow;
+        updated.name      = doc["name"]      | updated.name;
+        updated.roomId    = doc["roomId"]    | updated.roomId;
+        updated.enabled   = doc["enabled"]   | updated.enabled;
+        updated.favorite  = doc["favorite"]  | updated.favorite;
+        updated.activeLow = doc["activeLow"] | updated.activeLow;
 
         IOType type;
         if(typeFromValue(doc["type"]|(uint8_t)updated.type,type))
-            updated.type=type;
+            updated.type = type;
 
         IOIcon icon;
         if(iconFromValue(doc["icon"]|(uint8_t)updated.icon,icon))
-            updated.icon=icon;
+            updated.icon = icon;
 
-        bool ok=ioManager.update(updated);
+        bool ok = ioManager.update(updated);
 
         if(ok)
+        {
             ioManager.save();
+
+            IOChannel* ch = ioManager.getChannel(updated.id);
+
+            if(ch)
+                Notifier::channelChanged(*ch);
+        }
 
         request->send(ok?200:500,
                       "application/json",
-                      ok?
-                      "{\"success\":true}":
-                      "{\"success\":false}");
+                      ok?"{\"success\":true}":"{\"success\":false}");
     });
 
     //--------------------------------------------------
-    // POST /api/channel/move
+    // MOVE
     //--------------------------------------------------
 
     server.on("/api/channels/move",
@@ -158,29 +161,32 @@ void ApiChannel::registerRoutes(WebServerService& web)
 
         if(deserializeJson(doc,data,len))
         {
-            request->send(400,
-                          "application/json",
-                          "{\"success\":false}");
+            request->send(400,"application/json","{\"success\":false}");
             return;
         }
 
-        uint16_t channelId=doc["channelId"]|0;
-        uint16_t roomId=doc["roomId"]|0;
+        uint16_t channelId = doc["channelId"]|0;
+        uint16_t roomId    = doc["roomId"]|0;
 
-        bool ok=ioManager.assignToRoom(channelId,roomId);
+        bool ok = ioManager.assignToRoom(channelId,roomId);
 
         if(ok)
+        {
             ioManager.save();
+
+            IOChannel* ch = ioManager.getChannel(channelId);
+
+            if(ch)
+                Notifier::channelChanged(*ch);
+        }
 
         request->send(ok?200:404,
                       "application/json",
-                      ok?
-                      "{\"success\":true}":
-                      "{\"success\":false}");
+                      ok?"{\"success\":true}":"{\"success\":false}");
     });
 
     //--------------------------------------------------
-    // POST /api/channels/on
+    // ON
     //--------------------------------------------------
 
     server.on("/api/channels/on",
@@ -189,23 +195,31 @@ void ApiChannel::registerRoutes(WebServerService& web)
     {
         if(!request->hasParam("id"))
         {
-            request->send(400,"application/json",
-                "{\"success\":false}");
+            request->send(400,"application/json","{\"success\":false}");
             return;
         }
 
-        bool ok=ioManager.on(
-            request->getParam("id")->value().toInt());
+        uint16_t id = request->getParam("id")->value().toInt();
+
+        bool ok = ioManager.on(id);
+
+        if(ok)
+        {
+            ioManager.save();
+
+            IOChannel* ch = ioManager.getChannel(id);
+
+            if(ch)
+                Notifier::channelChanged(*ch);
+        }
 
         request->send(ok?200:404,
                       "application/json",
-                      ok?
-                      "{\"success\":true}":
-                      "{\"success\":false}");
+                      ok?"{\"success\":true}":"{\"success\":false}");
     });
 
     //--------------------------------------------------
-    // POST /api/channels/off
+    // OFF
     //--------------------------------------------------
 
     server.on("/api/channels/off",
@@ -214,23 +228,31 @@ void ApiChannel::registerRoutes(WebServerService& web)
     {
         if(!request->hasParam("id"))
         {
-            request->send(400,"application/json",
-                "{\"success\":false}");
+            request->send(400,"application/json","{\"success\":false}");
             return;
         }
 
-        bool ok=ioManager.off(
-            request->getParam("id")->value().toInt());
+        uint16_t id = request->getParam("id")->value().toInt();
+
+        bool ok = ioManager.off(id);
+
+        if(ok)
+        {
+            ioManager.save();
+
+            IOChannel* ch = ioManager.getChannel(id);
+
+            if(ch)
+                Notifier::channelChanged(*ch);
+        }
 
         request->send(ok?200:404,
                       "application/json",
-                      ok?
-                      "{\"success\":true}":
-                      "{\"success\":false}");
+                      ok?"{\"success\":true}":"{\"success\":false}");
     });
 
     //--------------------------------------------------
-    // POST /api/channels/toggle
+    // TOGGLE
     //--------------------------------------------------
 
     server.on("/api/channels/toggle",
@@ -239,27 +261,26 @@ void ApiChannel::registerRoutes(WebServerService& web)
     {
         if(!request->hasParam("id"))
         {
-            request->send(400,"application/json",
-                "{\"success\":false}");
+            request->send(400,"application/json","{\"success\":false}");
             return;
         }
 
-        uint16_t id=request->getParam("id")->value().toInt();
+        uint16_t id = request->getParam("id")->value().toInt();
 
-        bool ok=ioManager.toggle(id);
+        bool ok = ioManager.toggle(id);
 
         if(ok)
         {
             ioManager.save();
 
-            if(auto* channel=ioManager.getChannel(id))
-                Notifier::channelChanged(*channel);
+            IOChannel* ch = ioManager.getChannel(id);
+
+            if(ch)
+                Notifier::channelChanged(*ch);
         }
 
         request->send(ok?200:404,
                       "application/json",
-                      ok?
-                      "{\"success\":true}":
-                      "{\"success\":false}");
+                      ok?"{\"success\":true}":"{\"success\":false}");
     });
 }
