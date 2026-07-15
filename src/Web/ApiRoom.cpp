@@ -17,7 +17,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
             uint16_t id =
                 request->getParam("id")->value().toInt();
     
-            Room* room = roomManager.get(id);
+            Room* room = roomManager.getAt(id);
     
             if(!room)
             {
@@ -43,19 +43,41 @@ void ApiRoom::registerRoutes(WebServerService& web)
     
         JsonArray arr = doc.to<JsonArray>();
     
-        for(uint16_t i=0;i<roomManager.count();i++)
-        {
-            Room* room = roomManager.get(i);
-    
-            if(!room)
-                continue;
-    
-            JsonObject o = arr.add<JsonObject>();
-    
-            o["id"]=room->id;
-            o["name"]=room->name;
-        }
-    
+for(uint16_t i=0;i<roomManager.count();i++)
+{
+    Room* room = roomManager.getAt(i);
+
+    if(!room)
+        continue;
+
+    JsonObject o = arr.add<JsonObject>();
+
+    o["id"] = room->id;
+    o["name"] = room->name;
+
+    JsonArray channels = o["channels"].to<JsonArray>();
+
+    for(uint16_t j=0;j<ioManager.count();j++)
+    {
+        const IOChannel* ch = ioManager.getAt(j);
+
+        if(!ch)
+            continue;
+
+        if(ch->roomId != room->id)
+            continue;
+
+        JsonObject c = channels.add<JsonObject>();
+
+        c["id"] = ch->id;
+        c["name"] = ch->name;
+        c["state"] = ch->state;
+        c["enabled"] = ch->enabled;
+        c["favorite"] = ch->favorite;
+        c["type"] = (uint8_t)ch->type;
+        c["icon"] = (uint8_t)ch->icon;
+    }
+}    
         String out;
     
         serializeJson(doc,out);
