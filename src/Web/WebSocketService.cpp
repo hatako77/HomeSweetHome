@@ -77,40 +77,30 @@ void WebSocketService::onEvent(
 
         case WS_EVT_DATA:
         {
-            AwsFrameInfo* info =
-                (AwsFrameInfo*)arg;
-
-            if(!info->final)
-                return;
-
-            if(info->index != 0)
-                return;
-
-            if(info->opcode != WS_TEXT)
-                return;
-
+            AwsFrameInfo* info =(AwsFrameInfo*)arg;
+            if(!info->final)return;
+            if(info->index != 0)return;
+            if(info->opcode != WS_TEXT)return;            
             String json;
-            json.reserve(len);
-
-            for(size_t i=0;i<len;i++)
-                json += (char)data[i];
+            json.reserve(len);            
+            for(size_t i=0;i<len;i++)json += (char)data[i];            
+            Serial.println("========== WS ==========");
+            Serial.println(json);
+            Serial.println("========================");
 
             JsonDocument doc;
-
             if(deserializeJson(doc,json))
             {
                 Serial.println("WS Invalid JSON");
                 return;
             }
-
-            String type =
-                doc["type"] | "";
-
-            String action =
-                doc["action"] | "";
-
-            JsonObject data =
-                doc["data"].as<JsonObject>();
+            String type =doc["type"] | "";
+            String action =doc["action"] | "";
+            JsonObject data =doc["data"].as<JsonObject>();
+            Serial.print("TYPE   : ");
+            Serial.println(type);            
+            Serial.print("ACTION : ");
+            Serial.println(action);
 
             //--------------------------------------------------
             // OTA
@@ -126,7 +116,6 @@ void WebSocketService::onEvent(
                 {
                     ota.startUpdate();
                 }
-
                 return;
             }
 
