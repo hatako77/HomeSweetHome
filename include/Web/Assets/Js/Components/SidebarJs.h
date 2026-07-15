@@ -1,5 +1,5 @@
 #ifndef SIDEBAR_JS_H
-#define SIDEBARY_JS_H
+#define SIDEBAR_JS_H
 
 #include <pgmspace.h>
 
