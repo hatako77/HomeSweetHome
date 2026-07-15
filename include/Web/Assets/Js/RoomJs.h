@@ -275,6 +275,7 @@ function updateRoomCounter(roomId)
 
 function addRoom(room)
 {
+console.log("roomAdded", room.id);
     getRooms().push(room);
 
     renderRooms();
