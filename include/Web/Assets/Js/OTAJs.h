@@ -3,78 +3,219 @@
 
 #include <pgmspace.h>
 
-const char OTA_JS[] PROGMEM=R"rawliteral(
+const char OTA_JS[] PROGMEM = R"rawliteral(
 
-function initOTA()
+async function initOTA()
 {
-	$("content").innerHTML=`
-		<h2>Firmware Update</h2>
-		<div class="card">
-			<div class="info">
-				<div>
-					Current Version :
-					<b id="otaCurrent">-</b>
-				</div>
-				<div>
-					Latest Version :
-					<b id="otaRemote">-</b>
-				</div>
-				<div>
-					Status :
-					<b id="otaState">Idle</b>
-				</div>
-			</div>
-			<progress id="otaProgress" value="0" max="100" style="width:100%;margin-top:15px;"></progress>
-			<div style="display:flex;justify-content:space-between;margin-top:10px;">
-				<span id="otaPercent">0%</span>
-				<span id="otaSpeed">0 KB/s</span>
-				<span id="otaEta">0 s</span>
-			</div>
-			<div style="display:flex;gap:10px;margin-top:20px;">
-				<button class="btn" onclick="checkOTA()">
-					Check
-				</button>
-				<button class="btn" onclick="startOTA()">
-					Update
-				</button>
-			</div>
-		</div>
-	`;
-	wsSend("ota","check");
+    App.currentPage = "ota";
+
+    $("content").innerHTML = `
+    <h2>Firmware Update</h2>
+
+    <div class="card">
+
+        <div class="info-row">
+            <span>Current Version</span>
+            <b id="otaCurrent">-</b>
+        </div>
+
+        <div class="info-row">
+            <span>Latest Version</span>
+            <b id="otaRemote">-</b>
+        </div>
+
+        <div class="info-row">
+            <span>Status</span>
+            <b id="otaState">Idle</b>
+        </div>
+
+        <progress
+            id="otaProgress"
+            value="0"
+            max="100"
+            style="width:100%;margin-top:20px;">
+        </progress>
+
+        <div style="display:flex;justify-content:space-between;margin-top:12px;">
+            <span id="otaPercent">0%</span>
+            <span id="otaSpeed">0 KB/s</span>
+            <span id="otaEta">ETA --</span>
+        </div>
+
+        <div style="margin-top:10px;text-align:center;">
+            <span id="otaSize">0 / 0 MB</span>
+        </div>
+
+        <div
+            id="otaMessage"
+            style="margin-top:20px;text-align:center;font-weight:bold;">
+            Ready
+        </div>
+
+        <div
+            id="otaError"
+            style="margin-top:10px;color:#ff4d4d;text-align:center;">
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:25px;">
+
+            <button
+                class="btn"
+                id="otaCheckButton"
+                onclick="checkOTA()">
+                Check
+            </button>
+
+            <button
+                class="btn"
+                id="otaUpdateButton"
+                onclick="startOTA()"
+                disabled>
+                Update
+            </button>
+
+        </div>
+
+    </div>
+    `;
+
+    checkOTA();
 }
 
 function checkOTA()
 {
-	wsSend("ota","check");
+    $("otaError").innerText = "";
+    $("otaMessage").innerText = "Checking...";
+
+    $("otaCheckButton").disabled = true;
+    $("otaUpdateButton").disabled = true;
+
+    wsSend("ota","check");
 }
 
 function startOTA()
 {
-	wsSend("ota","start");
+    $("otaError").innerText = "";
+    $("otaMessage").innerText = "Starting update...";
+
+    $("otaCheckButton").disabled = true;
+    $("otaUpdateButton").disabled = true;
+
+    wsSend("ota","update");
 }
 
 function updateOTA(data)
 {
-	if($("otaState"))
-		$("otaState").innerText=data.state??"-";
+    if(!data)
+        return;
 
-	if($("otaCurrent"))
-		$("otaCurrent").innerText=data.current??"-";
+    if($("otaCurrent"))
+        $("otaCurrent").innerText = data.current ?? "-";
 
-	if($("otaRemote"))
-		$("otaRemote").innerText=data.remote??"-";
+    if($("otaRemote"))
+        $("otaRemote").innerText = data.remote ?? "-";
 
-	if($("otaProgress"))
-		$("otaProgress").value=data.percent??0;
+    if($("otaState"))
+        $("otaState").innerText = data.state ?? "-";
 
-	if($("otaPercent"))
-		$("otaPercent").innerText=(data.percent??0)+"%";
+    if($("otaProgress"))
+        $("otaProgress").value = data.percent ?? 0;
 
-	if($("otaSpeed"))
-		$("otaSpeed").innerText=((data.speed??0).toFixed(1))+" KB/s";
+    if($("otaPercent"))
+        $("otaPercent").innerText =
+            (data.percent ?? 0) + "%";
 
-	if($("otaEta"))
-		$("otaEta").innerText=(data.eta??0)+" s";
+    if($("otaSpeed"))
+    {
+        const speed = Number(data.speed ?? 0);
+        $("otaSpeed").innerText =
+            speed.toFixed(1) + " KB/s";
+    }
+
+    if($("otaEta"))
+    {
+        if((data.eta ?? 0) > 0)
+            $("otaEta").innerText =
+                "ETA " + data.eta + " s";
+        else
+            $("otaEta").innerText = "ETA --";
+    }
+
+    if($("otaSize"))
+    {
+        const downloaded =
+            Number(data.downloaded ?? 0) / 1024 / 1024;
+
+        const total =
+            Number(data.total ?? 0) / 1024 / 1024;
+
+        $("otaSize").innerText =
+            downloaded.toFixed(2) +
+            " / " +
+            total.toFixed(2) +
+            " MB";
+    }
+
+    if($("otaMessage"))
+        $("otaMessage").innerText =
+            data.state ?? "";
+
+    if(data.error && $("otaError"))
+        $("otaError").innerText = data.error;
+
+    if(data.running)
+    {
+        $("otaCheckButton").disabled = true;
+        $("otaUpdateButton").disabled = true;
+        return;
+    }
+
+    if(data.state === "Update Available")
+    {
+        $("otaCheckButton").disabled = false;
+        $("otaUpdateButton").disabled = false;
+        $("otaMessage").innerText =
+            "New firmware available.";
+        return;
+    }
+
+    if(data.state === "Up To Date")
+    {
+        $("otaCheckButton").disabled = false;
+        $("otaUpdateButton").disabled = true;
+        $("otaMessage").innerText =
+            "Firmware is already up to date.";
+        return;
+    }
+
+    if(data.state === "Completed")
+    {
+        $("otaCheckButton").disabled = true;
+        $("otaUpdateButton").disabled = true;
+
+        let sec = 5;
+
+        $("otaMessage").innerText =
+            "Restarting in " + sec + "...";
+
+        const timer = setInterval(() =>
+        {
+            sec--;
+
+            $("otaMessage").innerText =
+                "Restarting in " + sec + "...";
+
+            if(sec <= 0)
+            {
+                clearInterval(timer);
+            }
+
+        },1000);
+
+        return;
+    }
+
+    $("otaCheckButton").disabled = false;
 }
 
 )rawliteral";
