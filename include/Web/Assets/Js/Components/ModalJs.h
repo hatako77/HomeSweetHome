@@ -5,7 +5,7 @@
 
 const char MODAL_JS[] PROGMEM=R"rawliteral(
 
-function openModal(title,content)
+function initModal(title,content)
 {
 	let modal=$("modal");
 
