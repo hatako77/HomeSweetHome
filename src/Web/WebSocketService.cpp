@@ -25,19 +25,27 @@ void WebSocketService::begin(AsyncWebServer& server)
     server.addHandler(&ws);
 }
 
+void WebSocketService::loop()
+{
+    ws.cleanupClients();
+}
+
 void WebSocketService::onEvent(
     AsyncWebSocket* server,
     AsyncWebSocketClient* client,
-    AwsEventType eventType,
+    AwsEventType type,
     void* arg,
     uint8_t* data,
     size_t len)
 {
-    switch(eventType)
+    switch(type)
     {
         case WS_EVT_CONNECT:
         {
-            Serial.printf("WS Client %u Connected\n", client->id());
+            Serial.printf(
+                "WS Client %u Connected\n",
+                client->id()
+            );
 
             Message msg("system","connected");
 
@@ -48,116 +56,116 @@ void WebSocketService::onEvent(
 
         case WS_EVT_DISCONNECT:
         {
-            Serial.printf("WS Client %u Disconnected\n", client->id());
+            Serial.printf(
+                "WS Client %u Disconnected\n",
+                client->id()
+            );
+
+            break;
+        }
+
+        case WS_EVT_PONG:
+        {
+            break;
+        }
+
+        case WS_EVT_ERROR:
+        {
+            Serial.println("WS Error");
             break;
         }
 
         case WS_EVT_DATA:
         {
-            AwsFrameInfo* info=(AwsFrameInfo*)arg;
+            AwsFrameInfo* info =
+                (AwsFrameInfo*)arg;
 
             if(!info->final)
-                break;
+                return;
 
-            if(info->index!=0)
-                break;
+            if(info->index != 0)
+                return;
 
-            if(info->opcode!=WS_TEXT)
-                break;
+            if(info->opcode != WS_TEXT)
+                return;
 
             String json;
-
             json.reserve(len);
 
             for(size_t i=0;i<len;i++)
-                json+=(char)data[i];
+                json += (char)data[i];
 
             JsonDocument doc;
 
             if(deserializeJson(doc,json))
             {
                 Serial.println("WS Invalid JSON");
-                break;
+                return;
             }
 
-            String type   = doc["type"]   | "";
-            String action = doc["action"] | "";
+            String type =
+                doc["type"] | "";
 
-            JsonObject payload = doc["data"].as<JsonObject>();
+            String action =
+                doc["action"] | "";
 
-            Serial.print("WS ");
-            Serial.print(type);
-            Serial.print(" -> ");
-            Serial.println(action);
+            JsonObject data =
+                doc["data"].as<JsonObject>();
 
             //--------------------------------------------------
             // OTA
             //--------------------------------------------------
 
-            if(type=="ota")
+            if(type == "ota")
             {
-                if(action=="check")
+                if(action == "check")
                 {
                     ota.startCheck();
                 }
-                else if(action=="update")
+                else if(action == "update")
                 {
                     ota.startUpdate();
                 }
+
+                return;
             }
 
             //--------------------------------------------------
-            // CHANNEL
+            // Future Commands
             //--------------------------------------------------
 
-            else if(type=="channel")
+            if(type == "channel")
             {
-                // next step
+                return;
             }
 
-            //--------------------------------------------------
-            // ROOM
-            //--------------------------------------------------
-
-            else if(type=="room")
+            if(type == "room")
             {
-                // next step
+                return;
             }
 
-            //--------------------------------------------------
-            // SCENE
-            //--------------------------------------------------
-
-            else if(type=="scene")
+            if(type == "scene")
             {
-                // next step
+                return;
             }
 
-            //--------------------------------------------------
-            // SENSOR
-            //--------------------------------------------------
-
-            else if(type=="sensor")
+            if(type == "schedule")
             {
-                // next step
+                return;
             }
 
-            //--------------------------------------------------
-            // SETTINGS
-            //--------------------------------------------------
-
-            else if(type=="settings")
+            if(type == "sensor")
             {
-                // next step
+                return;
             }
+
+            Serial.printf(
+                "Unknown WS Message : %s / %s\n",
+                type.c_str(),
+                action.c_str()
+            );
 
             break;
         }
-
-        case WS_EVT_PONG:
-            break;
-
-        case WS_EVT_ERROR:
-            break;
     }
 }
