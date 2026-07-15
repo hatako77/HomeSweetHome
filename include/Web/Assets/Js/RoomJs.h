@@ -4,6 +4,7 @@
 #include <pgmspace.h>
 
 const char ROOM_JS[] PROGMEM = R"rawliteral(
+let rooms = [];
 
 async function initRooms()
 {
