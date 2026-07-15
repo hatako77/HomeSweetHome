@@ -49,6 +49,7 @@ async function initDashboard()
 
 function updateDashboard()
 {
+    if(!$("dashboardRooms")) return;
     const roomCount=rooms.length;
 
     let channelCount=0;
