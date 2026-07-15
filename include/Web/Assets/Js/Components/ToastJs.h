@@ -3,55 +3,71 @@
 
 #include <pgmspace.h>
 
-const char TOAST_JS[] PROGMEM=R"rawliteral(
+const char TOAST_JS[] PROGMEM = R"rawliteral(
 
-function initToast(message,type="info")
+function initToast()
 {
-	let container=$("toastContainer");
-	if(!container)
-	{
-		container=document.createElement("div");
-		container.id="toastContainer";
-		document.body.appendChild(container);
-	}
-	const item=document.createElement("div");
-	item.className="toast "+type;
-	item.innerHTML=`
-		<div class="toast-message">${message}</div>
-	`;
-	container.appendChild(item);
-	requestAnimationFrame(()=>
-	{
-		item.classList.add("show");
-	});
-	setTimeout(()=>
-	{
-		item.classList.remove("show");
-		setTimeout(()=>
-		{
-			item.remove();
-		},300);
-	},3000);
+    if($("toastContainer"))
+        return;
+
+    const container = create("div");
+    container.id = "toastContainer";
+
+    document.body.appendChild(container);
+}
+
+function showToast(message, type = "info")
+{
+    const container = $("toastContainer");
+
+    if(!container)
+        return;
+
+    const toast = create("div", "toast " + type);
+
+    toast.innerHTML = `
+        <div class="toast-message">
+            ${message}
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    requestAnimationFrame(() =>
+    {
+        toast.classList.add("show");
+    });
+
+    setTimeout(() =>
+    {
+        toast.classList.remove("show");
+
+        setTimeout(() =>
+        {
+            toast.remove();
+        },300);
+
+    },3000);
 }
 
 function toastSuccess(message)
 {
-	toast(message,"success");
+    showToast(message, "success");
 }
 
 function toastError(message)
 {
-	toast(message,"error");
+    showToast(message, "error");
 }
 
 function toastWarning(message)
 {
-	toast(message,"warning");
+    showToast(message, "warning");
 }
 
 function toastInfo(message)
 {
-	toast(message,"info");
+    showToast(message, "info");
 }
 
 )rawliteral";
