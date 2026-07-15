@@ -10,6 +10,7 @@ public:
     void begin(AsyncWebServer& server);
     void broadcast(const String& json);
     void send(const Message& message);
+    void loop();   // ← این خط جا مانده
 
 private:
     AsyncWebSocket ws{"/ws"};
