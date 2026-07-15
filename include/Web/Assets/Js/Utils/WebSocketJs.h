@@ -78,22 +78,19 @@ function connectWebSocket()
             //--------------------------------------------------
 
             case "room":
-                if(msg.action==="reload")
+            
+                if(msg.action==="changed")
                 {
                     initRooms().then(()=>
                     {
                         if(App.currentPage==="rooms")
                             renderRooms();
-                        if(App.currentPage==="dashboard")
-                            updateDashboard();
+            
+                        updateDashboard();
                     });
                 }
-                else if(msg.action==="updated")
-                {
-                    updateRoom(msg.data);
-                }
+            
                 break;
-
             //--------------------------------------------------
             // OTA
             //--------------------------------------------------
