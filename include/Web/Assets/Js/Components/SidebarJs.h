@@ -5,7 +5,7 @@
 
 const char SIDEBAR_JS[] PROGMEM = R"rawliteral(
 
-function loadSidebar()
+function initSidebar()
 {
     $("sidebar").innerHTML=`
     <div class="sidebar-menu">
