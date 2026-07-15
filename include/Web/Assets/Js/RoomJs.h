@@ -16,12 +16,15 @@ async function initRooms()
     rooms = data;
 }
 
-function showRooms()
+async function showRooms()
 {
-    $("content").innerHTML=`
+    await initRooms();
+
+    $("content").innerHTML = `
         <h2>Rooms</h2>
         <div id="roomsContainer"></div>
     `;
+
     renderRooms();
 }
 
