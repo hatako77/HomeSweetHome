@@ -3,41 +3,54 @@
 
 #include <pgmspace.h>
 
-const char LOADER_JS[] PROGMEM=R"rawliteral(
+const char LOADER_JS[] PROGMEM = R"rawliteral(
 
-function initLoader(text="Loading...")
+function initLoader()
 {
-	let loader=$("loader");
-	if(!loader)
-	{
-		loader=document.createElement("div");
-		loader.id="loader";
-		loader.innerHTML=`
-			<div class="loader-box">
-				<div class="loader-spinner"></div>
-				<div id="loaderText">${text}</div>
-			</div>
-		`;
-		document.body.appendChild(loader);
-	}
-	else
-	{
-		$("loaderText").innerText=text;
-	}
-	loader.style.display="flex";
+    if($("loader"))
+        return;
+
+    const loader = create("div");
+    loader.id = "loader";
+
+    loader.innerHTML = `
+        <div class="loader-box">
+            <div class="loader-spinner"></div>
+            <div id="loaderText">Loading...</div>
+        </div>
+    `;
+
+    document.body.appendChild(loader);
+
+    hideLoader();
+}
+
+function showLoader(text = "Loading...")
+{
+    const loader = $("loader");
+
+    if(!loader)
+        return;
+
+    loader.style.display = "flex";
+
+    setLoaderText(text);
 }
 
 function hideLoader()
 {
-	const loader=$("loader");
-	if(loader)
-		loader.style.display="none";
+    const loader = $("loader");
+
+    if(loader)
+        loader.style.display = "none";
 }
 
-function loaderText(text)
+function setLoaderText(text)
 {
-	if($("loaderText"))
-		$("loaderText").innerText=text;
+    const label = $("loaderText");
+
+    if(label)
+        label.innerText = text;
 }
 
 )rawliteral";
