@@ -6,7 +6,10 @@
 const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 
 @media(max-width:1200px){
+	body{
+		    height: 70%;
 
+	}
 	#roomsContainer{
 		grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
 	}
