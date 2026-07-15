@@ -43,7 +43,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
 		initWebSocket();
 
 	if(typeof loadDashboard==='function')
-		loadDashboard();
+		initDashboard();
 });
 
 )rawliteral";
