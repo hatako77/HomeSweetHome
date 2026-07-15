@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
 	if(typeof initWebSocket==='function')
 		initWebSocket();
 
-	if(typeof loadDashboard==='function')
+	if(typeof initDashboard==='function')
 		initDashboard();
 });
 
