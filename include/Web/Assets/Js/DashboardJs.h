@@ -5,37 +5,46 @@
 
 const char DASHBOARD_JS[] PROGMEM = R"rawliteral(
 
-function initDashboard()
+async function initDashboard()
 {
-    $("content").innerHTML=`
-    <h2>Dashboard</h2>
+    try
+    {
+        await initRooms();
 
-    <div class="dashboard-grid">
+        $("content").innerHTML=`
+        <h2>Dashboard</h2>
 
-        <div class="dashboard-card">
-            <h3>Rooms</h3>
-            <div class="value" id="dashboardRooms">0</div>
+        <div class="dashboard-grid">
+
+            <div class="dashboard-card">
+                <h3>Rooms</h3>
+                <div class="value" id="dashboardRooms">0</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Channels</h3>
+                <div class="value" id="dashboardChannels">0</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Active</h3>
+                <div class="value" id="dashboardOn">0</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Offline</h3>
+                <div class="value" id="dashboardOffline">0</div>
+            </div>
+
         </div>
+        `;
 
-        <div class="dashboard-card">
-            <h3>Channels</h3>
-            <div class="value" id="dashboardChannels">0</div>
-        </div>
-
-        <div class="dashboard-card">
-            <h3>Active</h3>
-            <div class="value" id="dashboardOn">0</div>
-        </div>
-
-        <div class="dashboard-card">
-            <h3>Offline</h3>
-            <div class="value" id="dashboardOffline">0</div>
-        </div>
-
-    </div>
-    `;
-
-    updateDashboard();
+        updateDashboard();
+    }
+    finally
+    {
+        hideLoader();
+    }
 }
 
 function updateDashboard()
