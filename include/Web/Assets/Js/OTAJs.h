@@ -5,7 +5,7 @@
 
 const char OTA_JS[] PROGMEM=R"rawliteral(
 
-function showOTA()
+function initOTA()
 {
 	$("content").innerHTML=`
 		<h2>Firmware Update</h2>
