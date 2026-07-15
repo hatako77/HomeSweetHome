@@ -10,20 +10,62 @@ function $(id)
     return document.getElementById(id);
 }
 
-function create(tag, cls = "")
+function $$(selector)
 {
-    const e = document.createElement(tag);
-
-    if(cls)
-        e.className = cls;
-
-    return e;
+    return document.querySelector(selector);
 }
 
-function clear(el)
+function $$$ (selector)
 {
-    while(el.firstChild)
-        el.removeChild(el.firstChild);
+    return document.querySelectorAll(selector);
+}
+
+function create(tag, cls = "")
+{
+    const element = document.createElement(tag);
+
+    if(cls)
+        element.className = cls;
+
+    return element;
+}
+
+function clear(element)
+{
+    if(!element)
+        return;
+
+    element.innerHTML = "";
+}
+
+function show(element)
+{
+    if(element)
+        element.style.display = "";
+}
+
+function hide(element)
+{
+    if(element)
+        element.style.display = "none";
+}
+
+function text(element, value)
+{
+    if(element)
+        element.innerText = value;
+}
+
+function html(element, value)
+{
+    if(element)
+        element.innerHTML = value;
+}
+
+function on(element, event, callback)
+{
+    if(element)
+        element.addEventListener(event, callback);
 }
 
 function icon(name)
