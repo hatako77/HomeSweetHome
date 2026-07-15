@@ -47,6 +47,12 @@ void Notifier::sceneRemoved(uint16_t id)
     websocket.send(msg);
 }
 
+void Notifier::roomsChanged()
+{
+    Message msg("room","reload");
+    websocket.send(msg);
+}
+
 void Notifier::sceneExecuted(uint16_t id)
 {
     Message msg("scene", "executed");
