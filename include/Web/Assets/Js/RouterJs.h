@@ -34,7 +34,7 @@ const Router =
                 break;
 
             case "ota":
-                await showOTA();
+                await initOTA();
                 break;
 
             case "settings":
