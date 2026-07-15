@@ -5,7 +5,7 @@
 
 const char ROOM_JS[] PROGMEM = R"rawliteral(
 
-async function loadRooms()
+async function initRooms()
 {
     const data=await apiGet("/api/rooms");
     if(!data)
