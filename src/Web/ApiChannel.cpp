@@ -144,7 +144,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
     // POST /api/channel/move
     //--------------------------------------------------
 
-    server.on("/api/channel/move",
+    server.on("/api/channels/move",
               HTTP_POST,
               [](AsyncWebServerRequest*){},
               nullptr,
