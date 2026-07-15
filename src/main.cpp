@@ -2,6 +2,7 @@
 #include "Core/Version.h"
 #include "IO/IOManager.h"
 #include "OTA/OTAService.h"
+#include "Web/WebSocketService.h"
 #include "Web/WebServerService.h"
 #include "Core/DemoData.h"
 #include <LittleFS.h>
@@ -50,4 +51,5 @@ void loop()
     ioManager.update();
     web.update();
     sceneManager.update();
+    websocket.loop();
 }
