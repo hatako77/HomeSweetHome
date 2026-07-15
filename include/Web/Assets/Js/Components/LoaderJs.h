@@ -5,7 +5,7 @@
 
 const char LOADER_JS[] PROGMEM=R"rawliteral(
 
-function showLoader(text="Loading...")
+function initLoader(text="Loading...")
 {
 	let loader=$("loader");
 	if(!loader)
