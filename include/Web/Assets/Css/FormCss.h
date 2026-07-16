@@ -4,7 +4,20 @@
 #include <pgmspace.h>
 
 const char FORM_CSS[] PROGMEM=R"rawliteral(
+.textbox{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid #444;
+    border-radius:8px;
+    background:#222;
+    color:#fff;
+    font-size:14px;
+    outline:none;
+}
 
+.textbox:focus{
+    border-color:#00d26a;
+}
 .form-group{
 	display:flex;
 	flex-direction:column;
