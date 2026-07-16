@@ -5,13 +5,15 @@
 
 const char DIALOG_JS[] PROGMEM = R"rawliteral(
 
+window.Dialog = {};
+
 function initDialog()
 {
 }
 
-function showDialog(title, content, buttons = "")
+Dialog.open = function(options)
 {
-    closeDialog();
+    Dialog.close();
 
     const overlay = create("div");
     overlay.id = "dialogOverlay";
@@ -22,7 +24,7 @@ function showDialog(title, content, buttons = "")
             <div class="dialog-header">
 
                 <div class="dialog-title">
-                    ${title}
+                    ${options.title ?? ""}
                 </div>
 
                 <button class="dialog-close" id="dialogClose">
@@ -31,12 +33,14 @@ function showDialog(title, content, buttons = "")
 
             </div>
 
-            <div class="dialog-body">
-                ${content}
+            <div class="dialog-body" id="dialogBody">
+                ${options.content ?? ""}
             </div>
 
             <div class="dialog-footer">
-                ${buttons}
+
+                ${options.footer ?? ""}
+
             </div>
 
         </div>
@@ -44,7 +48,13 @@ function showDialog(title, content, buttons = "")
 
     document.body.appendChild(overlay);
 
-    $("dialogClose").onclick = closeDialog;
+    $("dialogClose").onclick = () =>
+    {
+        Dialog.close();
+
+        if(options.onCancel)
+            options.onCancel();
+    };
 
     requestAnimationFrame(() =>
     {
@@ -52,7 +62,7 @@ function showDialog(title, content, buttons = "")
     });
 }
 
-function closeDialog()
+Dialog.close = function()
 {
     const dialog = $("dialogOverlay");
 
@@ -67,46 +77,131 @@ function closeDialog()
     },200);
 }
 
-function confirmDialog(title, message, onYes)
+Dialog.alert = function(title,message)
 {
-    showDialog(
+    Dialog.open({
+
         title,
-        `<p>${message}</p>`,
+
+        content:`
+            <p>${message}</p>
+        `,
+
+        footer:`
+            <button class="btn btn-primary" id="dialogOk">
+                OK
+            </button>
         `
-        <button class="btn" id="dialogCancel">
-            Cancel
-        </button>
 
-        <button class="btn btn-primary" id="dialogYes">
-            OK
-        </button>
-        `
-    );
+    });
 
-    $("dialogCancel").onclick = closeDialog;
-
-    $("dialogYes").onclick = () =>
+    $("dialogOk").onclick=()=>
     {
-        closeDialog();
+        Dialog.close();
+    };
+}
+
+Dialog.confirm=function(title,message,onYes)
+{
+    Dialog.open({
+
+        title,
+
+        content:`
+            <p>${message}</p>
+        `,
+
+        footer:`
+            <button class="btn" id="dialogCancel">
+                Cancel
+            </button>
+
+            <button class="btn btn-primary" id="dialogYes">
+                OK
+            </button>
+        `
+
+    });
+
+    $("dialogCancel").onclick=()=>
+    {
+        Dialog.close();
+    };
+
+    $("dialogYes").onclick=()=>
+    {
+        Dialog.close();
 
         if(onYes)
             onYes();
     };
 }
 
-function alertDialog(title, message)
+Dialog.prompt=function(options)
 {
-    showDialog(
-        title,
-        `<p>${message}</p>`,
-        `
-        <button class="btn btn-primary" id="dialogOk">
-            OK
-        </button>
-        `
-    );
+    Dialog.open({
 
-    $("dialogOk").onclick = closeDialog;
+        title:options.title,
+
+        content:`
+
+            <input
+                id="dialogInput"
+                class="textbox"
+                placeholder="${options.placeholder ?? ""}"
+                value="${options.value ?? ""}"
+            >
+
+        `,
+
+        footer:`
+
+            <button class="btn" id="dialogCancel">
+                Cancel
+            </button>
+
+            <button class="btn btn-primary" id="dialogSave">
+                Save
+            </button>
+
+        `
+
+    });
+
+    const input=$("dialogInput");
+
+    input.focus();
+    input.select();
+
+    input.onkeydown=(e)=>
+    {
+        if(e.key==="Enter")
+            $("dialogSave").click();
+
+        if(e.key==="Escape")
+            $("dialogCancel").click();
+    };
+
+    $("dialogCancel").onclick=()=>
+    {
+        Dialog.close();
+    };
+
+    $("dialogSave").onclick=()=>
+    {
+        const value=input.value.trim();
+
+        if(options.required!==false && value==="")
+        {
+            input.focus();
+            return;
+        }
+
+        Dialog.close();
+
+        if(options.onSave)
+            options.onSave(value);
+    };
 }
 
 )rawliteral";
