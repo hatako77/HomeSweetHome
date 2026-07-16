@@ -43,41 +43,41 @@ void ApiRoom::registerRoutes(WebServerService& web)
     
         JsonArray arr = doc.to<JsonArray>();
     
-for(uint16_t i=0;i<roomManager.count();i++)
-{
-    Room* room = roomManager.getAt(i);
-
-    if(!room)
-        continue;
-
-    JsonObject o = arr.add<JsonObject>();
-
-    o["id"] = room->id;
-    o["name"] = room->name;
-
-    JsonArray channels = o["channels"].to<JsonArray>();
-
-    for(uint16_t j=0;j<ioManager.count();j++)
-    {
-        const IOChannel* ch = ioManager.getAt(j);
-
-        if(!ch)
-            continue;
-
-        if(ch->roomId != room->id)
-            continue;
-
-        JsonObject c = channels.add<JsonObject>();
-
-        c["id"] = ch->id;
-        c["name"] = ch->name;
-        c["state"] = ch->state;
-        c["enabled"] = ch->enabled;
-        c["favorite"] = ch->favorite;
-        c["type"] = (uint8_t)ch->type;
-        c["icon"] = (uint8_t)ch->icon;
-    }
-}    
+        for(uint16_t i=0;i<roomManager.count();i++)
+        {
+            Room* room = roomManager.getAt(i);
+        
+            if(!room)
+                continue;
+        
+            JsonObject o = arr.add<JsonObject>();
+        
+            o["id"] = room->id;
+            o["name"] = room->name;
+        
+            JsonArray channels = o["channels"].to<JsonArray>();
+        
+            for(uint16_t j=0;j<ioManager.count();j++)
+            {
+                const IOChannel* ch = ioManager.getAt(j);
+        
+                if(!ch)
+                    continue;
+        
+                if(ch->roomId != room->id)
+                    continue;
+        
+                JsonObject c = channels.add<JsonObject>();
+        
+                c["id"] = ch->id;
+                c["name"] = ch->name;
+                c["state"] = ch->state;
+                c["enabled"] = ch->enabled;
+                c["favorite"] = ch->favorite;
+                c["type"] = (uint8_t)ch->type;
+                c["icon"] = (uint8_t)ch->icon;
+            }
+        }    
         String out;
     
         serializeJson(doc,out);
@@ -105,9 +105,25 @@ for(uint16_t i=0;i<roomManager.count();i++)
             return;
         }
     
-        uint16_t id=doc["id"]|0;
+        uint16_t id = doc["id"] | 0;
     
-        if(roomManager.hasChannels(id))
+        bool hasChannels = false;
+    
+        for(uint16_t i=0;i<ioManager.count();i++)
+        {
+            const IOChannel* ch = ioManager.getAt(i);
+    
+            if(!ch)
+                continue;
+    
+            if(ch->roomId == id)
+            {
+                hasChannels = true;
+                break;
+            }
+        }
+    
+        if(hasChannels)
         {
             request->send(
                 409,
@@ -117,14 +133,17 @@ for(uint16_t i=0;i<roomManager.count();i++)
             return;
         }
     
-        bool ok=roomManager.remove(id);
+        bool ok = roomManager.remove(id);
     
         request->send(
-            ok?200:404,
+            ok ? 200 : 404,
             "application/json",
-            ok?"{\"success\":true}":"{\"success\":false}"
+            ok ? "{\"success\":true}" : "{\"success\":false}"
         );
-    });    
+    });
+    
+    
+    
     server.on("/api/rooms/update", HTTP_POST,    
     [](AsyncWebServerRequest *request){}, nullptr,    
     [](AsyncWebServerRequest *request, uint8_t *data,
