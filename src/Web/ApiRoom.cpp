@@ -87,30 +87,44 @@ for(uint16_t i=0;i<roomManager.count();i++)
     
     
     
-    server.on("/api/rooms",HTTP_POST,    
-    [](AsyncWebServerRequest *request){},nullptr,    
-    [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t, size_t)
+    server.on("/api/rooms/delete",
+    HTTP_POST,
+    [](AsyncWebServerRequest*){},
+    nullptr,
+    [](AsyncWebServerRequest* request,
+       uint8_t* data,
+       size_t len,
+       size_t,
+       size_t)
     {
-        JsonDocument doc;    
+        JsonDocument doc;
+    
         if(deserializeJson(doc,data,len))
         {
-            request->send(400,
-                          "application/json",
-                          "{\"success\":false}");
+            request->send(400,"application/json","{\"success\":false}");
             return;
-        }    
-        Room room;    
-        room.name=doc["name"]|"Room";    
-        Room* created=roomManager.add(room);    
-        if(created)
-            roomManager.save();    
-        request->send(created?201:500,
-                      "application/json",
-                      created?
-                      "{\"success\":true}":
-                      "{\"success\":false}");
-    });
+        }
     
+        uint16_t id=doc["id"]|0;
+    
+        if(roomManager.hasChannels(id))
+        {
+            request->send(
+                409,
+                "application/json",
+                "{\"success\":false,\"message\":\"Room contains channels\"}"
+            );
+            return;
+        }
+    
+        bool ok=roomManager.remove(id);
+    
+        request->send(
+            ok?200:404,
+            "application/json",
+            ok?"{\"success\":true}":"{\"success\":false}"
+        );
+    });    
     server.on("/api/rooms/update", HTTP_POST,    
     [](AsyncWebServerRequest *request){}, nullptr,    
     [](AsyncWebServerRequest *request, uint8_t *data,
