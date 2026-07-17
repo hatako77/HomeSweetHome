@@ -5,8 +5,8 @@
 
 void DemoData::create()
 {
-    //if (roomManager.count() == 0)
-    //{
+    if (roomManager.count() == 0)
+    {
         roomManager.add({0,"Living Room"});
         roomManager.add({0,"Kitchen"});
         roomManager.add({0,"Master Bedroom"});
@@ -16,7 +16,7 @@ void DemoData::create()
         roomManager.add({0,"Hallway"});
         roomManager.add({0,"Yard"});
         roomManager.save();
-    //}
+    }
 
     if (ioManager.count() == 0)
         return;
