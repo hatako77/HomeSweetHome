@@ -61,18 +61,14 @@ async function addRoom()
         placeholder: "Room name",
         onSave: async(name)=>
         {
-            const result = await apiPost(
-                "/api/rooms/add",
-                {
-                    name
-                }
-            );
-
-            if(!result.success)
+            const result = await apiPost("/api/rooms/add",{name});
+            
+            if(!result || !result.success)
             {
                 toastError("Cannot create room");
                 return;
             }
+
 
             toastSuccess("Room created");
 
