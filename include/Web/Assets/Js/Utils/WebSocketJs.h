@@ -78,19 +78,10 @@ function connectWebSocket()
             //--------------------------------------------------
 
             case "room":
-            
-                if(msg.action==="changed")
-                {
-                    initRooms().then(()=>
-                    {
-                        if(App.currentPage==="rooms")
-                            renderRooms();
-            
-                        updateDashboard();
-                    });
-                }
-            
-                break;
+
+            handleRoomMessage(msg);
+        
+            break;
             //--------------------------------------------------
             // OTA
             //--------------------------------------------------
@@ -160,37 +151,25 @@ function handleChannelMessage(msg)
         updateDashboard();
 }
 
-function handleRoomMessage(msg)
+async function handleRoomMessage(msg)
 {
-    if(!msg.data)
-        return;
-
     switch(msg.action)
     {
+        case "changed":
         case "added":
-
-            addRoom(msg.data);
-
-            break;
-
         case "updated":
-
-            updateRoom(msg.data);
-
-            break;
-
         case "removed":
 
-            removeRoom(msg.data.id);
+            await initRooms();
+
+            if(App.currentPage==="rooms")
+                renderRooms();
+
+            if(App.currentPage==="dashboard")
+                updateDashboard();
 
             break;
     }
-
-    if(App.currentPage==="rooms")
-        renderRooms();
-
-    if(App.currentPage==="dashboard")
-        updateDashboard();
 }
 
 function wsSend(type, action, data = {})
