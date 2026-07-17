@@ -174,9 +174,5 @@ void registerRoutes(WebServerService& web)
         request->send(200,"application/javascript",LOADER_JS);
     });
 
-    server.on("/ota",HTTP_GET,[](AsyncWebServerRequest* request)
-    {
-        request->send(200,"text/html",OTA_HTML);
-    });
 }
 }
