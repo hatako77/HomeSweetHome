@@ -61,7 +61,12 @@ async function addRoom()
         placeholder: "Room name",
         onSave: async(name)=>
         {
-            const result = await apiPost("/api/rooms/add",{name});
+            const result = await apiPost(
+                "/api/rooms",
+                {
+                    name
+                }
+            );
             
             if(!result || !result.success)
             {
