@@ -11,6 +11,26 @@ const char ROOM_CSS[] PROGMEM=R"rawliteral(
 	gap:20px;
 	align-items:start;
 }
+.room-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.icon-btn{
+    width:32px;
+    height:32px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.icon-btn.danger{
+    color:#e74c3c;
+}
 
 .room-card{
 	background:#111827;
