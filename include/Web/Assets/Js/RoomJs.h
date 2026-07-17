@@ -306,13 +306,6 @@ function updateRoomCounter(roomId)
         counter.innerText=(room.channels??[]).length;
 }
 
-function addRoom(room)
-{
-console.log("roomAdded", room.id);
-    getRooms().push(room);
-
-    renderRooms();
-}
 
 function removeRoom(id)
 {
