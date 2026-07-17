@@ -4,9 +4,11 @@
 #include "Core/Room.h"
 #include "Core/RoomManager.h"
 #include "Web/WebSocketService.h"
-#include "Web/Message.h"
 #include <ArduinoJson.h>
 #include <ESPAsyncWebServer.h>
+
+
+extern WebSocketService websocket;
 
 void ApiRoom::registerRoutes(WebServerService& web)
 {
@@ -116,8 +118,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
             serializeJson(res,out);
             AsyncWebServerResponse* response = request->beginResponse(201,"application/json",out);
             response ->addHeader("Location","/api/rooms?id=" + String(created->id));
-            Message msg("room","changed");
-            websocket.send(msg);
+            websocket.broadcast(R"({"type":"room","action":"changed"})");
             request->send(response);
         }
     );
@@ -147,8 +148,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
                 request->send(404,"application/json","{\"success\":false,\"message\":\"Room not found\"}");
                 return;
             }
-            Message msg("room","changed");
-            websocket.send(msg);
+            websocket.broadcast(R"({"type":"room","action":"changed"})");
             request->send(200,"application/json","{\"success\":true}");
         }
     );
@@ -178,8 +178,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
                 request->send(404,"application/json","{\"success\":false,\"message\":\"Room not found\"}");
                 return;
             }
-            Message msg("room","changed");
-            websocket.send(msg);
+            websocket.broadcast(R"({"type":"room","action":"changed"})");
             request->send(200,"application/json","{\"success\":true}");
         }
     );
