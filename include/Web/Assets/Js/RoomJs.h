@@ -109,17 +109,40 @@ function createRoomCard(room)
 
     card.innerHTML = `
         <div class="room-header">
+
             <div class="room-name">
                 <i class="fa-solid fa-house"></i>
                 ${room.name}
             </div>
 
-            <div class="room-count">
-                ${(room.channels ?? []).length}
+            <div class="room-actions">
+
+                <div class="room-count">
+                    ${(room.channels ?? []).length}
+                </div>
+
+                <button
+                    class="icon-btn"
+                    onclick="editRoom(${room.id})"
+                    title="Edit">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+
+                <button
+                    class="icon-btn danger"
+                    onclick="deleteRoom(${room.id})"
+                    title="Delete">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+
             </div>
+
         </div>
 
-        <div class="channel-list" data-room="${room.id}"></div>
+        <div
+            class="channel-list"
+            data-room="${room.id}">
+        </div>
     `;
 
     const list = card.querySelector(".channel-list");
