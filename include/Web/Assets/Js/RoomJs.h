@@ -44,10 +44,43 @@ async function showRooms()
 
     $("content").innerHTML = `
         <h2>Rooms</h2>
+        <button class="btn btn-primary" onclick="addRoom()">
+            <i class="fa-solid fa-plus"></i>
+            Add Room
+        </button>
         <div id="roomsContainer"></div>
     `;
 
     renderRooms();
+}
+
+async function addRoom()
+{
+    Dialog.prompt({
+        title: "Add Room",
+        placeholder: "Room name",
+        onSave: async(name)=>
+        {
+            const result = await apiPost(
+                "/api/rooms/add",
+                {
+                    name
+                }
+            );
+
+            if(!result.success)
+            {
+                toastError("Cannot create room");
+                return;
+            }
+
+            toastSuccess("Room created");
+
+            await initRooms();
+
+            Router.navigate("rooms");
+        }
+    });
 }
 
 function renderRooms()
