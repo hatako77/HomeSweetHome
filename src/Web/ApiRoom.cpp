@@ -231,7 +231,8 @@ void ApiRoom::registerRoutes(WebServerService& web)
             return;
         }    
         Room room;    
-        room.name = doc["name"] | "Room";    
+        room.name = doc["name"] | "Room";   
+        Serial.println(room.name);
         Room* created = roomManager.add(room);    
         if (created)
             roomManager.save();    
