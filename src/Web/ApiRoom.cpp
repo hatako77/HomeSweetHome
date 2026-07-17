@@ -219,6 +219,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
     [](AsyncWebServerRequest *request,
     uint8_t *data, size_t len, size_t, size_t)
     {
+        Serial.println("POST /api/rooms/add");
         JsonDocument doc;    
         if (deserializeJson(doc, data, len))
         {
