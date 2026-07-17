@@ -113,7 +113,11 @@ void ApiRoom::registerRoutes(WebServerService& web)
             res["name"] = created->name;
             String out;
             serializeJson(res,out);
-            request->send(201,"application/json",out);
+            AsyncWebServerResponse* res = request->beginResponse(201,"application/json",out);
+            res->addHeader("Location","/api/rooms?id=" + String(created->id));
+            Message msg("room","changed");
+            websocket.send(msg);
+            request->send(res);
         }
     );
     //--------------------------------------------------
@@ -142,7 +146,8 @@ void ApiRoom::registerRoutes(WebServerService& web)
                 request->send(404,"application/json","{\"success\":false,\"message\":\"Room not found\"}");
                 return;
             }
-            roomManager.save();
+            Message msg("room","changed");
+            websocket.send(msg);
             request->send(200,"application/json","{\"success\":true}");
         }
     );
@@ -172,9 +177,9 @@ void ApiRoom::registerRoutes(WebServerService& web)
                 request->send(404,"application/json","{\"success\":false,\"message\":\"Room not found\"}");
                 return;
             }
-            roomManager.save();
-            request->send(200,"application/json","{\"success\":true}"
-            );
+            Message msg("room","changed");
+            websocket.send(msg);
+            request->send(200,"application/json","{\"success\":true}");
         }
     );
     //--------------------------------------------------
