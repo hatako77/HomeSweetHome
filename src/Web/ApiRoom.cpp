@@ -3,7 +3,8 @@
 #include "IO/IOConfig.h"
 #include "Core/Room.h"
 #include "Core/RoomManager.h"
-
+#include "Web/WebSocketService.h"
+#include "Web/Message.h"
 #include <ArduinoJson.h>
 #include <ESPAsyncWebServer.h>
 
@@ -113,11 +114,11 @@ void ApiRoom::registerRoutes(WebServerService& web)
             res["name"] = created->name;
             String out;
             serializeJson(res,out);
-            AsyncWebServerResponse* res = request->beginResponse(201,"application/json",out);
-            res->addHeader("Location","/api/rooms?id=" + String(created->id));
+            AsyncWebServerResponse* response = request->beginResponse(201,"application/json",out);
+            response ->addHeader("Location","/api/rooms?id=" + String(created->id));
             Message msg("room","changed");
             websocket.send(msg);
-            request->send(res);
+            request->send(response);
         }
     );
     //--------------------------------------------------
