@@ -18,9 +18,14 @@ void ApiRoom::registerRoutes(WebServerService& web)
     HTTP_GET,
     [](AsyncWebServerRequest* request)
     {
-        if(request->hasParam("id"))
+        if(!request->hasParam("id"))
         {
-            uint16_t id=request->getParam("id")->value().toInt();
+            request->send(400,"application/json","{\"success\":false}");
+            return;
+        }
+        
+        uint16_t id =
+            request->getParam("id")->value().toInt();
 
             Room* room=roomManager.get(id);
 
@@ -192,8 +197,9 @@ void ApiRoom::registerRoutes(WebServerService& web)
             request->send(400,"application/json","{\"success\":false}");
             return;
         }
-
-        uint16_t id = .toInt();
+        
+        uint16_t id =
+            request->getParam("id")->value().toInt();
 
         Room* room = roomManager.get(id);
 
@@ -307,7 +313,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
             return;
         }
         
-        uint16_t id =
+        uint16_t roomId =
             request->getParam("id")->value().toInt();
 
         bool hasChannels = false;
