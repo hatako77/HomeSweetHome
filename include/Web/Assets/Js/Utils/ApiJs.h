@@ -20,24 +20,29 @@ async function api(url, options = {})
             throw new Error("Unauthorized");
         }
 
+        const text = await response.text();        
+        let result = null;        
+        if(text !== "")
+        {
+            try
+            {
+                result = JSON.parse(text);
+            }
+            catch
+            {
+                result = text;
+            }
+        }
+        
         if(!response.ok)
         {
-            throw new Error(response.statusText || response.status);
-        }
-
-        const text = await response.text();
-
-        if(text === "")
-            return null;
-
-        try
-        {
-            return JSON.parse(text);
-        }
-        catch
-        {
-            return text;
-        }
+            return result ??
+            {
+                success:false,
+                message:response.statusText
+            };
+        }        
+        return result;
     }
     catch(error)
     {
