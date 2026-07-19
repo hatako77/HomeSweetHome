@@ -318,19 +318,6 @@ bool IOManager::registerDriver(IIODriver* driver)
     return true;
 }
 
-bool IOManager::assignToRoom(uint16_t channelId, uint8_t roomId)
-{
-    IOChannel* ch = getChannel(channelId);
-
-    if (!ch)
-        return false;
-
-    ch->roomId = roomId;
-
-    save();
-
-    return true;
-}
 
 
 
