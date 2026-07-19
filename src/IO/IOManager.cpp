@@ -43,7 +43,6 @@ void IOManager::begin()
             }
         }
     }    
-    load();
     bool loaded = load();
     
     Serial.print("Load: ");
@@ -219,7 +218,6 @@ bool IOManager::update(const IOChannel& channel)
             return true;
         }
     }
-    save();
     return false;
 }
 
