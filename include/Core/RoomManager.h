@@ -18,7 +18,7 @@ public:
     Room* add(const Room& room);
     bool update(const Room& room);
     bool remove(uint16_t id);
-
+    bool exists(const String& name, uint8_t ignoreId = 0);
     bool save();
     bool load();
 
