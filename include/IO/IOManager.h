@@ -22,7 +22,7 @@ public:
     const IOChannel* getChannel(uint16_t id) const;
     uint16_t count() const;
     IIODriver* getDriver(uint16_t driverId);
-    bool add(const IOChannel& channel);
+    IOChannel* add(const IOChannel& channel);
     bool remove(uint16_t id);
     bool save() const;
     bool load();
