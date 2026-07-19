@@ -16,9 +16,6 @@ public:
     bool write(uint16_t id, bool state);    
     bool read(uint16_t id) const;  
     bool update(const IOChannel& channel);
-    bool on(uint16_t id);    
-    bool off(uint16_t id);    
-    bool toggle(uint16_t id);
     void begin();
     void update();
     IOChannel* getChannel(uint16_t id);
@@ -31,7 +28,6 @@ public:
     bool load();
     bool registerDriver(IIODriver* driver);
     bool assignToRoom(uint16_t channelId, uint8_t roomId);
-    bool removeFromRoom(uint16_t channelId);
     const IOChannel* getAt(uint16_t index) const;
     IOChannel* getAt(uint16_t index);
 private:
