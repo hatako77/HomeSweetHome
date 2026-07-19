@@ -5,6 +5,51 @@
 
 const char ROOM_JS[] PROGMEM = R"rawliteral(
 
+
+async function editRoom(id)
+{
+    const room = getRooms().find(r => r.id == id);
+
+    if(!room)
+        return;
+
+    Dialog.prompt(
+    {
+        title: "Edit Room",
+        value: room.name,
+        placeholder: "Room name",
+
+        onSave: async(name)=>
+        {
+            const result = await api(
+                "/api/rooms?id=" + id,
+                {
+                    method: "PUT",
+                    headers:
+                    {
+                        "Content-Type":"application/json"
+                    },
+                    body: JSON.stringify(
+                    {
+                        name: name
+                    })
+                });
+
+            if(!result || !result.success)
+            {
+                toastError("Cannot update room");
+                return;
+            }
+
+            toastSuccess("Room updated");
+
+            await initRooms();
+
+            Router.navigate("rooms");
+        }
+    });
+}
+
 async function initRooms()
 {
     console.log("initRooms");
