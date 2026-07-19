@@ -290,59 +290,5 @@ void ApiChannel::registerRoutes(WebServerService& web)
         );
     });
     
-    server.on("/api/channels/move",
-    HTTP_POST,
-    [](AsyncWebServerRequest*){},
-    nullptr,
-    [](AsyncWebServerRequest* request,
-    uint8_t* data,
-    size_t len,
-    size_t,
-    size_t)
-    {
-        JsonDocument doc;
-    
-        if(deserializeJson(doc,data,len))
-        {
-            request->send(
-                400,
-                "application/json",
-                "{\"success\":false,\"message\":\"Invalid JSON\"}"
-            );
-            return;
-        }
-    
-        uint16_t channelId=
-            doc["channelId"]|0;
-    
-        uint16_t roomId=
-            doc["roomId"]|0;
-    
-        if(!ioManager.assignToRoom(channelId,roomId))
-        {
-            request->send(
-                404,
-                "application/json",
-                "{\"success\":false}"
-            );
-            return;
-        }
-    
-        ioManager.save();
-    
-        IOChannel* ch=
-            ioManager.getChannel(channelId);
-    
-        if(ch)
-            Notifier::channelChanged(*ch);
-    
-        Notifier::roomsChanged();
-    
-        request->send(
-            200,
-            "application/json",
-            "{\"success\":true}"
-        );
-    });
     
 }
