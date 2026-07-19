@@ -326,10 +326,13 @@ function updateChannel(channel)
         updateTile(tile,local);
 }
 
-function toggleChannel(id)
+async function toggleChannel(id)
 {
-        console.log("toggleChannel", id);
-        wsSend("channel","toggle",{id});
+    const ch = getChannel(id);
+
+    await apiPut("/api/channels?id=" + id,{
+        state: !ch.state
+    });
 }
 
 function enableDrag(list)
