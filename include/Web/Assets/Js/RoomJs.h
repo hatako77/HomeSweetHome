@@ -4,7 +4,41 @@
 #include <pgmspace.h>
 
 const char ROOM_JS[] PROGMEM = R"rawliteral(
+async function deleteRoom(id)
+{
+    const room = getRooms().find(r => r.id == id);
 
+    if(!room)
+        return;
+
+    Dialog.confirm(
+        "Delete Room",
+        `Delete "${room.name}" ?`,
+        async() =>
+        {
+            const result = await api(
+                "/api/rooms?id=" + id,
+                {
+                    method:"DELETE"
+                });
+
+            if(!result || !result.success)
+            {
+                toastError(
+                    result?.message ??
+                    "Cannot delete room"
+                );
+                return;
+            }
+
+            toastSuccess("Room deleted");
+
+            await initRooms();
+
+            Router.navigate("rooms");
+        }
+    );
+}
 
 async function editRoom(id)
 {
