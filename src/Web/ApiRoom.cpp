@@ -101,8 +101,15 @@ void ApiRoom::registerRoutes(WebServerService& web)
                 request->send(400,"application/json","{\"success\":false,\"message\":\"Invalid JSON\"}");
                 return;
             }
+            String name = doc["name"] | "";
+            name.trim();            
+            if(name.isEmpty())
+            {
+                request->send(400,"application/json",R"({"success":false,"message":"Room name is required"})");
+                return;
+            }
             Room room;
-            room.name = doc["name"] | "Room";
+            room.name = name;
             Room* created =roomManager.add(room);
             if(!created)
             {
@@ -140,9 +147,16 @@ void ApiRoom::registerRoutes(WebServerService& web)
                 request->send(400,"application/json","{\"success\":false,\"message\":\"Invalid JSON\"}");
                 return;
             }
+            String name = doc["name"] | "";
+            name.trim();            
+            if(name.isEmpty())
+            {
+                request->send(400,"application/json",R"({"success":false,"message":"Room name is required"})");
+                return;
+            }
             Room room;
             room.id = id;
-            room.name = doc["name"] | "Room";
+            room.name = name;
             if(!roomManager.update(room))
             {
                 request->send(404,"application/json","{\"success\":false,\"message\":\"Room not found\"}");
