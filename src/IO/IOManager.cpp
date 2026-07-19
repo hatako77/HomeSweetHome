@@ -215,6 +215,10 @@ bool IOManager::update(const IOChannel& channel)
             channels[i].favorite   = channel.favorite;
             channels[i].activeLow  = channel.activeLow;
             channels[i].roomId     = channel.roomId;
+            if(channels[i].state != channel.state)
+            {
+                write(channel.id,channel.state);
+            }
             return true;
         }
     }
