@@ -10,14 +10,49 @@ window.Dialog = {};
 function initDialog()
 {
 }
+Dialog.form = function(options)
+{
+    Dialog.open({
+        title: options.title,
+        content: options.content,
+        footer:`
+            <button class="btn" id="dialogCancel">
+                Cancel
+            </button>
 
+            <button class="btn btn-primary" id="dialogSave">
+                ${options.saveText ?? "Save"}
+            </button>
+        `
+    });
+
+    $("dialogCancel").onclick = () =>
+    {
+        Dialog.close();
+
+        if(options.onCancel)
+            options.onCancel();
+    };
+
+    $("dialogSave").onclick = async () =>
+    {
+        if(options.onSave)
+        {
+            const result = await options.onSave();
+
+            if(result === false)
+                return;
+        }
+
+        Dialog.close();
+    };
+}
 Dialog.open = function(options)
 {
     Dialog.close();
 
     const overlay = create("div");
     overlay.id = "dialogOverlay";
-
     overlay.innerHTML = `
         <div class="dialog">
 
@@ -45,8 +80,22 @@ Dialog.open = function(options)
 
         </div>
     `;
-
     document.body.appendChild(overlay);
+    
+    const first = overlay.querySelector(
+        "input,select,textarea"
+    );
+    
+    if(first)
+    {
+        requestAnimationFrame(() =>
+        {
+            first.focus();
+    
+            if(first.select)
+                first.select();
+        });
+    }
 
     $("dialogClose").onclick = () =>
     {
