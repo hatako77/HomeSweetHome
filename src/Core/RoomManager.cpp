@@ -51,7 +51,18 @@ bool RoomManager::update(const Room& room)
 
     return save();
 }
+bool RoomManager::exists(const String& name, uint8_t ignoreId)
+{
+    for(uint16_t i = 0; i < count(); i++)
+    {
+        Room* room = getAt(i);
+        if(!room) continue;
+        if(room->id == ignoreId)continue;
 
+        if(room->name.equalsIgnoreCase(name))return true;
+    }
+    return false;
+}
 bool RoomManager::remove(uint16_t id)
 {
     for (uint16_t i = 0; i < roomCount; i++)
