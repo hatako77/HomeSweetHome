@@ -71,7 +71,7 @@ async function editRoom(id)
 
             if(!result || !result.success)
             {
-                toastError("Cannot update room");
+                toastError(result.message || "Cannot update room");
                 return;
             }
 
@@ -149,15 +149,11 @@ async function addRoom()
             
             if(!result || !result.success)
             {
-                toastError("Cannot create room");
+                toastError(result.message || "Cannot create room");
                 return;
             }
-
-
             toastSuccess("Room created");
-
             await initRooms();
-
             Router.navigate("rooms");
         }
     });
