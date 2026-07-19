@@ -149,19 +149,19 @@ uint16_t IOManager::count() const
     return channelCount;
 }
 
-bool IOManager::add(const IOChannel& channel)
+IOChannel* IOManager::add(const IOChannel& channel)
 {
-    if (channelCount >= MAX_IO)
-        return false;
+    if(channelCount >= MAX_IO)
+        return nullptr;
 
     IOChannel ch = channel;
 
-    if (ch.id == 0)
+    if(ch.id == 0)
         ch.id = nextId++;
 
-    channels[channelCount++] = ch;
+    channels[channelCount] = ch;
 
-    return true;
+    return &channels[channelCount++];
 }
 
 
