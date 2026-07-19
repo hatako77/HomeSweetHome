@@ -94,7 +94,7 @@ void IOManager::update()
 
         channels[i].state = state;
     }
-    save();
+
 }
 bool IOManager::write(uint16_t id, bool state)
 {
