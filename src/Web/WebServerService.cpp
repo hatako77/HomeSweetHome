@@ -38,7 +38,6 @@ void WebServerService::registerPages()
 void WebServerService::registerApi()
 {
     ApiVersion::registerRoutes(*this);
-    ApiIO::registerRoutes(*this);
     ApiOTA::registerRoutes(*this);
     ApiSettings::registerRoutes(*this);
     ApiRoom::registerRoutes(*this);
