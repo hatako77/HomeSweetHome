@@ -165,21 +165,8 @@ bool IOManager::add(const IOChannel& channel)
     return true;
 }
 
-bool IOManager::toggle(uint16_t id)
-{
-    return write(id, !read(id));
-}
 
-bool IOManager::on(uint16_t id)
-{
-    return write(id, true);
-}
-
-bool IOManager::off(uint16_t id)
-{
-    return write(id, false);
-}
-    IIODriver* IOManager::getDriver(uint16_t driverId)
+IIODriver* IOManager::getDriver(uint16_t driverId)
 {
     if (driverId >= driverCount)
         return nullptr;
@@ -343,19 +330,6 @@ bool IOManager::assignToRoom(uint16_t channelId, uint8_t roomId)
     return true;
 }
 
-bool IOManager::removeFromRoom(uint16_t channelId)
-{
-    IOChannel* ch = getChannel(channelId);
-
-    if (!ch)
-        return false;
-
-    ch->roomId = 0;
-
-    save();
-
-    return true;
-}
 
 
 IOChannel* IOManager::getAt(uint16_t index)
