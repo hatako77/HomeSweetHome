@@ -110,6 +110,11 @@ void ApiRoom::registerRoutes(WebServerService& web)
             }
             Room room;
             room.name = name;
+            if(roomManager.exists(name))
+            {
+                request->send(409,"application/json",R"({"success":false,"message":"Room already exists"})");
+                return;
+            }
             Room* created =roomManager.add(room);
             if(!created)
             {
@@ -157,6 +162,11 @@ void ApiRoom::registerRoutes(WebServerService& web)
             Room room;
             room.id = id;
             room.name = name;
+            if(roomManager.exists(name, id))
+            {
+                request->send(409,"application/json",R"({"success":false,"message":"Room already exists"})");
+                return;
+            }
             if(!roomManager.update(room))
             {
                 request->send(404,"application/json","{\"success\":false,\"message\":\"Room not found\"}");
