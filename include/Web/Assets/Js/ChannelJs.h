@@ -9,7 +9,107 @@ const char CHANNEL_JS[] PROGMEM = R"rawliteral(async function getChannels(id = n
     if(id != null)url += "?id=" + id;
     return await apiGet(url);
 }
+function showChannelDialog(channel = null)
+{
+    const editing = channel != null;
 
+    Dialog.form({
+        title: editing ? "Edit Channel" : "New Channel",
+
+        content: buildChannelForm(channel),
+
+        onSave: async () =>
+        {
+
+        }
+    });
+}
+function buildChannelForm(channel)
+{
+    const c =
+    {
+        id: channel?.id ?? 0,
+        name: channel?.name ?? "",
+        roomId: channel?.roomId ?? 0,
+        type: channel?.type ?? 0,
+        icon: channel?.icon ?? 0,
+        enabled: channel?.enabled ?? true,
+        favorite: channel?.favorite ?? false,
+        activeLow: channel?.activeLow ?? false
+    };
+
+    return `
+        <div class="form-group">
+            <label>Name</label>
+            <input
+                id="channelName"
+                class="textbox"
+                value="${c.name}">
+        </div>
+
+        <div class="form-group">
+            <label>Room</label>
+            <select id="channelRoom" class="textbox">
+                ${buildRoomOptions(c.roomId)}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Type</label>
+            <select id="channelType" class="textbox">
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Icon</label>
+            <select id="channelIcon" class="textbox">
+
+            </select>
+        </div>
+
+        <label>
+            <input
+                type="checkbox"
+                id="channelEnabled"
+                ${c.enabled ? "checked" : ""}>
+            Enabled
+        </label>
+
+        <label>
+            <input
+                type="checkbox"
+                id="channelFavorite"
+                ${c.favorite ? "checked" : ""}>
+            Favorite
+        </label>
+
+        <label>
+            <input
+                type="checkbox"
+                id="channelActiveLow"
+                ${c.activeLow ? "checked" : ""}>
+            Active Low
+        </label>
+    `;
+}
+function buildRoomOptions(selectedId)
+{
+    let html = `<option value="0">No Room</option>`;
+
+    getRooms().forEach(room =>
+    {
+        html += `
+            <option
+                value="${room.id}"
+                ${room.id == selectedId ? "selected" : ""}>
+                ${room.name}
+            </option>
+        `;
+    });
+
+    return html;
+}
 async function createChannel(channel)
 {
     return await apiPost("/api/channels", channel);
