@@ -34,6 +34,7 @@
 #include "Web/Assets/Js/Utils/DomJs.h"
 #include "Web/Assets/Js/Utils/ApiJs.h"
 #include "Web/Assets/Js/Utils/IconJs.h"
+#include "Web/Assets/Js/Utils/SvgIcons.h"
 #include "Web/Assets/Js/Utils/WebSocketJs.h"
 
 #include "Web/Assets/Js/Components/SidebarJs.h"
