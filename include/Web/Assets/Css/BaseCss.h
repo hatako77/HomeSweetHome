@@ -10,7 +10,31 @@ const char BASE_CSS[] PROGMEM=R"rawliteral(
 	margin:0;
 	padding:0;
 }
+.icon-picker{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
 
+.icon-item{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:56px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.icon-item:hover{
+    background:var(--hover);
+}
+
+.icon-item.selected{
+    border:2px solid var(--primary);
+    background:rgba(59,130,246,.15);
+}
 html{
 	height:100%;
 }
