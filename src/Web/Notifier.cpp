@@ -11,7 +11,43 @@ void Notifier::reload()
 
     websocket.send(msg);
 }
+static void sendChannel(const char* action, const IOChannel& channel)
+{
+    Message msg("channel", action);
 
+    msg.data["id"]        = channel.id;
+    msg.data["roomId"]    = channel.roomId;
+    msg.data["name"]      = channel.name;
+    msg.data["state"]     = channel.state;
+    msg.data["enabled"]   = channel.enabled;
+    msg.data["favorite"]  = channel.favorite;
+    msg.data["activeLow"] = channel.activeLow;
+    msg.data["type"]      = (uint8_t)channel.type;
+    msg.data["icon"]      = (uint8_t)channel.icon;
+    msg.data["driverId"]  = channel.address.driverId;
+    msg.data["device"]    = channel.address.device;
+    msg.data["pin"]       = channel.address.pin;
+
+    websocket.send(msg);
+}
+void Notifier::channelCreated(const IOChannel& channel)
+{
+    sendChannel("created", channel);
+}
+
+void Notifier::channelUpdated(const IOChannel& channel)
+{
+    sendChannel("updated", channel);
+}
+
+void Notifier::channelDeleted(uint16_t id)
+{
+    Message msg("channel", "deleted");
+
+    msg.data["id"] = id;
+
+    websocket.send(msg);
+}
 void Notifier::sceneAdded(const Scene& scene)
 {
     Message msg("scene", "added");
