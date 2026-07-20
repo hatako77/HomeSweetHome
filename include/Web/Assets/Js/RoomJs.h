@@ -231,8 +231,6 @@ function createRoomCard(room)
         list.appendChild(createChannelTile(channel));
     });
 
-    enableDrag(list);
-
     card.querySelector(".add-channel-btn").onclick=(e)=>
     {
         e.stopPropagation();
