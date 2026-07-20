@@ -80,12 +80,12 @@ void registerRoutes(WebServerService& web)
         request->send(response);
     });
 
-    server.on("/js/icons.js",HTTP_GET,[](AsyncWebServerRequest* request)
+    server.on("/js/utils/icons.js",HTTP_GET,[](AsyncWebServerRequest* request)
     {
         request->send(200,"application/javascript",ICON_JS);
     });
     
-    server.on("/js/svgicons.js",HTTP_GET,[](AsyncWebServerRequest* request)
+    server.on("/js/utils/svgicons.js",HTTP_GET,[](AsyncWebServerRequest* request)
     {
         request->send(200,"application/javascript",SVG_ICONS);
     });
