@@ -49,6 +49,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 
 <script src="/js/dashboard.js"></script>
 <script src="/js/room.js"></script>
+<script src="/js/channel.js"></script>
 <script src="/js/scene.js"></script>
 <script src="/js/schedule.js"></script>
 <script src="/js/sensor.js"></script>
