@@ -19,6 +19,7 @@
 #include "Web/Assets/Css/ResponsiveCss.h"
 
 #include "Web/Assets/Js/StateJs.h"
+#include "Web/Assets/Js/SortableJs.h"
 #include "Web/Assets/Js/ChannelJs.h"
 #include "Web/Assets/Js/RouterJs.h"
 #include "Web/Assets/Js/AppJs.h"
@@ -80,11 +81,15 @@ void registerRoutes(WebServerService& web)
         request->send(response);
     });
 
+    server.on("/js/libs/sortable.min.js",HTTP_GET,[](AsyncWebServerRequest* request)
+    {
+        request->send(200,"application/javascript",SORTABLE_JS);
+    });
     server.on("/js/utils/icons.js",HTTP_GET,[](AsyncWebServerRequest* request)
     {
         request->send(200,"application/javascript",ICON_JS);
     });
-    
+
     server.on("/js/utils/svgicons.js",HTTP_GET,[](AsyncWebServerRequest* request)
     {
         request->send(200,"application/javascript",SVG_ICONS);
