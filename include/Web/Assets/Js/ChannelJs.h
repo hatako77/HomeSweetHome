@@ -76,7 +76,21 @@ async function showChannelDialog(channel = null)
                     </option>
                 </select>
             </div>
-
+            <div class="form-group">
+                <label>Driver</label>
+                <select id="chDriver" class="textbox">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Device</label>
+                <select id="chDevice" class="textbox">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Pin</label>
+                <select id="chPin" class="textbox">
+                </select>
+            </div>
             <div class="form-group">
                 <label>Icon</label>
                 <select id="chIcon"
@@ -113,8 +127,21 @@ async function showChannelDialog(channel = null)
     });
 
     fillChannelIcons(channel?.icon ?? 0);
+    fillDrivers(channel);
+    fillDevices(channel);
+    fillPins(channel);
+}
+function fillDrivers(channel)
+{
 }
 
+function fillDevices(channel)
+{
+}
+
+function fillPins(channel)
+{
+}
 function fillChannelIcons(selected = 0)
 {
     const icons =
