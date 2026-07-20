@@ -189,25 +189,17 @@ async function saveChannel(id)
 
 async function toggleChannel(id)
 {
-    const channel = await apiGet(`/api/channels?id=${id}`);
+    const channel = findChannel(id);
 
     if(!channel)
         return;
 
-    const result = await apiPut(`/api/channels?id=${id}`,
+    await apiPut(`/api/channels?id=${id}`,
     {
         state: !channel.state
     });
 
-    if(!result || result.success === false)
-    {
-        showToast(result?.message ?? "Toggle failed", "error");
-        return;
-    }
-
-    await initRooms();
-
-    renderRooms();
+    // منتظر پیام WebSocket می‌مانیم.
 }
 
 async function deleteChannel(id)
