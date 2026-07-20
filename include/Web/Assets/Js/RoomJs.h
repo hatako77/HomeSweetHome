@@ -233,8 +233,20 @@ function createRoomCard(room)
 
     enableDrag(list);
 
+    tile.querySelector(".add-channel-btn").onclick=(e)=>
+    {
+        e.stopPropagation();
+        addChannel(room.id);
+    };
     return card;
 }
+
+
+async function addChannel(roomId)
+{
+    console.log("Add Channel",roomId);
+}
+
 function createChannelTile(channel)
 {
     const tile = create("div","channel-tile");
