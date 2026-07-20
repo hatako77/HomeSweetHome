@@ -24,7 +24,10 @@ function initSidebar()
             <i class="fa-solid fa-house"></i>
             <span>Rooms</span>
         </div>
-
+        <div class="menu-item" data-page="channels">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Channels</span>
+        </div>
         <div class="menu-item" data-page="scenes">
             <i class="fa-solid fa-wand-magic-sparkles"></i>
             <span>Scenes</span>
