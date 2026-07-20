@@ -184,7 +184,7 @@ function buildIconPicker()
             selectedChannelIcon = index;
             buildIconPicker();
         };
-        picker.appendChild(item);
+        picker.endChild(item);
     });
 }
 //==============================================================
@@ -374,7 +374,7 @@ function renderChannels()
 async function showChannels()
 {
     await initChannels();
-    const app = $("app");
+    const app = $("content");
     app.innerHTML = `
         <div class="page">
             <div class="page-header">
