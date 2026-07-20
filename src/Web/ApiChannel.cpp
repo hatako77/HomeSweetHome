@@ -40,6 +40,9 @@ void ApiChannel::registerRoutes(WebServerService& web)
             doc["activeLow"]=ch->activeLow;
             doc["type"]=(uint8_t)ch->type;
             doc["icon"]=(uint8_t)ch->icon;
+            doc["driverId"] = ch->address.driverId;
+            doc["device"]   = ch->address.device;
+            doc["pin"]      = ch->address.pin;
     
             String out;
             serializeJson(doc,out);
@@ -75,6 +78,9 @@ void ApiChannel::registerRoutes(WebServerService& web)
             o["activeLow"]=ch->activeLow;
             o["type"]=(uint8_t)ch->type;
             o["icon"]=(uint8_t)ch->icon;
+            o["driverId"] = ch->address.driverId;
+            o["device"]   = ch->address.device;
+            o["pin"]      = ch->address.pin;
         }
     
         String out;
@@ -117,12 +123,12 @@ void ApiChannel::registerRoutes(WebServerService& web)
         channel.activeLow=doc["activeLow"]|false;
     
         IOType type;
-        if(typeFromValue(doc["type"]|0,type))
-            channel.type=type;
+        if(typeFromValue(doc["type"]|0,type)) channel.type=type;
     
-        IOIcon icon;
-        if(iconFromValue(doc["icon"]|0,icon))
-            channel.icon=icon;
+        channel.icon = (IOIcon)(doc["icon"] | 0);
+        channel.address.driverId = doc["driverId"] | 0;
+        channel.address.device   = doc["device"]   | 0;
+        channel.address.pin      = doc["pin"]      | 0;
         IOChannel* created=ioManager.add(channel);
     
         if(!created)
@@ -218,6 +224,9 @@ void ApiChannel::registerRoutes(WebServerService& web)
         updated.favorite=doc["favorite"]|updated.favorite;
         updated.activeLow=doc["activeLow"]|updated.activeLow;
         updated.state=doc["state"]|updated.state;
+        updated.address.driverId = doc["driverId"] | updated.address.driverId;
+        updated.address.device   = doc["device"]   | updated.address.device;
+        updated.address.pin      = doc["pin"]      | updated.address.pin;
         IOType type;
         if(typeFromValue(doc["type"]|(uint8_t)updated.type,type))
             updated.type=type;
@@ -244,7 +253,6 @@ void ApiChannel::registerRoutes(WebServerService& web)
         if(ch)
             Notifier::channelChanged(*ch);
     
-        Notifier::roomsChanged();
     
         request->send(
             200,
@@ -280,7 +288,6 @@ void ApiChannel::registerRoutes(WebServerService& web)
     
         ioManager.save();
     
-        Notifier::roomsChanged();
     
         request->send(
             200,
