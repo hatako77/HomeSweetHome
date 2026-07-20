@@ -239,7 +239,7 @@ function createChannelTile(channel)
         <div class="channel-info">
 
             <div class="channel-icon">
-                ${getIcon(channel.icon)}
+                ${icon(channel.icon)}
             </div>
 
             <div class="channel-text">
