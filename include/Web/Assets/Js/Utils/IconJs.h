@@ -5,36 +5,40 @@
 
 const char ICONS_JS[] PROGMEM = R"rawliteral(
 
+const iconMap =
+{
+    0: "light",
+    1: "fan",
+    2: "door",
+    3: "lock",
+    4: "motion",
+    5: "temperature",
+    6: "water",
+    7: "outlet",
+    8: "bell",
+    9: "curtain",
+    10: "tv",
+
+    plus: "plus",
+    edit: "edit",
+    trash: "trash",
+
+    generic: "generic"
+};
+
 function getIcon(id)
 {
-    switch(Number(id))
-    {
-    case 0:return Icons.light;
-    case 1:return Icons.fan;
-    case 2:return Icons.door;
-    case 3:return Icons.lock;
-    case 4:return Icons.motion;
-    case 5:return Icons.temperature;
-    case 6:return Icons.water;
-    case 7:return Icons.outlet;
-    case 8:return Icons.bell;
-    case 9:return Icons.curtain;
-    case 10:return Icons.tv;
-    case "plus":return Icons.plus;
-    case "edit":return Icons.edit;
-    case "trash":return Icons.trash;
-
-    default:return Icons.generic;
-    }
+    const key = iconMap[id] ?? "generic";
+    return Icons[key] ?? Icons.generic;
 }
 
-function icon(id,size=22)
+function icon(id, size = 22)
 {
-return `
-<span class="svg-icon" style="width:${size}px;height:${size}px">
-${getIcon(id)}
-</span>
-`;
+    return `
+        <span class="svg-icon" style="width:${size}px;height:${size}px">
+            ${getIcon(id)}
+        </span>
+    `;
 }
 
 )rawliteral";
