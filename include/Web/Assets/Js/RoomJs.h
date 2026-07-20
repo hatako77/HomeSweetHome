@@ -233,7 +233,7 @@ function createRoomCard(room)
 
     enableDrag(list);
 
-    tile.querySelector(".add-channel-btn").onclick=(e)=>
+    card.querySelector(".add-channel-btn").onclick=(e)=>
     {
         e.stopPropagation();
         addChannel(room.id);
@@ -484,15 +484,15 @@ function updateRoom(room)
     renderRooms();
 }
 
-function addChannel(roomId,channel)
+function addChannelLocal(roomId, channel)
 {
-    const room=findRoom(roomId);
+    const room = findRoom(roomId);
 
     if(!room)
         return;
 
     if(!room.channels)
-        room.channels=[];
+        room.channels = [];
 
     room.channels.push(channel);
 
