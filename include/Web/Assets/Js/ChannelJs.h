@@ -133,15 +133,52 @@ async function showChannelDialog(channel = null)
 }
 function fillDrivers(channel)
 {
+    $("chDriver").innerHTML = `
+        <option value="0">PCF8574</option>
+    `;
+
 }
 
 function fillDevices(channel)
 {
+    const select = $("chDevice");
+
+    let html = "";
+
+    for(let i=0;i<8;i++)
+    {
+        html += `
+            <option
+                value="${i}"
+                ${channel?.device==i?"selected":""}>
+                PCF ${i+1}
+            </option>
+        `;
+    }
+
+    select.innerHTML = html;
 }
 
 function fillPins(channel)
 {
+    const select = $("chPin");
+
+    let html = "";
+
+    for(let i=0;i<8;i++)
+    {
+        html += `
+            <option
+                value="${i}"
+                ${channel?.pin==i?"selected":""}>
+                Pin ${i}
+            </option>
+        `;
+    }
+
+    select.innerHTML = html;
 }
+
 function fillChannelIcons(selected = 0)
 {
     const icons =
@@ -174,6 +211,9 @@ async function saveChannel(id)
 {
     const body =
     {
+        driverId: Number($("chDriver").value);
+        device: Number($("chDevice").value);
+        pin: Number($("chPin").value);
         name: $("chName").value.trim(),
         roomId: Number($("chRoom").value),
         type: Number($("chType").value),
