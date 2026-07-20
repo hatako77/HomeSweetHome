@@ -125,7 +125,7 @@ function handleChannelMessage(msg)
             updateChannelInfo(msg.data);
             break;
 
-        case "added":
+        case "created":
             addChannelLocal(msg.data.roomId, msg.data);
             break;
 
