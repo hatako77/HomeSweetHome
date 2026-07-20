@@ -244,7 +244,17 @@ function createRoomCard(room)
 
 async function addChannel(roomId)
 {
-    console.log("Add Channel",roomId);
+    showChannelDialog({
+        roomId: roomId,
+        enabled: true,
+        favorite: false,
+        activeLow: false,
+        type: 1,
+        icon: 0,
+        driverId: 0,
+        device: 0,
+        pin: 0
+    });
 }
 
 function createChannelTile(channel)
