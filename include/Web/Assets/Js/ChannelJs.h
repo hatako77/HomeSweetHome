@@ -341,16 +341,6 @@ async function deleteChannel(id)
     return true;
 }
 
-async function moveChannel(channelId, roomId)
-{
-    return await apiPost("/api/channels/move",
-    {
-        channelId,
-        roomId
-    });
-}
-
-
 )rawliteral";
 
 #endif
