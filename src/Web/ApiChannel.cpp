@@ -125,7 +125,10 @@ void ApiChannel::registerRoutes(WebServerService& web)
         IOType type;
         if(typeFromValue(doc["type"]|0,type)) channel.type=type;
     
-        channel.icon = (IOIcon)(doc["icon"] | 0);
+        IOIcon icon;
+        
+        if(iconFromValue(doc["icon"] | 0, icon))
+            channel.icon = icon;
         channel.address.driverId = doc["driverId"] | 0;
         channel.address.device   = doc["device"]   | 0;
         channel.address.pin      = doc["pin"]      | 0;
@@ -143,7 +146,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
     
         ioManager.save();
     
-        Notifier::channelChanged(*created);
+        Notifier::channelCreated(*created);
     
         JsonDocument res;
     
@@ -251,7 +254,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             ioManager.getChannel(id);
     
         if(ch)
-            Notifier::channelChanged(*ch);
+            Notifier::channelUpdated(*ch);
     
     
         request->send(
@@ -288,7 +291,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
     
         ioManager.save();
     
-    
+        Notifier::channelDeleted(id);
         request->send(
             200,
             "application/json",
