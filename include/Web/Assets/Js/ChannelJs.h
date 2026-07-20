@@ -276,7 +276,7 @@ function removeChannelLocal(id)
     channels = channels.filter(c => c.id != id);
 }
 //==============================================================
-function addChannelLocal(channel)
+function addChannelToList(channel)
 {
     channels.push(channel);
     channels.sort((a,b)=>
