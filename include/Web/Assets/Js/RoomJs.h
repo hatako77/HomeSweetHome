@@ -251,7 +251,7 @@ function createChannelTile(channel)
 {
     const tile = create("div","channel-tile");
     tile.classList.toggle("on",channel.state);
-    tile.dataset.id = channel.id;
+    tile.setAttribute("data-id", channel.id);
     tile.innerHTML = `
         <div class="channel-info">
 
@@ -320,20 +320,27 @@ function createChannelTile(channel)
     return tile;
 }
 
-function updateTile(tile,channel)
+function updateTile(tile, channel)
 {
-    tile.classList.toggle("on",channel.state);
+    tile.classList.toggle("on", channel.state);
 
-    const label = tile.querySelector(".channel-state");
-    
-    if(label)
+    const state = tile.querySelector(".channel-state");
+
+    if(state)
     {
-        label.className =
-            "channel-state " + (channel.state ? "on":"off");
-    
-        label.innerText =
-            channel.state ? "ON":"OFF";
+        state.classList.toggle("on", channel.state);
+        state.classList.toggle("off", !channel.state);
+        state.innerText = channel.state ? "ON" : "OFF";
     }
+
+    const name = tile.querySelector(".channel-name");
+
+    if(name)
+        name.innerText = channel.name;
+
+        const iconElement = tile.querySelector(".channel-icon");        
+        if(iconElement)
+            iconElement.innerHTML = icon(channel.icon);
 }
 
 function updateChannel(channel)
@@ -379,7 +386,6 @@ function updateChannel(channel)
             targetRoom.channels.push(local);
         }
 
-        renderRooms();
         return;
     }
 
