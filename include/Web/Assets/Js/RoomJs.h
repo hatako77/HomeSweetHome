@@ -231,47 +231,75 @@ function createRoomCard(room)
 
     return card;
 }
-
 function createChannelTile(channel)
 {
     const tile = create("div","channel-tile");
+
     tile.innerHTML = `
         <div class="channel-info">
+
             <div class="channel-icon">
                 <i class="fa-solid fa-lightbulb"></i>
             </div>
+
             <div class="channel-text">
+
                 <div class="channel-name">
                     ${channel.name}
                 </div>
+
                 <div class="channel-state ${channel.state ? "on" : "off"}">
                     ${channel.state ? "ON" : "OFF"}
                 </div>
+
             </div>
+
         </div>
+
         <div class="channel-actions">
-            <button class="icon-btn edit-btn">
-                <i class="fa-solid fa-pen"></i>
+
+            <button class="icon-btn edit-btn" title="Edit">
+                <i class="fa-solid fa-gear"></i>
             </button>
-            <button class="icon-btn delete-btn">
+
+            <button class="icon-btn delete-btn" title="Delete">
                 <i class="fa-solid fa-trash"></i>
             </button>
+
         </div>
     `;
+
+    //--------------------------------------------------
+    // Toggle
+    //--------------------------------------------------
+
     tile.onclick = async () =>
     {
         await toggleChannel(channel.id);
     };
+
+    //--------------------------------------------------
+    // Edit
+    //--------------------------------------------------
+
     tile.querySelector(".edit-btn").onclick = (e) =>
     {
         e.stopPropagation();
-        editChannel(channel);
+
+        editChannel(channel.id);
     };
+
+    //--------------------------------------------------
+    // Delete
+    //--------------------------------------------------
+
     tile.querySelector(".delete-btn").onclick = (e) =>
     {
         e.stopPropagation();
-        removeChannel(channel);
+
+        removeChannel(channel.id);
     };
+
     return tile;
 }
 
