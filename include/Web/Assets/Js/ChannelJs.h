@@ -9,7 +9,7 @@ const char CHANNEL_JS[] PROGMEM = R"rawliteral(async function getChannels(id = n
     if(id != null)url += "?id=" + id;
     return await apiGet(url);
 }
-
+let selectedChannelIcon = 0;
 async function editChannel(id)
 {
     const channel = await apiGet(`/api/channels?id=${id}`);
@@ -93,9 +93,7 @@ async function showChannelDialog(channel = null)
             </div>
             <div class="form-group">
                 <label>Icon</label>
-                <select id="chIcon"
-                        class="textbox">
-                </select>
+                <div id="iconPicker" class="icon-picker"></div>
             </div>
 
             <label class="checkbox">
@@ -126,7 +124,8 @@ async function showChannelDialog(channel = null)
         }
     });
 
-    fillChannelIcons(channel?.icon ?? 0);
+    selectedChannelIcon = channel?.icon ?? 0;
+    buildIconPicker();
     fillDrivers(channel);
     fillDevices(channel);
     fillPins(channel);
@@ -207,17 +206,59 @@ function fillChannelIcons(selected = 0)
     `).join("");
 }
 
+function buildIconPicker()
+{
+    const picker = $("iconPicker");
+
+    picker.innerHTML = "";
+
+    const names =
+    [
+        "light",
+        "fan",
+        "door",
+        "lock",
+        "motion",
+        "temperature",
+        "water",
+        "outlet",
+        "bell",
+        "curtain",
+        "tv",
+        "generic"
+    ];
+
+    names.forEach((name,index)=>
+    {
+        const item = document.createElement("div");
+
+        item.className =
+            "icon-item" +
+            (index===selectedChannelIcon ? " selected" : "");
+
+        item.innerHTML = icon(name,26);
+
+        item.onclick = () =>
+        {
+            selectedChannelIcon = index;
+
+            buildIconPicker();
+        };
+
+        picker.appendChild(item);
+    });
+}
 async function saveChannel(id)
 {
     const body =
     {
-        driverId: Number($("chDriver").value);
-        device: Number($("chDevice").value);
-        pin: Number($("chPin").value);
+        driverId: Number($("chDriver").value),
+        device: Number($("chDevice").value),
+        pin: Number($("chPin").value),
         name: $("chName").value.trim(),
         roomId: Number($("chRoom").value),
         type: Number($("chType").value),
-        icon: Number($("chIcon").value),
+        icon: selectedChannelIcon,
         enabled: $("chEnabled").checked,
         favorite: $("chFavorite").checked,
         activeLow: $("chActiveLow").checked
