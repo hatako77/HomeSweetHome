@@ -10,6 +10,7 @@ async function getChannels(id = null)
     if(id != null)url += "?id=" + id;
     return await apiGet(url);
 }
+let channels = [];
 let selectedChannelIcon = 0;
 async function editChannel(id)
 {
@@ -308,6 +309,160 @@ async function deleteChannel(id)
 
     return true;
 }
+
+async function initChannels()
+{
+    channels = await getChannels();
+
+    if(!Array.isArray(channels))
+        channels = [];
+}
+function findChannel(id)
+{
+    return channels.find(c => c.id == id);
+}
+function removeChannelLocal(id)
+{
+    channels = channels.filter(c => c.id != id);
+}
+function addChannelLocal(channel)
+{
+    channels.push(channel);
+
+    channels.sort((a,b)=>
+        a.roomId - b.roomId ||
+        a.name.localeCompare(b.name)
+    );
+}
+function updateChannelLocal(channel)
+{
+    const index =
+        channels.findIndex(c=>c.id==channel.id);
+
+    if(index < 0)
+        return;
+
+    Object.assign(channels[index],channel);
+
+    channels.sort((a,b)=>
+        a.roomId - b.roomId ||
+        a.name.localeCompare(b.name)
+    );
+}
+function renderChannels()
+{
+    const body = $("page");
+
+    let html = `
+        <div class="page-header">
+
+            <div class="page-title">
+                Channels
+            </div>
+
+            <button
+                class="btn primary"
+                onclick="showChannelDialog()">
+
+                ${icon("plus")}
+                Add Channel
+
+            </button>
+
+        </div>
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+                    <th>Room</th>
+                    <th>Type</th>
+                    <th>State</th>
+                    <th></th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+    `;
+    channels.forEach(channel =>
+    {
+        const room = findRoom(channel.roomId);
+
+        html += `
+            <tr>
+
+                <td>
+
+                    ${iconByIndex(channel.icon)}
+                    ${channel.name}
+
+                </td>
+
+                <td>
+
+                    ${room ? room.name : "-"}
+
+                </td>
+
+                <td>
+
+                    ${
+                        channel.type == 0 ?
+                        "Input" :
+                        "Output"
+                    }
+
+                </td>
+
+                <td>
+
+                    ${
+                        channel.state ?
+                        "ON" :
+                        "OFF"
+                    }
+
+                </td>
+
+                <td class="actions">
+
+                    <button
+                        class="icon-btn"
+                        onclick="editChannel(${channel.id})">
+
+                        ${icon("edit")}
+
+                    </button>
+
+                    <button
+                        class="icon-btn danger"
+                        onclick="deleteChannel(${channel.id})">
+
+                        ${icon("trash")}
+
+                    </button>
+
+                </td>
+
+            </tr>
+        `;
+    });
+    html += `
+            </tbody>
+
+        </table>
+    `;
+
+    body.innerHTML = html;
+}
+
+
+
 
 )rawliteral";
 
