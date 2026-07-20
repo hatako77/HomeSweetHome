@@ -200,14 +200,14 @@ function createRoomCard(room)
                     class="icon-btn"
                     onclick="editRoom(${room.id})"
                     title="Edit">
-                    <i class="fa-solid fa-pen"></i>
+                    ${icon("edit")}
                 </button>
 
                 <button
                     class="icon-btn danger"
                     onclick="deleteRoom(${room.id})"
                     title="Delete">
-                    <i class="fa-solid fa-trash"></i>
+                    ${icon("trash")}
                 </button>
 
             </div>
