@@ -3,7 +3,7 @@
 
 #include <pgmspace.h>
 
-const char ICON_JS[] PROGMEM = R"rawliteral(
+const char ICONS_JS[] PROGMEM = R"rawliteral(
 
 function getIcon(id)
 {
