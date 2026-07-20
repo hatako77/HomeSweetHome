@@ -138,7 +138,6 @@ void ApiChannel::registerRoutes(WebServerService& web)
         ioManager.save();
     
         Notifier::channelChanged(*created);
-        Notifier::roomsChanged();
     
         JsonDocument res;
     
