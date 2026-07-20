@@ -125,11 +125,12 @@ async function showChannelDialog(channel = null)
         }
     });
 
-    selectedChannelIcon = channel?.icon ?? 0;
-    buildIconPicker();
     fillDrivers(channel);
     fillDevices(channel);
     fillPins(channel);
+    
+    selectedChannelIcon = channel?.icon ?? 0;
+    buildIconPicker();
 }
 function fillDrivers(channel)
 {
@@ -179,33 +180,6 @@ function fillPins(channel)
     select.innerHTML = html;
 }
 
-function fillChannelIcons(selected = 0)
-{
-    const icons =
-    [
-        "Light",
-        "Fan",
-        "Door",
-        "Lock",
-        "Motion",
-        "Temperature",
-        "Water",
-        "Outlet",
-        "Bell",
-        "Curtain",
-        "TV",
-        "Generic"
-    ];
-
-    const select = $("chIcon");
-
-    select.innerHTML = icons.map((name,index)=>`
-        <option value="${index}"
-            ${selected==index?"selected":""}>
-            ${name}
-        </option>
-    `).join("");
-}
 
 function buildIconPicker()
 {
@@ -290,9 +264,6 @@ async function saveChannel(id)
     }
 
     showToast("Saved","success");
-
-    await initRooms();
-
     return true;
 }
 
@@ -315,6 +286,7 @@ async function toggleChannel(id)
             result?.message ?? "Toggle failed",
             "error"
         );
+        return;
     }
 
     // هیچ کاری نکن.
@@ -331,10 +303,6 @@ async function deleteChannel(id)
         showToast(result?.message ?? "Delete failed","error");
         return false;
     }
-
-    await initRooms();
-
-    renderRooms();
 
     showToast("Channel deleted","success");
 
