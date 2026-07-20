@@ -194,14 +194,23 @@ async function toggleChannel(id)
     if(!channel)
         return;
 
-    await apiPut(`/api/channels?id=${id}`,
+    const result = await apiPut(
+        `/api/channels?id=${id}`,
+        {
+            state: !channel.state
+        });
+
+    if(!result || result.success === false)
     {
-        state: !channel.state
-    });
+        showToast(
+            result?.message ?? "Toggle failed",
+            "error"
+        );
+    }
 
-    // منتظر پیام WebSocket می‌مانیم.
+    // هیچ کاری نکن.
+    // WebSocket خودش UI را آپدیت می‌کند.
 }
-
 async function deleteChannel(id)
 {
     const result = await apiDelete(
