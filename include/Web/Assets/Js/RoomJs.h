@@ -417,24 +417,6 @@ async function toggleChannel(id)
     });
 }
 
-function enableDrag(list)
-{
-    new Sortable(list,
-    {
-        animation:150,
-        group:"channels",
-        draggable: ".channel-tile",
-
-        onEnd(evt)
-        {
-            moveChannel(
-                Number(evt.item.dataset.id),
-                Number(evt.to.dataset.room)
-            );
-        }
-    });
-}
-
 function findRoom(id)
 {
     return getRooms().find(r=>r.id===id);
