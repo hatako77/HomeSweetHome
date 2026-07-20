@@ -184,7 +184,7 @@ function buildIconPicker()
             selectedChannelIcon = index;
             buildIconPicker();
         };
-        picker.endChild(item);
+        picker.appendChild(item);
     });
 }
 //==============================================================
