@@ -66,19 +66,15 @@ function connectWebSocket()
             //--------------------------------------------------
             // CHANNEL
             //--------------------------------------------------
-
+            
             case "channel":
-
-                handleChannelMessage(msg);
-
+                handleChannelMessage(msg);            
                 break;
-
             //--------------------------------------------------
             // ROOM
             //--------------------------------------------------
 
             case "room":
-
             handleRoomMessage(msg);
         
             break;
@@ -126,29 +122,17 @@ function handleChannelMessage(msg)
     switch(msg.action)
     {
         case "changed":
-
-            updateChannel(msg.data);
-
+            updateChannelInfo(msg.data);
             break;
 
         case "added":
-
-            addChannel(msg.data.roomId,msg.data);
-
+            addChannelLocal(msg.data.roomId, msg.data);
             break;
 
         case "removed":
-
             removeChannel(msg.data.id);
-
             break;
     }
-
-    if(App.currentPage==="rooms")
-        renderRooms();
-
-    if(App.currentPage==="dashboard")
-        updateDashboard();
 }
 
 async function handleRoomMessage(msg)
@@ -161,13 +145,6 @@ async function handleRoomMessage(msg)
         case "removed":
 
             await initRooms();
-
-            if(App.currentPage==="rooms")
-                renderRooms();
-
-            if(App.currentPage==="dashboard")
-                updateDashboard();
-
             break;
     }
 }
