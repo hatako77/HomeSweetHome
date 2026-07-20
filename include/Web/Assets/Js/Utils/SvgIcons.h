@@ -6,6 +6,27 @@
 const char SVG_ICONS[] PROGMEM = R"rawliteral(
 
 window.Icons={
+Icons.plus=`
+<svg viewBox="0 0 24 24">
+<path d="M12 5v14"/>
+<path d="M5 12h14"/>
+</svg>`;
+
+Icons.edit=`
+<svg viewBox="0 0 24 24">
+<path d="M4 20l4-1l10-10l-3-3L5 16z"/>
+<path d="M14 5l3 3"/>
+</svg>`;
+
+Icons.trash=`
+<svg viewBox="0 0 24 24">
+<path d="M5 7h14"/>
+<path d="M9 7V4h6v3"/>
+<path d="M8 7v12"/>
+<path d="M16 7v12"/>
+<path d="M6 7l1 13h10l1-13"/>
+</svg>`;
+
 light:`
 <svg viewBox="0 0 24 24">
 <path d="M9 18h6M10 21h4M12 2a7 7 0 0 0-4 12c.7.8 1.4 1.8 1.8 3h4.4c.4-1.2 1.1-2.2 1.8-3A7 7 0 0 0 12 2z"/>
