@@ -20,6 +20,10 @@ function getIcon(id)
     case 8:return Icons.bell;
     case 9:return Icons.curtain;
     case 10:return Icons.tv;
+    case "plus":return Icons.plus;
+    case "edit":return Icons.edit;
+    case "trash":return Icons.trash;
+
     default:return Icons.generic;
     }
 }
