@@ -3,7 +3,8 @@
 
 #include <pgmspace.h>
 
-const char CHANNEL_JS[] PROGMEM = R"rawliteral(async function getChannels(id = null)
+const char CHANNEL_JS[] PROGMEM = R"rawliteral(
+async function getChannels(id = null)
 {
     let url = "/api/channels";
     if(id != null)url += "?id=" + id;
@@ -302,11 +303,11 @@ async function toggleChannel(id)
     if(!channel)
         return;
 
-    const result = await apiPut(
-        `/api/channels?id=${id}`,
-        {
-            state: !channel.state
-        });
+    const result = await apiPost("/api/channels/state",
+    {
+        id,state: !channel.state
+    }
+);
 
     if(!result || result.success === false)
     {
