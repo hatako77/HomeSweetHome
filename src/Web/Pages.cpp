@@ -79,6 +79,21 @@ void registerRoutes(WebServerService& web)
         request->send(response);
     });
 
+    server.on("/js/icons.js",HTTP_GET,[](AsyncWebServerRequest* request)
+    {
+        request->send(200,"application/javascript",ICON_JS);
+    });
+    
+    server.on("/js/svgicons.js",HTTP_GET,[](AsyncWebServerRequest* request)
+    {
+        request->send(200,"application/javascript",SVG_ICONS);
+    });
+
+    server.on("/js/channel.js",HTTP_GET,[](AsyncWebServerRequest* request)
+    {
+        request->send(200,"application/javascript",CHANNEL_JS);
+    });
+
     server.on("/js/state.js",HTTP_GET,[](AsyncWebServerRequest* request)
     {
         request->send(200,"application/javascript",STATE_JS);
