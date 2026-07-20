@@ -435,17 +435,6 @@ function enableDrag(list)
     });
 }
 
-async function moveChannel(channelId,roomId)
-{
-    await apiPost("/api/channels/move",
-    {
-        channelId,
-        roomId
-    });
-
-    // منتظر WebSocket هستیم.
-}
-
 function findRoom(id)
 {
     return getRooms().find(r=>r.id===id);
