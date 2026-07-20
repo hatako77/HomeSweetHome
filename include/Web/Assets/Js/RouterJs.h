@@ -16,7 +16,9 @@ const Router =
             case "dashboard":
                 await initDashboard();
                 break;
-
+            case "channels":
+                await showChannels();
+                break;
             case "rooms":
                 await showRooms();
                 break;
