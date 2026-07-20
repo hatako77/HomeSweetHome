@@ -186,7 +186,7 @@ function createRoomCard(room)
         <div class="room-header">
 
             <div class="room-name">
-                <i class="fa-solid fa-house"></i>
+                ${icon("generic")}
                 ${room.name}
             </div>
 
@@ -250,7 +250,8 @@ async function addChannel(roomId)
 function createChannelTile(channel)
 {
     const tile = create("div","channel-tile");
-
+    tile.classList.toggle("on",channel.state);
+    tile.dataset.id = channel.id;
     tile.innerHTML = `
         <div class="channel-info">
 
@@ -275,11 +276,11 @@ function createChannelTile(channel)
         <div class="channel-actions">
 
             <button class="icon-btn edit-btn" title="Edit">
-                <i class="fa-solid fa-gear"></i>
+                ${icon("edit")}
             </button>
 
             <button class="icon-btn delete-btn" title="Delete">
-                <i class="fa-solid fa-trash"></i>
+                ${icon("trash")}
             </button>
 
         </div>
@@ -323,10 +324,16 @@ function updateTile(tile,channel)
 {
     tile.classList.toggle("on",channel.state);
 
-    const label = tile.querySelector(".tile-label");
-
+    const label = tile.querySelector(".channel-state");
+    
     if(label)
-        label.innerText = channel.state ? "ON" : "OFF";
+    {
+        label.className =
+            "channel-state " + (channel.state ? "on":"off");
+    
+        label.innerText =
+            channel.state ? "ON":"OFF";
+    }
 }
 
 function updateChannel(channel)
@@ -384,7 +391,10 @@ function updateChannel(channel)
 
 async function toggleChannel(id)
 {
-    const ch = getChannel(id);
+    const ch = findChannel(id);
+
+    if(!ch)
+        return;
 
     await apiPut("/api/channels?id=" + id,{
         state: !ch.state
@@ -397,7 +407,7 @@ function enableDrag(list)
     {
         animation:150,
         group:"channels",
-        draggable:".tile",
+        draggable: ".channel-tile",
 
         onEnd(evt)
         {
