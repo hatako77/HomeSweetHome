@@ -17,32 +17,6 @@ void IOManager::begin()
     channelCount = 0;
     nextId = 1;
 
-    for (uint16_t d = 0; d < driverCount; d++)
-    {
-        IIODriver* drv = drivers[d];
-        for (uint16_t device = 0; device < drv->deviceCount(); device++)
-        {
-        if (!drv->isConnected(device))
-            continue;
-            for (uint16_t pin = 0; pin < drv->pinCount(device); pin++)
-            {
-                IOChannel ch;    
-                ch.id = 0;
-                ch.name = "IO " + String(channelCount  + 1);
-                ch.icon = IOIcon::Light;
-                ch.type = IOType::DigitalOutput;
-                ch.state = false;
-                ch.enabled = true;
-                ch.activeLow = false;    
-                ch.address.driverId = d;
-                ch.address.device = device;
-                ch.address.pin = pin;    
-                ch.roomId = 0;
-                ch.favorite = false;    
-                add(ch);
-            }
-        }
-    }    
     bool loaded = load();
     
     Serial.print("Load: ");
