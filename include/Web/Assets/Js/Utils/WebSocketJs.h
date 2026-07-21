@@ -121,15 +121,18 @@ function handleChannelMessage(msg)
 
     switch(msg.action)
     {
-        case "changed":
-            updateChannelInfo(msg.data);
+        case "updated":
+            updateChannel(msg.data);
+            updateChannelInList(msg.data);
             break;
 
         case "created":
             addChannelToList(msg.data);
+            addChannelLocal(msg.data.roomId, msg.data);
             break;
 
-        case "removed":
+        case "deleted":
+            removeChannelFromList(msg.data.id);
             removeChannel(msg.data.id);
             break;
     }
