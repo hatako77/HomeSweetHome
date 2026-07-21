@@ -236,49 +236,31 @@ bool IOManager::save() const
 
 bool IOManager::load()
 {
-    if (!LittleFS.exists("/io.json"))
-        return false;
-
+    if (!LittleFS.exists("/io.json")) return false;
     File f = LittleFS.open("/io.json", "r");
-
-    if (!f)
-        return false;
-
+    if (!f) return false;
     JsonDocument doc;
-
     deserializeJson(doc, f);
-
     JsonArray arr = doc.as<JsonArray>();
-
-    uint8_t i = 0;
-
-    for (JsonObject o : arr)
+    channelCount = 0;
+    for(JsonObject o : arr)
     {
-        if (i >= count())
-            break;
-
-        IOChannel* ch = &channels[i];
-
-        ch->name = o["name"] | ch->name;
-        ch->enabled = o["enabled"] | true;
-        ch->activeLow = o["activeLow"] | false;
-        IOType type;
-        if (typeFromValue(o["type"] | 1, type))
-            ch->type = type;
-        IOIcon icon;        
-        if (iconFromValue(o["icon"] | 0, icon))
-            ch->icon = icon;
-        ch->favorite = o["favorite"] | false;
-        ch->roomId = o["roomId"] | 0;
-        ch->favorite = o["favorite"] | false;
-        ch->address.driverId = o["driverId"] | 0;
-        ch->address.device = o["device"] | 0;
-        ch->address.pin = o["pin"] | 0;
-        i++;
+        if(channelCount >= MAX_IO) break;    
+        IOChannel& ch = channels[channelCount++];    
+        ch.id = o["id"] | nextId;    
+        if(ch.id >= nextId) nextId = ch.id + 1;    
+        ch.name = o["name"] | "";
+        ch.enabled = o["enabled"] | true;
+        ch.activeLow = o["activeLow"] | false;
+        ch.favorite = o["favorite"] | false;
+        ch.roomId = o["roomId"] | 0;    
+        typeFromValue(o["type"] | 1, ch.type);
+        iconFromValue(o["icon"] | 0, ch.icon);    
+        ch.address.driverId = o["driverId"] | 0;
+        ch.address.device   = o["device"]   | 0;
+        ch.address.pin      = o["pin"]      | 0;
     }
-
     f.close();
-
     return true;
 }
 
