@@ -390,6 +390,26 @@ async function showChannels()
     renderChannelsTable();
 }
 //==============================================================
+function updateChannelInList(channel)
+{
+    const index = channels.findIndex(c => c.id == channel.id);
+
+    if(index < 0)
+        return;
+
+    channels[index] = channel;
+
+    renderChannelsTable();
+}
+//==============================================================
+function removeChannelFromList(id)
+{
+    channels = channels.filter(c => c.id != id);
+
+    renderChannelsTable();
+}
+//==============================================================
+
 function renderChannelsTable()
 {
     const container = $("channelsTable");
