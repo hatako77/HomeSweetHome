@@ -279,10 +279,8 @@ function removeChannelLocal(id)
 function addChannelToList(channel)
 {
     channels.push(channel);
-    channels.sort((a,b)=>
-        a.roomId - b.roomId ||
-        a.name.localeCompare(b.name)
-    );
+    channels.sort((a,b)=> a.roomId - b.roomId || (a.name || "").localeCompare(b.name || ""));
+    renderChannelsTable();
 }
 //==============================================================
 function updateChannelLocal(channel)
@@ -388,6 +386,7 @@ async function showChannels()
             <div id="channelsTable"></div>
         </div>
     `;
+    channels = await getChannels();
     renderChannelsTable();
 }
 //==============================================================
@@ -408,15 +407,17 @@ function renderChannelsTable()
             </thead>
             <tbody>
     `;
-    getRooms().forEach(room =>
-    {
-        if(!room.channels) return;
-        room.channels.forEach(channel =>
+        channels.forEach(channel =>
         {
-            html += buildChannelRow(channel, room.name);
+            const room = findRoom(channel.roomId);
+        
+            html += buildChannelRow(
+                channel,
+                room ? room.name : "-"
+            );
         });
-    });
-    html += `
+        
+        html += `
             </tbody>
         </table>
     `;
