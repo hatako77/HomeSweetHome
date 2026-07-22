@@ -237,6 +237,7 @@ async function toggleChannel(id)
     }
     );
     console.log(result);
+    console.log("toggle finished");
     if(!result || result.success === false)
     {
         showToast(
