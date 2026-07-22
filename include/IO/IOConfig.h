@@ -40,7 +40,9 @@ struct IOAddress
 };
 struct IOChannel
 {
+
     uint16_t id;
+    bool connected = true;
     String name;
     IOIcon icon;
     IOType type;
