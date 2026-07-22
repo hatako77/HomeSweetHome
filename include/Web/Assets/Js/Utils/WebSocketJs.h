@@ -127,8 +127,8 @@ function handleChannelMessage(msg)
             break;
         
         case "changed":
-            updateChannelInfo(msg.data);        
-            if (typeof updateRoomChannel === "function") updateRoomChannel(msg.data);
+            console.log("changed");
+
             updateChannel(msg.data);
             updateChannelInList(msg.data);
             break;
