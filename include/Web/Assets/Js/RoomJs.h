@@ -191,10 +191,6 @@ function createRoomCard(room)
             </div>
 
             <div class="room-actions">
-
-                <div class="room-count">
-                    ${(room.channels ?? []).length}
-                </div>
                 
                 <button class="icon-btn add-channel-btn" title="Add Channel">
                     ${icon("plus")}
