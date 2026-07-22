@@ -434,9 +434,17 @@ function updateChannelInList(channel)
 //==============================================================
 function removeChannelFromList(id)
 {
-    channels = channels.filter(c => c.id != id);
+    const index = channels.findIndex(c => c.id == id);
+
+    if(index < 0)
+        return;
+
+    channels.splice(index, 1);
 
     renderChannelsTable();
+
+    if(App.currentPage === "rooms")
+        renderRooms();
 }
 //==============================================================
 
