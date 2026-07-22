@@ -128,9 +128,10 @@ function handleChannelMessage(msg)
         
         case "changed":
             console.log("changed");
-
             updateChannel(msg.data);
             updateChannelInList(msg.data);
+            updateRoomChannel(msg.data);
+
             break;
 
         case "created":
