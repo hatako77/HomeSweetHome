@@ -319,6 +319,7 @@ function updateTile(tile, channel)
     {
         inner.classList.toggle("on", channel.state);
         inner.classList.toggle("off", !channel.state);
+        inner.style.background = channel.state ? "red" : "blue";
         console.log(inner.className);
     }
     console.log("updateTile", channel.id);
