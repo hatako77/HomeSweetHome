@@ -419,7 +419,10 @@ function removeChannelFromList(id)
 
 function renderChannelsTable()
 {
+    if(App.currentPage !== "channels")
+        return;
     const container = $("channelsTable");
+
     let html = `
         <table class="table">
             <thead>
