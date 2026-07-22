@@ -305,28 +305,24 @@ function renderChannels()
 {
     const body = $("page");
     let html = `
-        <div class="page-header">
-            <div class="page-title">
-                Channels
-            </div>
             <button
                 class="btn primary"
                 onclick="showChannelDialog()">
                 ${icon("plus")}
                 Add Channel
             </button>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Room</th>
-                    <th>Type</th>
-                    <th>State</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+    <table class="table channels-table">
+        <thead>
+            <tr>
+                <th style="width:70px">ID</th>
+                <th>Name</th>
+                <th style="width:180px">Room</th>
+                <th style="width:110px">Type</th>
+                <th style="width:120px">State</th>
+                <th style="width:120px;text-align:center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
     `;
     channels.forEach(channel =>
     {
@@ -425,17 +421,23 @@ function renderChannelsTable()
 
     let html = `
         <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Room</th>
-                    <th>Type</th>
-                    <th>State</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Room</th>
+                <th>Type</th>
+                <th>Driver</th>
+                <th>Device</th>
+                <th>Pin</th>
+                <th>Icon</th>
+                <th>Favorite</th>
+                <th>Enabled</th>
+                <th>State</th>
+                <th></th>
+            </tr>
+        </thead>
+    <tbody>
     `;
         channels.forEach(channel =>
         {
@@ -475,14 +477,31 @@ function buildChannelRow(channel, roomName)
             <td>${roomName}</td>
 
             <td>${typeName}</td>
+            <td>${channel.driverId}</td>
+            
+            <td>${channel.device}</td>
+            
+            <td>${channel.pin}</td>
+            
+            <td>${icon(channel.icon)}</td>
+            
+            <td>${channel.favorite ? "⭐" : "-"}</td>
+            
+            <td>${channel.enabled ? "Yes" : "No"}</td>
 
             <td>
-                <span class="${stateText}">
-                    ${stateText}
+                <span class="state-badge ${channel.state ? "on" : "off"}">
+                    ${channel.state ? "ON" : "OFF"}
                 </span>
-                ${connected ? "" : "<span class='offline'>Offline</span>"}
+            
+                ${
+                    connected
+                    ? ""
+                    : `<span class="state-badge offline">
+                            Offline
+                       </span>`
+                }
             </td>
-
             <td class="actions">
                 <button class="icon-btn"
                     onclick="editChannel(${channel.id})">
@@ -498,8 +517,29 @@ function buildChannelRow(channel, roomName)
     `;
 }
 //==============================================================
+async function editChannel(id)
+{
+    const channel = findChannel(id);
 
+    if(!channel)
+        return;
 
+    showChannelDialog(
+    {
+        id: channel.id,
+        name: channel.name,
+        roomId: channel.roomId,
+        enabled: channel.enabled,
+        favorite: channel.favorite,
+        activeLow: channel.activeLow,
+        type: channel.type,
+        icon: channel.icon,
+        driverId: channel.driverId,
+        device: channel.device,
+        pin: channel.pin
+    });
+}
+//==============================================================
 
 
 
