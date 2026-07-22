@@ -102,7 +102,7 @@ void Notifier::channelChanged(const IOChannel& channel)
 
     Serial.println(">>>>>>>> NOTIFIER channelChanged");
     Message msg("channel", "changed");
-    msg.data["connected"] = connected;
+    msg.data["connected"] = channel.connected;
     msg.data["id"]        = channel.id;
     msg.data["roomId"]    = channel.roomId;
     msg.data["name"]      = channel.name;
