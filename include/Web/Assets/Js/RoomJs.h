@@ -257,11 +257,12 @@ async function addChannel(roomId)
 
 function createChannelTile(channel)
 {
+    const disabled = channel.connected === false;
     const tile = create("div","channel-tile");
     tile.classList.toggle("on",channel.state);
     tile.setAttribute("data-id", channel.id);
     tile.innerHTML = `
-        <div class="channel-info">
+        <div class="tile ${disabled ? "disabled" : ""}">
 
             <div class="channel-icon">
                 ${icon(channel.icon)}
@@ -276,54 +277,20 @@ function createChannelTile(channel)
                 <div class="channel-state ${channel.state ? "on" : "off"}">
                     ${channel.state ? "ON" : "OFF"}
                 </div>
-
             </div>
-
-        </div>
-
-        <div class="channel-actions">
-
-            <button class="icon-btn edit-btn" title="Edit">
-                ${icon("edit")}
-            </button>
-
-            <button class="icon-btn delete-btn" title="Delete">
-                ${icon("trash")}
-            </button>
-
         </div>
     `;
 
     //--------------------------------------------------
     // Toggle
     //--------------------------------------------------
-
-    tile.onclick = async () =>
+    if(!disabled)
     {
-        await toggleChannel(channel.id);
-    };
-
-    //--------------------------------------------------
-    // Edit
-    //--------------------------------------------------
-
-    tile.querySelector(".edit-btn").onclick = (e) =>
-    {
-        e.stopPropagation();
-
-        editChannel(channel.id);
-    };
-
-    //--------------------------------------------------
-    // Delete
-    //--------------------------------------------------
-
-    tile.querySelector(".delete-btn").onclick = (e) =>
-    {
-        e.stopPropagation();
-
-        removeChannel(channel.id);
-    };
+           tile.onclick = async () =>
+        {
+            await toggleChannel(channel.id);
+        };
+    }
 
     return tile;
 }
