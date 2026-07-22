@@ -342,6 +342,7 @@ function updateTile(tile, channel)
 
 function updateChannel(channel)
 {
+    console.log("ROOM updateChannel");
     const local = findChannel(channel.id);
 
     if(!local)
