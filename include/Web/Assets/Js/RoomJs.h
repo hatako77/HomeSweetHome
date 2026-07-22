@@ -299,7 +299,7 @@ function createChannelTile(channel)
     //--------------------------------------------------
     if(!disabled)
     {
-           tile.onclick = async () =>
+        tile.onclick = async () =>
         {
             await toggleChannel(channel.id);
         };
@@ -313,6 +313,7 @@ function updateTile(tile, channel)
     console.log(channel.id, channel.state);
     console.log(findChannel(channel.id).state);
     const inner = tile.querySelector(".tile");
+    tile.style.border = "5px solid red";
     
     if(inner)
     {
@@ -367,7 +368,7 @@ function updateChannel(channel)
     }
 
     const tile = document.querySelector(`[data-id="${channel.id}"]`);
-
+    console.log(tile.className);
     if(tile)
         updateTile(tile, local);
 }
