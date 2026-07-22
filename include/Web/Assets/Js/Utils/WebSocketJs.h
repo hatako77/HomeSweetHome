@@ -121,27 +121,24 @@ function handleChannelMessage(msg)
 
     switch(msg.action)
     {
-        case "updated":
-            updateChannel(msg.data);
-            updateChannelInList(msg.data);
-            break;
-        
-        case "changed":
-            console.log("changed");
-            updateChannel(msg.data);
-            updateChannelInList(msg.data);
-            updateRoomChannel(msg.data);
-
-            break;
-
         case "created":
             addChannelToList(msg.data);
-            addChannelLocal(msg.data.roomId, msg.data);
+            renderRooms();
+            break;
+    
+        case "updated":
+            updateChannelInList(msg.data);
+            renderRooms();
             break;
 
+        case "changed":
+            updateChannelInList(msg.data);
+            renderRooms();
+            break;
+    
         case "deleted":
             removeChannelFromList(msg.data.id);
-            removeChannel(msg.data.id);
+            renderRooms();
             break;
     }
 }
