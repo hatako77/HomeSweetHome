@@ -129,8 +129,8 @@ function handleChannelMessage(msg)
         case "changed":
             updateChannelInfo(msg.data);        
             if (typeof updateRoomChannel === "function") updateRoomChannel(msg.data);
-            //updateChannel(msg.data);
-            //updateChannelInList(msg.data);
+            updateChannel(msg.data);
+            updateChannelInList(msg.data);
             break;
 
         case "created":
