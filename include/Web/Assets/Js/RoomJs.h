@@ -309,6 +309,7 @@ function createChannelTile(channel)
 
 function updateTile(tile, channel)
 {
+    console.log("updateTile", channel.id);
     tile.classList.toggle("on", channel.state);
 
     const state = tile.querySelector(".channel-state");
