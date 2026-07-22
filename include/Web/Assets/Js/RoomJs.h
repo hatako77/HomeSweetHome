@@ -370,17 +370,6 @@ function updateChannel(channel)
         updateTile(tile,local);
 }
 
-async function toggleChannel(id)
-{
-    const ch = findChannel(id);
-
-    if(!ch)
-        return;
-
-    await apiPut("/api/channels?id=" + id,{
-        state: !ch.state
-    });
-}
 
 function findRoom(id)
 {
