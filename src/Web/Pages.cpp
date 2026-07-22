@@ -60,7 +60,11 @@ void registerRoutes(WebServerService& web)
     {
         request->send(200,"text/html",INDEX_HTML);
     });
-
+    server.on("/hello", HTTP_GET,
+    [](AsyncWebServerRequest *request)
+    {
+        request->send(200, "text/plain", "HELLO");
+    });
     server.on("/style.css",HTTP_GET,[](AsyncWebServerRequest* request)
     {
         AsyncResponseStream* response=request->beginResponseStream("text/css");
