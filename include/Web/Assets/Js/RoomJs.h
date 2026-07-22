@@ -344,6 +344,8 @@ function updateTile(tile, channel)
 
 function updateChannel(channel)
 {
+    const local = findChannel(channel.id);
+
     console.log("UPDATE", local);
     console.log(channel);
     console.log(local === channel);
