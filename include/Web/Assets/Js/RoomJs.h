@@ -96,15 +96,6 @@ async function initRooms()
         a.name.localeCompare(b.name,"fa")
     );
 
-    data.forEach(room=>
-    {
-        if(room.channels)
-        {
-            room.channels.sort((a,b)=>
-                a.name.localeCompare(b.name,"fa")
-            );
-        }
-    });
 
     App.state.rooms = data;
     console.log(data.length);
@@ -164,7 +155,6 @@ async function addRoom()
 
 function renderRooms()
 {
-    console.log("renderRooms");
     if(App.currentPage !== "rooms")
         return;
 
@@ -175,14 +165,35 @@ function renderRooms()
 
     container.innerHTML = "";
 
+    const channelsByRoom = new Map();
+
+    getChannels().forEach(channel =>
+    {
+        if(!channelsByRoom.has(channel.roomId))
+            channelsByRoom.set(channel.roomId, []);
+
+        channelsByRoom.get(channel.roomId).push(channel);
+    });
+
+    channelsByRoom.forEach(list =>
+    {
+        list.sort((a,b)=>
+            (a.name || "").localeCompare(b.name || "", "fa")
+        );
+    });
+
     getRooms().forEach(room =>
     {
-        container.appendChild(createRoomCard(room));
+        container.appendChild(
+            createRoomCard(room, channelsByRoom)
+        );
     });
 }
 
-function createRoomCard(room)
+function createRoomCard(room, channelsByRoom)
 {
+    const roomChannels = channelsByRoom.get(room.id) || [];
+
     const card = create("div","room-card");
 
     card.innerHTML = `
@@ -194,7 +205,11 @@ function createRoomCard(room)
             </div>
 
             <div class="room-actions">
-                
+
+                <div class="room-count">
+                    ${roomChannels.length}
+                </div>
+
                 <button class="icon-btn add-channel-btn" title="Add Channel">
                     ${icon("plus")}
                 </button>
@@ -217,30 +232,25 @@ function createRoomCard(room)
 
         </div>
 
-        <div
-            class="channel-list"
-            data-room="${room.id}">
+        <div class="channel-list" data-room="${room.id}">
         </div>
     `;
 
     const list = card.querySelector(".channel-list");
 
-    getChannels()
-        .filter(c => c.roomId === room.id)
-        .sort((a,b)=>(a.name || "").localeCompare(b.name || ""))
-        .forEach(channel =>
-        {
-            list.appendChild(createChannelTile(channel));
-        });
+    roomChannels.forEach(channel =>
+    {
+        list.appendChild(createChannelTile(channel));
+    });
 
-    card.querySelector(".add-channel-btn").onclick=(e)=>
+    card.querySelector(".add-channel-btn").onclick = (e) =>
     {
         e.stopPropagation();
         addChannel(room.id);
     };
+
     return card;
 }
-
 
 async function addChannel(roomId)
 {
@@ -322,16 +332,17 @@ function updateTile(tile, channel)
 
 function updateChannel(channel)
 {
-    const local = getChannels().find(c => c.id === channel.id);
+    const local = findChannel(channel.id);
 
     if(!local)
         return;
 
     const roomChanged = local.roomId !== channel.roomId;
+    const connectedChanged = local.connected !== channel.connected;
 
     Object.assign(local, channel);
 
-    if(roomChanged)
+    if(roomChanged || connectedChanged)
     {
         renderRooms();
         return;
@@ -379,11 +390,6 @@ function updateRoom(room)
 }
 
 
-
-function updateChannelInfo(channel)
-{
-    updateChannel(channel);
-}
 
 )rawliteral";
 
