@@ -344,16 +344,16 @@ function updateTile(tile, channel)
 
 function updateChannel(channel)
 {
-    const local = findChannel(channel.id);
-
-    console.log("UPDATE", local);
-    console.log(channel);
-    console.log(local === channel);
     console.log("ROOM updateChannel");
+
     const local = findChannel(channel.id);
 
     if(!local)
         return;
+
+    console.log("UPDATE", local);
+    console.log(channel);
+    console.log(local === channel);
 
     const roomChanged = local.roomId !== channel.roomId;
     const connectedChanged = local.connected !== channel.connected;
@@ -371,7 +371,6 @@ function updateChannel(channel)
     if(tile)
         updateTile(tile, local);
 }
-
 function findRoom(id)
 {
     return getRooms().find(r=>r.id===id);
