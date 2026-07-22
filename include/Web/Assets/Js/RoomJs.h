@@ -309,6 +309,8 @@ function createChannelTile(channel)
 
 function updateTile(tile, channel)
 {
+    console.log(channel.id, channel.state);
+    console.log(findChannel(channel.id).state);
     const inner = tile.querySelector(".tile");
     
     if(inner)
