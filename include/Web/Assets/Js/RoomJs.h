@@ -225,10 +225,13 @@ function createRoomCard(room)
 
     const list = card.querySelector(".channel-list");
 
-    (room.channels ?? []).forEach(channel =>
-    {
-        list.appendChild(createChannelTile(channel));
-    });
+    getChannels()
+        .filter(c => c.roomId === room.id)
+        .sort((a,b)=>(a.name || "").localeCompare(b.name || ""))
+        .forEach(channel =>
+        {
+            list.appendChild(createChannelTile(channel));
+        });
 
     card.querySelector(".add-channel-btn").onclick=(e)=>
     {
@@ -319,56 +322,26 @@ function updateTile(tile, channel)
 
 function updateChannel(channel)
 {
-    let sourceRoom = null;
-    let sourceIndex = -1;
-    let local = null;
-
-    for(const room of getRooms())
-    {
-        if(!room.channels)
-            continue;
-
-        const index = room.channels.findIndex(c=>c.id===channel.id);
-
-        if(index>=0)
-        {
-            sourceRoom = room;
-            sourceIndex = index;
-            local = room.channels[index];
-            break;
-        }
-    }
+    const local = getChannels().find(c => c.id === channel.id);
 
     if(!local)
         return;
 
-    const oldRoomId = local.roomId;
+    const roomChanged = local.roomId !== channel.roomId;
 
-    Object.assign(local,channel);
+    Object.assign(local, channel);
 
-    if(oldRoomId !== channel.roomId)
+    if(roomChanged)
     {
-        sourceRoom.channels.splice(sourceIndex,1);
-
-        const targetRoom = findRoom(channel.roomId);
-
-        if(targetRoom)
-        {
-            if(!targetRoom.channels)
-                targetRoom.channels=[];
-
-            targetRoom.channels.push(local);
-        }
-
+        renderRooms();
         return;
     }
 
-    const tile=document.querySelector(`[data-id="${channel.id}"]`);
+    const tile = document.querySelector(`[data-id="${channel.id}"]`);
 
     if(tile)
-        updateTile(tile,local);
+        updateTile(tile, local);
 }
-
 
 function findRoom(id)
 {
@@ -377,41 +350,12 @@ function findRoom(id)
 
 function findChannel(id)
 {
-    for(const room of getRooms())
-    {
-        if(!room.channels)
-            continue;
-
-        const channel = room.channels.find(c=>c.id===id);
-
-        if(channel)
-            return channel;
-    }
-
-    return null;
+    return getChannels().find(c => c.id === id);
 }
 
 function refreshRooms()
 {
     renderRooms();
-}
-
-function updateRoomCounter(roomId)
-{
-    const room=findRoom(roomId);
-
-    if(!room)
-        return;
-
-    const list=document.querySelector(`.channel-list[data-room="${roomId}"]`);
-
-    if(!list)
-        return;
-
-    const counter=list.parentElement.querySelector(".room-count");
-
-    if(counter)
-        counter.innerText=(room.channels??[]).length;
 }
 
 
@@ -434,40 +378,7 @@ function updateRoom(room)
     renderRooms();
 }
 
-function addChannelLocal(roomId, channel)
-{
-    const room = findRoom(roomId);
 
-    if(!room)
-        return;
-
-    if(!room.channels)
-        room.channels = [];
-
-    room.channels.push(channel);
-
-    renderRooms();
-}
-
-function removeChannel(channelId)
-{
-    for(const room of getRooms())
-    {
-        if(!room.channels)
-            continue;
-
-        const index=room.channels.findIndex(c=>c.id===channelId);
-
-        if(index>=0)
-        {
-            room.channels.splice(index,1);
-
-            renderRooms();
-
-            return;
-        }
-    }
-}
 
 function updateChannelInfo(channel)
 {
