@@ -12,11 +12,7 @@ void Notifier::reload()
     websocket.send(msg);
 }
 static void sendChannel(const char* action, const IOChannel& channel)
-{
-    IIODriver* drv = ioManager.getDriver(channel.address.driverId);
-    
-    bool connected = false;    
-    if(drv) connected = drv->isConnected(channel.address.device);
+{    
     Message msg("channel", action);
     msg.data["connected"] = connected;
     msg.data["id"]        = channel.id;
@@ -104,9 +100,6 @@ void Notifier::sceneExecuted(uint16_t id)
 
 void Notifier::channelChanged(const IOChannel& channel)
 {
-    IIODriver* drv = ioManager.getDriver(channel.address.driverId);
-    bool connected = false;
-    if(drv) connected = drv->isConnected(channel.address.device);
 
     Serial.println(">>>>>>>> NOTIFIER channelChanged");
     Message msg("channel", "changed");
