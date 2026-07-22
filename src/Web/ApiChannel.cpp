@@ -9,7 +9,40 @@
 void ApiChannel::registerRoutes(WebServerService& web)
 {
     auto& server = web.server();
+    server.on("/api/channels/state", HTTP_POST,
+    [](AsyncWebServerRequest*){},
+    nullptr,
+    [](AsyncWebServerRequest* request,
+    uint8_t* data,
+    size_t len,
+    size_t,
+    size_t)
+    {
+        JsonDocument doc;
     
+        if(deserializeJson(doc, data, len))
+        {
+            request->send(400,
+                          "application/json",
+                          "{\"success\":false}");
+            return;
+        }
+    
+        uint16_t id = doc["id"] | 0;
+        bool state  = doc["state"] | false;
+    
+        if(!ioManager.write(id, state))
+        {
+            request->send(404,
+                          "application/json",
+                          "{\"success\":false}");
+            return;
+        }
+    
+        request->send(200,
+                      "application/json",
+                      "{\"success\":true}");
+    });
     server.on("/api/channels/state",HTTP_POST,[](AsyncWebServerRequest*){},nullptr,
     [](AsyncWebServerRequest* request,uint8_t* data,size_t len,size_t,size_t)
     {
