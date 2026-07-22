@@ -428,8 +428,30 @@ function updateChannelInList(channel)
         return;
 
     Object.assign(channels[index], channel);
-
-    renderChannelsTable();
+    
+    if(App.currentPage === "channels")
+    {
+        const row = document.querySelector(`tr[data-id="${channel.id}"]`);
+    
+        if(row)
+        {
+            const room = findRoom(channel.roomId);
+    
+            row.outerHTML = buildChannelRow(
+                channels[index],
+                room ? room.name : "-"
+            );
+        }
+        else
+        {
+            renderChannelsTable();
+        }
+    }
+    
+    if(App.currentPage === "rooms")
+    {
+        updateChannel(channel);
+    }
 }
 //==============================================================
 function removeChannelFromList(id)
