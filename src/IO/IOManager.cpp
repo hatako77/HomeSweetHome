@@ -58,7 +58,7 @@ void IOManager::update()
         
         if (!drv)
             continue;
-        
+        channels[i].connected = drv->isConnected(channels[i].address.device);   
         bool state = drv->read(
             channels[i].address.device,
             channels[i].address.pin
