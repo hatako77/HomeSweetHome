@@ -274,7 +274,7 @@ function createChannelTile(channel)
     tile.classList.toggle("on",channel.state);
     tile.setAttribute("data-id", channel.id);
     tile.innerHTML = `
-        <div class="tile ${disabled ? "disabled" : ""}">
+        <div class="tile ${channel.state ? "on" : "off"} ${disabled ? "disabled" : ""}">
 
             <div class="channel-icon">
                 ${icon(channel.icon)}
