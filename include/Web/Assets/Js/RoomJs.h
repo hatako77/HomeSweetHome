@@ -269,9 +269,9 @@ async function addChannel(roomId)
 
 function createChannelTile(channel)
 {
+    console.log("CREATE", channel.id, channel);
     const disabled = channel.connected === false;
     const tile = create("div","channel-tile");
-    tile.classList.toggle("on",channel.state);
     tile.setAttribute("data-id", channel.id);
     tile.innerHTML = `
         <div class="tile ${channel.state ? "on" : "off"} ${disabled ? "disabled" : ""}">
@@ -317,6 +317,7 @@ function updateTile(tile, channel)
     {
         inner.classList.toggle("on", channel.state);
         inner.classList.toggle("off", !channel.state);
+        console.log(inner.className);
     }
     console.log("updateTile", channel.id);
     tile.classList.toggle("on", channel.state);
@@ -342,6 +343,9 @@ function updateTile(tile, channel)
 
 function updateChannel(channel)
 {
+    console.log("UPDATE", local);
+    console.log(channel);
+    console.log(local === channel);
     console.log("ROOM updateChannel");
     const local = findChannel(channel.id);
 
