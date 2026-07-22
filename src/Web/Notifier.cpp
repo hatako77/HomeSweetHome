@@ -100,6 +100,7 @@ void Notifier::sceneExecuted(uint16_t id)
 
 void Notifier::channelChanged(const IOChannel& channel)
 {
+    Serial.println(">>>>>>>> NOTIFIER channelChanged");
     Message msg("channel", "changed");
 
     msg.data["id"]        = channel.id;
