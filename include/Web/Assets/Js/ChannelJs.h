@@ -319,6 +319,7 @@ function addChannelToList(channel)
 //==============================================================
 function updateChannelLocal(channel)
 {
+    console.log("updateChannel", channel.id, channel.state);
     const index = channels.findIndex(c=>c.id==channel.id);
     if(index < 0) return;
     Object.assign(channels[index],channel);
