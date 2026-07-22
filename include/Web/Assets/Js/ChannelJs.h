@@ -224,6 +224,14 @@ async function saveChannel(id)
         return false;
     }
     showToast("Saved","success");
+    if(id)
+    {
+        updateChannelInList(
+        {
+            id,
+            ...body
+        });
+    }
     return true;
 }
 //==============================================================
@@ -252,14 +260,33 @@ async function toggleChannel(id)
 //==============================================================
 async function deleteChannel(id)
 {
-    const result = await apiDelete(`/api/channels?id=${id}`);
-    if(!result || result.success === false)
-    {
-        showToast(result?.message ?? "Delete failed","error");
-        return false;
-    }
-    showToast("Channel deleted","success");
-    return true;
+    const channel = findChannel(id);
+
+    if(!channel)
+        return;
+
+    Dialog.confirm(
+        "Delete Channel",
+        `Delete "${channel.name}" ?`,
+        async () =>
+        {
+            const result = await api(
+                `/api/channels?id=${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+            if(!result || !result.success)
+            {
+                toastError(result?.message ?? "Cannot delete channel");
+                return;
+            }
+
+            toastSuccess("Channel deleted");
+            // هیچ render یا init اینجا لازم نیست
+        }
+    );
 }
 //==============================================================
 async function initChannels()
@@ -400,7 +427,7 @@ function updateChannelInList(channel)
     if(index < 0)
         return;
 
-    channels[index] = channel;
+    Object.assign(channels[index], channel);
 
     renderChannelsTable();
 }
