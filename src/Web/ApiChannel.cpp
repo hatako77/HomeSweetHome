@@ -44,16 +44,15 @@ void ApiChannel::registerRoutes(WebServerService& web)
     
             if(!ch)
             {
-                request->send(
-                    404,
-                    "application/json",
-                    "{\"success\":false}"
-                );
+                request->send(404,"application/json","{\"success\":false}");
                 return;
             }
-    
+
+
+            IIODriver* drv = ioManager.getDriver(ch->address.driverId);
+            
             JsonDocument doc;
-    
+            doc["connected"] = drv ? drv->isConnected(ch->address.device) : false;
             doc["id"]=ch->id;
             doc["name"]=ch->name;
             doc["roomId"]=ch->roomId;
@@ -86,12 +85,11 @@ void ApiChannel::registerRoutes(WebServerService& web)
         for(uint16_t i=0;i<ioManager.count();i++)
         {
             const IOChannel* ch=ioManager.getAt(i);
-    
-            if(!ch)
-                continue;
-    
+            if(!ch) continue;
+
+            IIODriver* drv = ioManager.getDriver(ch->address.driverId);
             JsonObject o=arr.add<JsonObject>();
-    
+            o["connected"] = drv ? drv->isConnected(ch->address.device) : false;
             o["id"]=ch->id;
             o["name"]=ch->name;
             o["roomId"]=ch->roomId;
