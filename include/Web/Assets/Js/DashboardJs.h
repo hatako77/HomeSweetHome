@@ -60,7 +60,7 @@ function updateDashboard()
 
     rooms.forEach(room =>
     {
-        const channels = room.channels ?? [];
+        
 
         channelCount += channels.length;
 
