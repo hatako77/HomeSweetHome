@@ -236,6 +236,7 @@ async function toggleChannel(id)
         id,state: !channel.state
     }
     );
+    console.log(result);
     if(!result || result.success === false)
     {
         showToast(
