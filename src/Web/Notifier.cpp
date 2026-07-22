@@ -14,7 +14,6 @@ void Notifier::reload()
 static void sendChannel(const char* action, const IOChannel& channel)
 {    
     Message msg("channel", action);
-    msg.data["connected"] = connected;
     msg.data["id"]        = channel.id;
     msg.data["roomId"]    = channel.roomId;
     msg.data["name"]      = channel.name;
@@ -27,7 +26,7 @@ static void sendChannel(const char* action, const IOChannel& channel)
     msg.data["driverId"]  = channel.address.driverId;
     msg.data["device"]    = channel.address.device;
     msg.data["pin"]       = channel.address.pin;
-
+    msg.data["connected"] = channel.connected;
     websocket.send(msg);
 }
 void Notifier::channelCreated(const IOChannel& channel)
