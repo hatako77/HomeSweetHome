@@ -72,6 +72,7 @@ void IOManager::update()
 }
 bool IOManager::write(uint16_t id, bool state)
 {
+    Serial.println(">>>>>>>> IOManager::write");
     IOChannel* ch = getChannel(id);
     if (!ch)
         return false;    
