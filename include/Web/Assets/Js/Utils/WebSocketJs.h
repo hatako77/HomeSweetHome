@@ -138,7 +138,6 @@ function handleChannelMessage(msg)
     
         case "deleted":
             removeChannelFromList(msg.data.id);
-            renderRooms();
             break;
     }
 }
