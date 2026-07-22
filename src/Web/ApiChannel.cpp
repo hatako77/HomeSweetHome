@@ -48,11 +48,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
                 return;
             }
 
-
-            IIODriver* drv = ioManager.getDriver(ch->address.driverId);
-            
             JsonDocument doc;
-            doc["connected"] = drv ? drv->isConnected(ch->address.device) : false;
             doc["id"]=ch->id;
             doc["name"]=ch->name;
             doc["roomId"]=ch->roomId;
@@ -65,7 +61,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             doc["driverId"] = ch->address.driverId;
             doc["device"]   = ch->address.device;
             doc["pin"]      = ch->address.pin;
-    
+            doc["connected"] = ch->connected;
             String out;
             serializeJson(doc,out);
     
@@ -87,9 +83,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             const IOChannel* ch=ioManager.getAt(i);
             if(!ch) continue;
 
-            IIODriver* drv = ioManager.getDriver(ch->address.driverId);
             JsonObject o=arr.add<JsonObject>();
-            o["connected"] = drv ? drv->isConnected(ch->address.device) : false;
             o["id"]=ch->id;
             o["name"]=ch->name;
             o["roomId"]=ch->roomId;
@@ -102,6 +96,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             o["driverId"] = ch->address.driverId;
             o["device"]   = ch->address.device;
             o["pin"]      = ch->address.pin;
+            o["connected"] = ch->connected;
         }
     
         String out;
