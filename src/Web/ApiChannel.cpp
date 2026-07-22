@@ -8,9 +8,10 @@
 
 void ApiChannel::registerRoutes(WebServerService& web)
 {
+    Serial.println(">>>>>>>> ApiChannel::registerRoutes");
     auto& server = web.server();
-    Serial.println("ApiChannel::registerRoutes");
-
+    Serial.println(">>>>>>>> Server OK");
+    
     server.on("/api/channels/state", HTTP_POST,[](AsyncWebServerRequest*){},nullptr,
     [](AsyncWebServerRequest* request,uint8_t* data,size_t len,size_t,size_t)
     {
@@ -29,7 +30,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
         }    
         request->send(200,"application/json","{\"success\":true}");
     });
-
+    Serial.println(">>>>>>>> Route Registered");
     
     server.on("/api/channels",HTTP_GET,
     [](AsyncWebServerRequest* request)
