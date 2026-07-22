@@ -130,6 +130,9 @@ async function showRooms()
         <div id="roomsContainer"></div>
     `;
 
+    await initRooms();
+    await initChannels();
+    
     renderRooms();
 }
 
