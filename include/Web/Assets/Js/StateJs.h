@@ -45,7 +45,7 @@ App.updateDashboardState = function()
 
     rooms.forEach(room =>
     {
-        const channels = room.channels ?? [];
+        //const channels = room.channels ?? [];
 
         channelCount += channels.length;
 
