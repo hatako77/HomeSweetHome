@@ -155,6 +155,7 @@ async function addRoom()
 
 function renderRooms()
 {
+console.log("######## renderRooms ########");
     if(App.currentPage !== "rooms")
         return;
 
