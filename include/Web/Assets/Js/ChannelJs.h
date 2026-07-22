@@ -425,23 +425,24 @@ async function showChannels()
 function updateChannelInList(channel)
 {
     console.log("TABLE updateChannelInList");
-    const index = channels.findIndex(c => c.id == channel.id);
 
-    if(index < 0)
+    const local = channels.find(c => c.id === channel.id);
+
+    if(!local)
         return;
 
-    Object.assign(channels[index], channel);
-    
+    Object.assign(local, channel);
+
     if(App.currentPage === "channels")
     {
-        const row = document.querySelector(`tr[data-id="${channel.id}"]`);
-    
+        const row = document.querySelector(`tr[data-id="${local.id}"]`);
+
         if(row)
         {
-            const room = findRoom(channel.roomId);
-    
+            const room = findRoom(local.roomId);
+
             row.outerHTML = buildChannelRow(
-                channels[index],
+                local,
                 room ? room.name : "-"
             );
         }
@@ -450,10 +451,10 @@ function updateChannelInList(channel)
             renderChannelsTable();
         }
     }
-    
+
     if(App.currentPage === "rooms")
     {
-        updateChannel(channel);
+        updateChannel(local);
     }
 }
 //==============================================================
