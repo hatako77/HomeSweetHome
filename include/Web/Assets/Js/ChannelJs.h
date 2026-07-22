@@ -456,29 +456,42 @@ function renderChannelsTable()
 //==============================================================
 function buildChannelRow(channel, roomName)
 {
+    const typeName =
+    {
+        0: "Input",
+        1: "Output"
+    }[channel.type] ?? "-";
+
+    const stateText = channel.state ? "ON" : "OFF";
+
+    const connected = channel.connected !== false;
+
     return `
-        <tr>
+        <tr data-id="${channel.id}">
             <td>${channel.id}</td>
+
             <td>${channel.name}</td>
+
             <td>${roomName}</td>
+
+            <td>${typeName}</td>
+
             <td>
-                ${channel.type == 0
-                    ? "Input"
-                    : "Output"}
+                <span class="${stateText}">
+                    ${stateText}
+                </span>
+                ${connected ? "" : "<span class='offline'>Offline</span>"}
             </td>
-            <td>
-                ${channel.state
-                    ? "ON"
-                    : "OFF"}
-            </td>
+
             <td class="actions">
-                <button class="icon-button"
-                        onclick="editChannel(${channel.id})">
-                    <i class="fa-solid fa-pen"></i>
+                <button class="icon-btn"
+                    onclick="editChannel(${channel.id})">
+                    ${icon("edit")}
                 </button>
-                <button class="icon-button danger"
-                        onclick="deleteChannel(${channel.id})">
-                    <i class="fa-solid fa-trash"></i>
+
+                <button class="icon-btn danger"
+                    onclick="deleteChannel(${channel.id})">
+                    ${icon("trash")}
                 </button>
             </td>
         </tr>
