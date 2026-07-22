@@ -90,11 +90,14 @@ const char TILE_CSS[] PROGMEM=R"rawliteral(
 	fill:#94a3b8;
 }
 
-.tile.disabled{
-	opacity:.45;
-	pointer-events:none;
-}
 
+.tile.disabled
+{
+    opacity: .35;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+    pointer-events: none;
+}
 @media(max-width:768px){
 
 	.tile{
