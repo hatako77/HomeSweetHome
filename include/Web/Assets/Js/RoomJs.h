@@ -360,7 +360,6 @@ function updateChannel(channel)
     const roomChanged = local.roomId !== channel.roomId;
     const connectedChanged = local.connected !== channel.connected;
 
-    Object.assign(local, channel);
 
     if(roomChanged || connectedChanged)
     {
