@@ -4,7 +4,7 @@
 #include <pgmspace.h>
 
 const char CHANNEL_JS[] PROGMEM = R"rawliteral(
-async function getChannels(id = null)
+async function loadChannels(id = null)
 {
     let url = "/api/channels";
     if(id != null)url += "?id=" + id;
@@ -264,8 +264,13 @@ async function deleteChannel(id)
 //==============================================================
 async function initChannels()
 {
-    channels = await getChannels();
+    channels = await loadChannels();    
     if(!Array.isArray(channels)) channels = [];
+}
+//==============================================================
+function getChannels()
+{
+    return channels;
 }
 //==============================================================
 function findChannel(id)
@@ -388,7 +393,7 @@ async function showChannels()
             <div id="channelsTable"></div>
         </div>
     `;
-    channels = await getChannels();
+    await initChannels();
     renderChannelsTable();
 }
 //==============================================================
