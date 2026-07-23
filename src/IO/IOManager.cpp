@@ -147,8 +147,7 @@ IOChannel* IOManager::add(const IOChannel& channel)
 
     IOChannel ch = channel;
 
-    if(ch.id == 0)
-        ch.id = nextId++;
+    if(ch.id == 0 || getChannel(ch.id)) ch.id = nextId++;
 
     channels[channelCount] = ch;
 
