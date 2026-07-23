@@ -339,6 +339,12 @@ function updateTile(tile, channel)
     if(name) name.innerText = channel.name;
     const iconElement = tile.querySelector(".channel-icon");        
     if(iconElement) iconElement.innerHTML = icon(channel.icon);
+    inner.style.display = "none";
+    
+    requestAnimationFrame(() =>
+    {
+        inner.style.display = "";
+    });
 }
 
 function findRoom(id)
