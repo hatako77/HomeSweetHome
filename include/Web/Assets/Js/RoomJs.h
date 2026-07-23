@@ -344,34 +344,6 @@ function updateTile(tile, channel)
             iconElement.innerHTML = icon(channel.icon);
 }
 
-function updateChannel(channel)
-{
-    console.log("ROOM updateChannel");
-
-    const local = findChannel(channel.id);
-
-    if(!local)
-        return;
-
-    console.log("UPDATE", local);
-    console.log(channel);
-    console.log(local === channel);
-
-    const roomChanged = local.roomId !== channel.roomId;
-    const connectedChanged = local.connected !== channel.connected;
-
-
-    if(roomChanged || connectedChanged)
-    {
-        renderRooms();
-        return;
-    }
-
-    const tile = document.querySelector(`[data-id="${channel.id}"]`);
-    console.log(tile.className);
-    if(tile)
-        updateTile(tile, local);
-}
 function findRoom(id)
 {
     return getRooms().find(r=>r.id===id);
