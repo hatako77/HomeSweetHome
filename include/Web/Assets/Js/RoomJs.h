@@ -86,7 +86,6 @@ async function editRoom(id)
 
 async function initRooms()
 {
-    console.log("initRooms");
     const data = await apiGet("/api/rooms");
 
     if(!data)
@@ -98,8 +97,6 @@ async function initRooms()
 
 
     App.state.rooms = data;
-    console.log(data.length);
-    console.log(App.state.rooms);
 }
 
 
@@ -270,7 +267,6 @@ async function addChannel(roomId)
 
 function createChannelTile(channel)
 {
-    console.log("CREATE", channel.id, channel);
     const disabled = channel.connected === false;
     const tile = create("div","channel-tile");
     tile.setAttribute("data-id", channel.id);
@@ -310,10 +306,6 @@ function createChannelTile(channel)
 
 function updateTile(tile, channel)
 {
-    console.log(channel.id, channel.state);
-    console.log(findChannel(channel.id).state);
-    const inner = tile.querySelector(".tile");
-    tile.style.border = "5px solid red";
     
     if(inner)
     {
