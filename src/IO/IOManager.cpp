@@ -48,28 +48,39 @@ void IOManager::begin()
 void IOManager::update()
 {
     for (uint16_t i = 0; i < driverCount; i++)
-    {
         drivers[i]->update();
-    }
 
     for (uint16_t i = 0; i < channelCount; i++)
     {
         IIODriver* drv = getDriver(channels[i].address.driverId);
-        
+
         if (!drv)
             continue;
-        channels[i].connected = drv->isConnected(channels[i].address.device);   
-        bool state = drv->read(
-            channels[i].address.device,
-            channels[i].address.pin
-        );
-        if (channels[i].activeLow)
-            state = !state;
 
-        channels[i].state = state;
+        channels[i].connected =
+            drv->isConnected(channels[i].address.device);
+
+        // فقط ورودی‌ها را بخوان
+        if (channels[i].type == IOType::DigitalInput)
+        {
+            bool state = drv->read(
+                channels[i].address.device,
+                channels[i].address.pin
+            );
+
+            if (channels[i].activeLow)
+                state = !state;
+
+            if (channels[i].state != state)
+            {
+                channels[i].state = state;
+                Notifier::channelChanged(channels[i]);
+            }
+        }
     }
-
 }
+
+
 bool IOManager::write(uint16_t id, bool state)
 {
 
