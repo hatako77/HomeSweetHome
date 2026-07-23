@@ -72,12 +72,13 @@ void IOManager::update()
 }
 bool IOManager::write(uint16_t id, bool state)
 {
-    Serial.printf(
-    "WRITE -> id=%d state=%d\n",
-    ch->id,
-    ch->state
-);
+
     IOChannel* ch = getChannel(id);
+    Serial.printf(
+        "WRITE -> id=%d state=%d\n",
+        ch->id,
+        ch->state
+    );
     if (!ch)
         return false;    
     if (ch->type != IOType::DigitalOutput)
