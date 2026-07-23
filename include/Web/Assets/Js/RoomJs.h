@@ -319,11 +319,13 @@ function updateTile(tile, channel)
     {
         inner.classList.toggle("on", channel.state);
         inner.classList.toggle("off", !channel.state);
-        inner.style.background = channel.state ? "red" : "blue";
-        console.log(inner.className);
+        requestAnimationFrame(() =>
+        {
+            inner.classList.toggle("on", channel.state);
+            inner.classList.toggle("off", !channel.state);
+        });
+
     }
-    console.log("updateTile", channel.id);
-    tile.classList.toggle("on", channel.state);
 
     const state = tile.querySelector(".channel-state");
 
@@ -333,15 +335,10 @@ function updateTile(tile, channel)
         state.classList.toggle("off", !channel.state);
         state.innerText = channel.state ? "ON" : "OFF";
     }
-
     const name = tile.querySelector(".channel-name");
-
-    if(name)
-        name.innerText = channel.name;
-
-        const iconElement = tile.querySelector(".channel-icon");        
-        if(iconElement)
-            iconElement.innerHTML = icon(channel.icon);
+    if(name) name.innerText = channel.name;
+    const iconElement = tile.querySelector(".channel-icon");        
+    if(iconElement) iconElement.innerHTML = icon(channel.icon);
 }
 
 function findRoom(id)
