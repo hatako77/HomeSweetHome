@@ -40,19 +40,24 @@ struct IOAddress
 };
 struct IOChannel
 {
+    uint16_t id = 0;
 
-    uint16_t id;
     bool connected = true;
-    String name;
-    IOIcon icon;
-    IOType type;
-    bool state;
-    bool enabled;
-    bool activeLow;
-    uint8_t roomId;
-    uint8_t groupId;
-    bool favorite;
-    IOAddress address;
-};
 
+    String name = "";
+
+    IOIcon icon = IOIcon::Generic;
+    IOType type = IOType::DigitalOutput;
+
+    bool state = false;
+    bool enabled = true;
+    bool activeLow = false;
+
+    uint8_t roomId = 0;
+    uint8_t groupId = 0;
+
+    bool favorite = false;
+
+    IOAddress address = {0,0,0};
+};
 #endif
