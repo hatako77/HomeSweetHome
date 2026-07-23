@@ -25,8 +25,6 @@ function connectWebSocket()
 
     socket.onopen = () =>
     {
-        console.log("WebSocket Connected");
-
         if(reconnectTimer)
         {
             clearTimeout(reconnectTimer);
@@ -36,8 +34,6 @@ function connectWebSocket()
 
     socket.onclose = () =>
     {
-        console.log("WebSocket Disconnected");
-
         reconnectTimer = setTimeout(connectWebSocket,3000);
     };
 
@@ -58,8 +54,6 @@ function connectWebSocket()
         {
             return;
         }
-
-        console.log("WS:", msg);
 
         switch(msg.type)
         {
@@ -156,23 +150,16 @@ async function handleRoomMessage(msg)
 
 function wsSend(type, action, data = {})
 {
-    console.log("wsSend");
-
     if(!socket)
     {
-        console.log("socket null");
         return;
     }
-
-    console.log("ready =", socket.readyState);
 
     const msg = {
         type,
         action,
         data
     };
-
-    console.log(msg);
 
     socket.send(JSON.stringify(msg));
 }
