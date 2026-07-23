@@ -130,7 +130,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             return;
         }
     
-        IOChannel channel;
+        IOChannel channel{};
     
         channel.name=doc["name"]|"Channel";
         channel.roomId=doc["roomId"]|0;
