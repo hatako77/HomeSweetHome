@@ -174,16 +174,16 @@ function buildIconPicker()
         "tv",
         "generic"
     ];
-    names.forEach((name,index)=>
+    names.forEach((_, index) =>
     {
-        const item = document.createElement("div");
-        item.className = "icon-item" + (index===selectedChannelIcon ? " selected" : "");
-        item.innerHTML = icon(name,26);
+        const item = document.createElement("div");    
+        item.className = "icon-item" + (index === selectedChannelIcon ? " selected" : "");    
+        item.innerHTML = icon(index, 26);    
         item.onclick = () =>
         {
             selectedChannelIcon = index;
             buildIconPicker();
-        };
+        };    
         picker.appendChild(item);
     });
 }
