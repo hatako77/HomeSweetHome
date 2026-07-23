@@ -244,8 +244,6 @@ async function toggleChannel(id)
         id,state: !channel.state
     }
     );
-    console.log(result);
-    console.log("toggle finished");
     if(!result || result.success === false)
     {
         showToast(
@@ -319,8 +317,6 @@ function addChannelToList(channel)
 //==============================================================
 function updateChannelLocal(channel)
 {
-    console.log("TABLE updateChannelLocal");
-    console.log("updateChannel", channel.id, channel.state);
     const index = channels.findIndex(c=>c.id==channel.id);
     if(index < 0) return;
     Object.assign(channels[index],channel);
@@ -424,13 +420,8 @@ async function showChannels()
 //==============================================================
 function updateChannelInList(channel)
 {
-    console.log("TABLE updateChannelInList");
-
     const local = channels.find(c => c.id === channel.id);
-
-    if(!local)
-        return;
-
+    if(!local) return;
     const roomChanged = local.roomId !== channel.roomId;
     const connectedChanged = local.connected !== channel.connected;
 
@@ -474,8 +465,6 @@ function updateChannelInList(channel)
             const tile = document.querySelector(
                 `[data-id="${local.id}"]`
             );
-            console.log(tile);
-            console.log(tile.outerHTML);
             if(tile)
             {
                 updateTile(tile, local);
