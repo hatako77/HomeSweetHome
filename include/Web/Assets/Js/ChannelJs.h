@@ -431,7 +431,14 @@ function updateChannelInList(channel)
     if(!local)
         return;
 
+    const roomChanged = local.roomId !== channel.roomId;
+    const connectedChanged = local.connected !== channel.connected;
+
     Object.assign(local, channel);
+
+    //----------------------------------------
+    // Channels Page
+    //----------------------------------------
 
     if(App.currentPage === "channels")
     {
@@ -452,9 +459,27 @@ function updateChannelInList(channel)
         }
     }
 
+    //----------------------------------------
+    // Rooms Page
+    //----------------------------------------
+
     if(App.currentPage === "rooms")
     {
-        updateChannel(local);
+        if(roomChanged || connectedChanged)
+        {
+            renderRooms();
+        }
+        else
+        {
+            const tile = document.querySelector(
+                `[data-id="${local.id}"]`
+            );
+
+            if(tile)
+            {
+                updateTile(tile, local);
+            }
+        }
     }
 }
 //==============================================================
