@@ -474,7 +474,8 @@ function updateChannelInList(channel)
             const tile = document.querySelector(
                 `[data-id="${local.id}"]`
             );
-
+            console.log(tile);
+            console.log(tile.outerHTML);
             if(tile)
             {
                 updateTile(tile, local);
