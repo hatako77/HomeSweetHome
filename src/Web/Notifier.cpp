@@ -112,7 +112,11 @@ void Notifier::channelChanged(const IOChannel& channel)
     msg.data["activeLow"] = channel.activeLow;
     msg.data["type"]      = (uint8_t)channel.type;
     msg.data["icon"]      = (uint8_t)channel.icon;
-
+    Serial.printf(
+        "WS SEND -> id=%d state=%d\n",
+        channel.id,
+        channel.state
+    );
     websocket.send(msg);
 }
 
