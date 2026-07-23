@@ -11,7 +11,6 @@
 #include "Web/Assets/Css/FormCss.h"
 #include "Web/Assets/Css/DashboardCss.h"
 #include "Web/Assets/Css/RoomCss.h"
-#include "Web/Assets/Css/TileCss.h"
 #include "Web/Assets/Css/DialogCss.h"
 #include "Web/Assets/Css/ToastCss.h"
 #include "Web/Assets/Css/LoaderCss.h"
@@ -76,7 +75,6 @@ void registerRoutes(WebServerService& web)
         response->print(FORM_CSS);
         response->print(DASHBOARD_CSS);
         response->print(ROOM_CSS);
-        response->print(TILE_CSS);
         response->print(DIALOG_CSS);
         response->print(TOAST_CSS);
         response->print(LOADER_CSS);
