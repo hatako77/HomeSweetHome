@@ -306,37 +306,37 @@ function createChannelTile(channel)
 
 function updateTile(tile, channel)
 {
-    
-    if(inner)
+    const inner = tile.querySelector(".tile");
+
+    if (inner)
     {
         inner.classList.toggle("on", channel.state);
         inner.classList.toggle("off", !channel.state);
-        requestAnimationFrame(() =>
-        {
-            inner.classList.toggle("on", channel.state);
-            inner.classList.toggle("off", !channel.state);
-        });
 
+        if (channel.connected === false)
+            inner.classList.add("disabled");
+        else
+            inner.classList.remove("disabled");
     }
 
     const state = tile.querySelector(".channel-state");
 
-    if(state)
+    if (state)
     {
         state.classList.toggle("on", channel.state);
         state.classList.toggle("off", !channel.state);
         state.innerText = channel.state ? "ON" : "OFF";
     }
+
     const name = tile.querySelector(".channel-name");
-    if(name) name.innerText = channel.name;
-    const iconElement = tile.querySelector(".channel-icon");        
-    if(iconElement) iconElement.innerHTML = icon(channel.icon);
-    inner.style.display = "none";
-    
-    requestAnimationFrame(() =>
-    {
-        inner.style.display = "";
-    });
+
+    if (name)
+        name.innerText = channel.name;
+
+    const iconElement = tile.querySelector(".channel-icon");
+
+    if (iconElement)
+        iconElement.innerHTML = icon(channel.icon);
 }
 
 function findRoom(id)
