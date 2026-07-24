@@ -25,15 +25,22 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     transform:translateY(-4px);
     border-color:#38bdf8;
 }
+.room-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:22px;
+    font-weight:600;
+}
 
 .room-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:16px;
-    background:#0f172a;
+    padding:18px 20px;
     border-bottom:1px solid #1f2937;
 }
+
 
 .room-name{
     display:flex;
@@ -48,7 +55,20 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     align-items:center;
     gap:8px;
 }
+.room-motion{
+    width:40px;
+    height:40px;
 
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:#7b7b7b;
+}
+
+.room-motion.active{
+    color:#3b82f6;
+}
 .room-count{
     padding:4px 10px;
     border-radius:999px;
