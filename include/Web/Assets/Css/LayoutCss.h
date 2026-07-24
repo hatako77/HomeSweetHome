@@ -45,12 +45,21 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 }
 
 #sidebar{
-	width:260px;
-	flex-shrink:0;
-	padding:20px;
-	border-right:1px solid rgba(255,255,255,.08);
-	background:#0f172a;
-	overflow-y:auto;
+    width:260px;
+    flex-shrink:0;
+
+    position:sticky;
+    top:60px;
+
+    height:calc(100vh - 60px);
+
+    padding:20px;
+
+    border-right:1px solid rgba(255,255,255,.08);
+
+    background:#0f172a;
+
+    overflow-y:auto;
 }
 
 #content{
