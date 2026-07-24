@@ -9,11 +9,10 @@ let sensors=[];
 
 async function initSensors()
 {
-	const data=await apiGet("/api/sensors");
-	if(!data)
-		return;
-	sensors=data;
-	renderSensors();
+	//const data=await apiGet("/api/sensors");
+	//if(!data) return;
+	//sensors=data;
+	//renderSensors();
 }
 
 function showSensors()
