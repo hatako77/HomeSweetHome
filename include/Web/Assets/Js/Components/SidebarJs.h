@@ -17,37 +17,37 @@ function initSidebar()
 
         <div class="menu-item" data-page="rooms">
             ${icon("rooms",22)}
-            <span>Rooms</span>
+            <span>خانه</span>
         </div>
 
         <div class="menu-item" data-page="channels">
             ${icon("channels",22)}
-            <span>Channels</span>
+            <span>کانال ها</span>
         </div>
 
         <div class="menu-item" data-page="scenes">
-            ${icon("scenes",22)}
+            ${icon("سناریوها",22)}
             <span>Scenes</span>
         </div>
 
         <div class="menu-item" data-page="schedules">
             ${icon("schedules",22)}
-            <span>Schedules</span>
+            <span>زمان بندی ها</span>
         </div>
 
         <div class="menu-item" data-page="sensors">
             ${icon("sensors",22)}
-            <span>Sensors</span>
+            <span>سنسورها</span>
         </div>
 
         <div class="menu-item" data-page="ota">
             ${icon("ota",22)}
-            <span>OTA</span>
+            <span>بروزرسانی</span>
         </div>
 
         <div class="menu-item" data-page="settings">
             ${icon("settings",22)}
-            <span>Settings</span>
+            <span>تنظیمات</span>
         </div>
 
     </div>
