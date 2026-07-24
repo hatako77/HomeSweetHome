@@ -40,11 +40,11 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 	}
 
 	.logo{
-		font-size:16px;
+		font-size:1rem;
 	}
 
 	.status{
-		font-size:11px;
+		font-size:1rem;
 	}
 
 	.layout{
@@ -96,7 +96,7 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 	}
 
 	.tile-name{
-		font-size:12px;
+		font-size:1rem;
 	}
 
 	.btn{
