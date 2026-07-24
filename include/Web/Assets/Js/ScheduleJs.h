@@ -9,11 +9,10 @@ let schedules=[];
 
 async function initSchedules()
 {
-	const data=await apiGet("/api/schedules");
-	if(!data)
-		return;
-	schedules=data;
-	renderSchedules();
+	//const data=await apiGet("/api/schedules");
+	//if(!data) return;
+	//schedules=data;
+	//renderSchedules();
 }
 
 function showSchedules()
