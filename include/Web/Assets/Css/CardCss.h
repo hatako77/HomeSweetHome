@@ -21,14 +21,14 @@ const char CARD_CSS[] PROGMEM=R"rawliteral(
 }
 
 .card-title{
-	font-size:18px;
+	font-size:1rem;
 	font-weight:600;
 	margin-bottom:16px;
 	color:#f8fafc;
 }
 
 .card-subtitle{
-	font-size:13px;
+	font-size:1rem;
 	color:#94a3b8;
 	margin-bottom:18px;
 }
@@ -77,7 +77,7 @@ const char CARD_CSS[] PROGMEM=R"rawliteral(
 
 .info-label{
 	color:#94a3b8;
-	font-size:13px;
+	font-size:1rem;
 }
 
 .info-value{
