@@ -110,10 +110,9 @@ async function showRooms()
     App.currentPage = "rooms";
 
     $("content").innerHTML = `
-        <h2>Rooms</h2>
+        <h2>مکان ها</h2>
         <button class="btn btn-primary" onclick="addRoom()">
-            <i class="fa-solid fa-plus"></i>
-            Add Room
+            ${icon("add",22)}
         </button>
         <div id="roomsContainer"></div>
     `;
