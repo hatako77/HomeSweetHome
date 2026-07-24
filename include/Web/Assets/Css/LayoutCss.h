@@ -57,7 +57,7 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
     position:fixed;
 
     top:60px;
-    left:0;
+    right:0;
 
     width:260px;
     height:calc(100vh - 60px);
@@ -87,7 +87,6 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
     #sidebar{
         width:70px;
         top:60px;
-        left:0;
         height:calc(100vh - 60px);
         padding:10px 6px;
     }
