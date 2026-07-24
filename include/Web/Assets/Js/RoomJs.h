@@ -195,11 +195,11 @@ function createRoomCard(room)
                 }
 
                 <span>${room.name}</span>
-                <div> 
-                    <button style="background-color: #ffffff26;color: bisque;border-radius: 7rem;width: 2.5rem;height: 2.5rem;" onclick="editRoom(${room.id})">
+                <div style="display: flex;"> 
+                    <button style="align-items: center;justify-content: center;display: flex;background-color: #ffffff26;color: bisque;border-radius: 7rem;width: 2.5rem;height: 2.5rem;" onclick="editRoom(${room.id})">
                         ${icon("edit")}
                     </button>                
-                    <button style="background-color: #ffffff26;color: bisque;border-radius: 7rem;width: 2.5rem;height: 2.5rem;" onclick="deleteRoom(${room.id})">
+                    <button style="align-items: center;justify-content: center;display: flex;background-color: #ffffff26;color: bisque;border-radius: 7rem;width: 2.5rem;height: 2.5rem;" onclick="deleteRoom(${room.id})">
                         ${icon("delete")}
                     </button>
                 </div>
