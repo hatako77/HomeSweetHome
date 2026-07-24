@@ -190,7 +190,7 @@ function createRoomCard(room)
                     room.motion
                     ? `
                         <div class="room-motion ${room.motion.state ? "active" : ""}">
-                            ${icon(4,20)}
+                            ${icon("motion",20)}
                         </div>
                     `
                     : ""
