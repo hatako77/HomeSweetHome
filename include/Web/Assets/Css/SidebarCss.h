@@ -62,7 +62,7 @@ const char SIDEBAR_CSS[] PROGMEM=R"rawliteral(
 	.menu-item span{
 		display:none;
 	}
-	.svg-icon span{
+	.menu-item .svg-icon {
 		display:block;
 	}
 
