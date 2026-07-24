@@ -15,11 +15,6 @@ function initSidebar()
     sidebar.innerHTML = `
     <div class="sidebar-menu">
 
-        <div class="menu-item active" data-page="dashboard">
-            <i class="fa-solid fa-gauge"></i>
-            <span>Dashboard</span>
-        </div>
-
         <div class="menu-item" data-page="rooms">
             <i class="fa-solid fa-house"></i>
             <span>Rooms</span>
