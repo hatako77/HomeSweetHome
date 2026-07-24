@@ -37,7 +37,7 @@ const char TOAST_CSS[] PROGMEM=R"rawliteral(
 }
 
 .toast-message{
-	font-size:14px;
+	font-size:1rem;
 	line-height:1.5;
 }
 
