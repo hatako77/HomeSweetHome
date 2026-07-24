@@ -10,22 +10,21 @@ async function initOTA()
     App.currentPage = "ota";
 
     $("content").innerHTML = `
-    <h2>Firmware Update</h2>
 
     <div class="card">
 
         <div class="info-row">
-            <span>Current Version</span>
+            <span>نسخه فعلی</span>
             <b id="otaCurrent">-</b>
         </div>
 
         <div class="info-row">
-            <span>Latest Version</span>
+            <span>آخرین نسخه</span>
             <b id="otaRemote">-</b>
         </div>
 
         <div class="info-row">
-            <span>Status</span>
+            <span>وضیت</span>
             <b id="otaState">Idle</b>
         </div>
 
@@ -63,7 +62,7 @@ async function initOTA()
                 class="btn"
                 id="otaCheckButton"
                 onclick="checkOTA()">
-                Check
+                بررسی
             </button>
 
             <button
@@ -71,7 +70,7 @@ async function initOTA()
                 id="otaUpdateButton"
                 onclick="startOTA()"
                 disabled>
-                Update
+                شروع بروزرسانی
             </button>
 
         </div>
