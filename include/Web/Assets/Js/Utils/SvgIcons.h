@@ -54,9 +54,24 @@ motion: `
 </svg>`,
 
 temperature: `
-<svg viewBox="0 0 24 24">
-<path d="M12 3v11a3 3 0 1 1-2 2.8V3a2 2 0 1 1 4 0v11"/>
-</svg>`,
+<svg viewBox="0 0 24 24" fill="none"
+     stroke="currentColor"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <!-- Head -->
+    <circle cx="8" cy="5" r="2"/>
+    <!-- Body -->
+    <path d="M8 7.5v5"/>
+    <path d="M8 9l-3 2"/>
+    <path d="M8 9l3 2"/>
+    <path d="M8 12l-2 5"/>
+    <path d="M8 12l3 5"/>
+    <!-- Detection waves -->
+    <path d="M15 7a3 3 0 0 1 0 10"/>
+    <path d="M18 4a6.5 6.5 0 0 1 0 16"/>
+</svg>
+`,
 
 water: `
 <svg viewBox="0 0 24 24">
