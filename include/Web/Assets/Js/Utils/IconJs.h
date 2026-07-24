@@ -18,6 +18,12 @@ const iconMap =
     8: "bell",
     9: "curtain",
     10: "tv",
+    settings:"settings",
+    ota:"ota",
+    scenes:"scenes",
+    schedules:"schedules",
+    rooms:"rooms",
+    channels:"channels",
 
     plus: "plus",
     edit: "edit",
