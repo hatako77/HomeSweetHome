@@ -32,14 +32,7 @@ function getIcon(id)
     return Icons[key] ?? Icons.generic;
 }
 
-function icon(id, size = 22)
-{
-    return `
-        <span class="svg-icon" style="width:${size}px;height:${size}px">
-            ${getIcon(id)}
-        </span>
-    `;
-}
+
 
 )rawliteral";
 
