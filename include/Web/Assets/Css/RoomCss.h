@@ -29,6 +29,8 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     display:flex;
     align-items:center;
     gap:12px;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .room-motion{
