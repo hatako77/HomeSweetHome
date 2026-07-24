@@ -11,7 +11,7 @@ const char FORM_CSS[] PROGMEM=R"rawliteral(
     border-radius:8px;
     background:#222;
     color:#fff;
-    font-size:14px;
+    font-size:1rem;
     outline:none;
 }
 
@@ -35,7 +35,7 @@ const char FORM_CSS[] PROGMEM=R"rawliteral(
 }
 
 label{
-	font-size:13px;
+	font-size:1rem;
 	font-weight:600;
 	color:#94a3b8;
 }
@@ -49,7 +49,7 @@ textarea{
 	border:1px solid #334155;
 	border-radius:12px;
 	color:#f8fafc;
-	font-size:14px;
+	font-size:1rem;
 	transition:.2s;
 }
 
