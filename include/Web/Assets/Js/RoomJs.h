@@ -152,7 +152,6 @@ async function addRoom()
 
 function renderRooms()
 {
-    console.trace("######## renderRooms ########");
     if(App.currentPage !== "rooms")
         return;
 
@@ -182,8 +181,22 @@ function renderRooms()
 
     getRooms().forEach(room =>
     {
+        const roomChannels =
+            channelsByRoom.get(room.id) || [];
+
+        // سنسور Motion این اتاق
+        room.motion =
+            roomChannels.find(c =>
+                c.type === 0 &&
+                c.icon === 4);
+
+        // فقط خروجی‌ها
+        room.outputs =
+            roomChannels.filter(c =>
+                c.type === 1);
+
         container.appendChild(
-            createRoomCard(room, channelsByRoom)
+            createRoomCard(room)
         );
     });
 }
