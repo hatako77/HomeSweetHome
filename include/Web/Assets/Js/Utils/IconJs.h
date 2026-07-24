@@ -28,7 +28,11 @@ const iconMap =
     plus: "plus",
     edit: "edit",
     trash: "trash",
-
+    add:"add",
+    plus:"plus",
+    create:"create",
+    delete:"delete",
+    edit:"edit",
     generic: "generic"
 };
 
