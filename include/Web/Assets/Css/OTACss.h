@@ -23,13 +23,13 @@ const char OTA_CSS[] PROGMEM=R"rawliteral(
 }
 
 .ota-title{
-	font-size:18px;
+	font-size:1rem;
 	font-weight:600;
 	color:#f8fafc;
 }
 
 .ota-version{
-	font-size:13px;
+	font-size:0.8rem;
 	color:#94a3b8;
 }
 
@@ -48,13 +48,13 @@ const char OTA_CSS[] PROGMEM=R"rawliteral(
 }
 
 .ota-item-label{
-	font-size:12px;
+	font-size:0.8rem;
 	color:#94a3b8;
 	margin-bottom:8px;
 }
 
 .ota-item-value{
-	font-size:16px;
+	font-size:1rem;
 	font-weight:600;
 	color:#f8fafc;
 }
@@ -95,7 +95,7 @@ const char OTA_CSS[] PROGMEM=R"rawliteral(
 	border-radius:12px;
 	background:#0f172a;
 	color:#cbd5e1;
-	font-size:14px;
+	font-size:0.8rem;
 }
 
 @media(max-width:768px){
