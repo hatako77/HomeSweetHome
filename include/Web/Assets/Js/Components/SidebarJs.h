@@ -16,35 +16,37 @@ function initSidebar()
     <div class="sidebar-menu">
 
         <div class="menu-item" data-page="rooms">
-            <i class="fa-solid fa-house"></i>
+            ${icon("rooms",22)}
             <span>Rooms</span>
         </div>
+
         <div class="menu-item" data-page="channels">
-            <i class="fa-solid fa-lightbulb"></i>
+            ${icon("channels",22)}
             <span>Channels</span>
         </div>
+
         <div class="menu-item" data-page="scenes">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            ${icon("scenes",22)}
             <span>Scenes</span>
         </div>
 
         <div class="menu-item" data-page="schedules">
-            <i class="fa-solid fa-clock"></i>
+            ${icon("schedules",22)}
             <span>Schedules</span>
         </div>
 
         <div class="menu-item" data-page="sensors">
-            <i class="fa-solid fa-temperature-half"></i>
+            ${icon("sensors",22)}
             <span>Sensors</span>
         </div>
 
         <div class="menu-item" data-page="ota">
-            <i class="fa-solid fa-upload"></i>
+            ${icon("ota",22)}
             <span>OTA</span>
         </div>
 
         <div class="menu-item" data-page="settings">
-            <i class="fa-solid fa-gear"></i>
+            ${icon("settings",22)}
             <span>Settings</span>
         </div>
 
@@ -61,7 +63,6 @@ function bindSidebar()
         button.onclick = () =>
         {
             setActiveMenu(button.dataset.page);
-
             Router.navigate(button.dataset.page);
         };
     });
