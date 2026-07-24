@@ -299,6 +299,15 @@ function createChannelTile(channel)
 
     return tile;
 }
+function updateRoomMotion(channel)
+{
+    if (channel.type !== 0) return;
+    const room = getRoom(channel.roomId);
+    if (!room) return;
+    room.motionActive = channel.state;
+    const icon = document.querySelector(`.room-header[data-room="${room.id}"] .room-motion`);
+    if (icon) icon.classList.toggle("active", room.motionActive);
+}
 
 function updateTile(tile, channel)
 {
