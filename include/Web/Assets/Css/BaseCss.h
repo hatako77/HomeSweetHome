@@ -34,7 +34,7 @@ const char BASE_CSS[] PROGMEM=R"rawliteral(
 .icon-item.selected{
     border:2px solid var(--primary);
     background:rgba(59,130,246,.15);
-
+}
 
 html{
     height:100%;
