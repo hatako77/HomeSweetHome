@@ -283,9 +283,6 @@ function createChannelTile(channel)
                     ${channel.name}
                 </div>
 
-                <div class="channel-state ${channel.state ? "on" : "off"}">
-                    ${channel.state ? "ON" : "OFF"}
-                </div>
             </div>
         </div>
     `;
