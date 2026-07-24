@@ -39,7 +39,7 @@ const char SIDEBAR_CSS[] PROGMEM=R"rawliteral(
 .menu-item i{
 	width:20px;
 	text-align:center;
-	font-size:18px;
+	font-size:1rem;
 	flex-shrink:0;
 }
 
@@ -69,7 +69,7 @@ const char SIDEBAR_CSS[] PROGMEM=R"rawliteral(
 	.menu-item i{
 		width:auto;
 		margin:0;
-		font-size:20px;
+		font-size:1rem;
 	}
 
 }
