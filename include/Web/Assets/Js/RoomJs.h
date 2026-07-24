@@ -203,7 +203,7 @@ function renderRooms()
 function createRoomCard(room)
 {
     const card = create("div", "room-card");
-
+    card.dataset.room = room.id;
     card.innerHTML = `
         <div class="room-header">
 
