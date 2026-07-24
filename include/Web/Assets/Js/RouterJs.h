@@ -13,9 +13,7 @@ const Router =
 
         switch(page)
         {
-            case "dashboard":
-                await initDashboard();
-                break;
+
             case "channels":
                 await showChannels();
                 break;
@@ -44,7 +42,7 @@ const Router =
                 break;
 
             default:
-                await initDashboard();
+                await showRooms();
                 break;
         }
 
