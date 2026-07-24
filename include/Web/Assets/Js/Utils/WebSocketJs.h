@@ -119,21 +119,23 @@ function handleChannelMessage(msg)
             addChannelToList(msg.data);
             renderRooms();
             break;
-    
+
         case "updated":
             updateChannelInList(msg.data);
+            updateRoomMotion(msg.data);
             break;
 
         case "changed":
             updateChannelInList(msg.data);
+            updateRoomMotion(msg.data);
             break;
-    
+
         case "deleted":
             removeChannelFromList(msg.data.id);
+            renderRooms();
             break;
     }
 }
-
 async function handleRoomMessage(msg)
 {
     switch(msg.action)
