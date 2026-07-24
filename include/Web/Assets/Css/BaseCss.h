@@ -34,18 +34,24 @@ const char BASE_CSS[] PROGMEM=R"rawliteral(
 .icon-item.selected{
     border:2px solid var(--primary);
     background:rgba(59,130,246,.15);
-}
+
+
 html{
-	height:100%;
+    height:100%;
 }
 
 body{
-	min-height:100%;
-	font-family:'Segoe UI',Arial,sans-serif;
-	background:#0b1220;
-	color:#e5e7eb;
-	overflow:hidden;
+    min-height:100vh;
+    margin:0;
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:#0b1220;
+    color:#e5e7eb;
+
+    overflow-y:auto;
+    overflow-x:hidden;
 }
+
+
 .svg-icon{
 display:inline-flex;
 align-items:center;
