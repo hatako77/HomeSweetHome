@@ -46,10 +46,8 @@ html{
 body{
     min-height:100vh;
     margin:0;
-    font-family:'Segoe UI',Arial,sans-serif;
     background:#0b1220;
     color:#e5e7eb;
-
     overflow-y:auto;
     overflow-x:hidden;
 }
