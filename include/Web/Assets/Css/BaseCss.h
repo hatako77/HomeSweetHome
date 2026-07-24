@@ -39,6 +39,7 @@ const char BASE_CSS[] PROGMEM=R"rawliteral(
 html{
     height:100%;
 	direction:rtl;
+	font-size:14px;
 }
 
 body{
