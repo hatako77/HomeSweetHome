@@ -7,13 +7,49 @@ const char SVG_ICONS[] PROGMEM = R"rawliteral(
 
 window.Icons = {
 
-
-
-
 plus: `
-<svg viewBox="0 0 24 24">
-<path d="M12 5v14"/>
-<path d="M5 12h14"/>
+<svg viewBox="0 0 24 24" fill="none"
+stroke="currentColor" stroke-width="2.2"
+stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 5v14"/>
+    <path d="M5 12h14"/>
+</svg>`,
+
+edit: `
+<svg viewBox="0 0 24 24" fill="none"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 20l4.5-1L19 8.5 15.5 5 5 15.5 4 20z"/>
+    <path d="M14.5 5.5L18 9"/>
+</svg>`,
+
+delete: `
+<svg viewBox="0 0 24 24" fill="none"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 7h16"/>
+    <path d="M9 4h6"/>
+    <path d="M7 7l1 13h8l1-13"/>
+    <path d="M10 11v6"/>
+    <path d="M14 11v6"/>
+</svg>`,
+
+create: `
+<svg viewBox="0 0 24 24" fill="none"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M12 8v8"/>
+    <path d="M8 12h8"/>
+</svg>`,
+
+add: `
+<svg viewBox="0 0 24 24" fill="none"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="14" height="16" rx="2"/>
+    <path d="M20 8v8"/>
+    <path d="M16 12h8"/>
 </svg>`,
 
 channels: `
