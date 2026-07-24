@@ -125,8 +125,8 @@ async function showRooms()
 async function addRoom()
 {
     Dialog.prompt({
-        title: "Add Room",
-        placeholder: "Room name",
+        title: "افزودن اتاق",
+        placeholder: "نام اتاق",
         onSave: async(name)=>
         {
             const result = await apiPost(
