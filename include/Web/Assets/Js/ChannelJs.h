@@ -468,6 +468,7 @@ function updateChannelInList(channel)
             if(tile)
             {
                 updateTile(tile, local);
+                updateRoomMotion(channel);
             }
         }
     }
