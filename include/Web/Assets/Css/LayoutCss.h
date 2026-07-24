@@ -63,10 +63,9 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 }
 
 #content{
-	flex:1;
-	min-width:0;
-	padding:30px;
-	overflow:auto;
+    flex:1;
+    min-width:0;
+    padding:30px;
 }
 
 @media(max-width:768px){
@@ -74,6 +73,9 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 	#sidebar{
 		width:70px;
 		padding:10px 6px;
+	    position:sticky;
+	    top:60px;
+	    height:calc(100vh - 60px);
 	}
 
 	#content{
