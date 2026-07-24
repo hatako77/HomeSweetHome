@@ -38,7 +38,6 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <script src="/js/utils/icons.js"></script>
 <script src="/js/utils/websocket.js"></script>
 <script src="/js/utils/svgicons.js"></script>
-<script src="/js/utils/iconpicker.js"></script>
 
 <script src="/js/components/sidebar.js"></script>
 <script src="/js/components/dialog.js"></script>
