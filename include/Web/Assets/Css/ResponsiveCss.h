@@ -6,6 +6,9 @@
 const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 
 @media(max-width:1200px){
+	html{
+		font-size:14px;
+	}
 
 	#roomsContainer{
 		grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
@@ -18,7 +21,9 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 }
 
 @media(max-width:992px){
-
+	html{
+		font-size:14px;
+	}
 	#content{
 		padding:20px;
 	}
@@ -34,7 +39,9 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 }
 
 @media(max-width:768px){
-
+	html{
+		font-size:14px;
+	}
 	.topbar{
 		padding:0 14px;
 	}
@@ -81,7 +88,9 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 }
 
 @media(max-width:480px){
-
+	html{
+		font-size:14px;
+	}
 	.channel-list{
 		grid-template-columns:1fr;
 	}
