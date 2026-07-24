@@ -6,13 +6,21 @@
 const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 
 .topbar{
-	display:flex;
-	align-items:center;
-	justify-content:space-between;
-	height:60px;
-	padding:0 20px;
-	background:#0f172a;
-	border-bottom:1px solid #1f2937;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    height:60px;
+    padding:0 20px;
+
+    background:#0f172a;
+    border-bottom:1px solid #1f2937;
 }
 
 .logo{
@@ -37,6 +45,7 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 
 .container{
     width:100%;
+    margin-top:60px;   /* ارتفاع TopBar */
 }
 
 .layout{
@@ -45,42 +54,48 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 }
 
 #sidebar{
-    width:260px;
-    flex-shrink:0;
+    position:fixed;
 
-    position:sticky;
     top:60px;
+    left:0;
 
+    width:260px;
     height:calc(100vh - 60px);
+
+    overflow-y:auto;
 
     padding:20px;
 
+    background:#0f172a;
     border-right:1px solid rgba(255,255,255,.08);
 
-    background:#0f172a;
-
-    overflow-y:auto;
+    z-index:999;
 }
 
 #content{
     flex:1;
-    min-width:0;
+
+    margin-left:260px;
+
     padding:30px;
+
+    min-width:0;
 }
 
 @media(max-width:768px){
 
-	#sidebar{
-		width:70px;
-		padding:10px 6px;
-	    position:sticky;
-	    top:60px;
-	    height:calc(100vh - 60px);
-	}
+    #sidebar{
+        width:70px;
+        top:60px;
+        left:0;
+        height:calc(100vh - 60px);
+        padding:10px 6px;
+    }
 
-	#content{
-		padding:16px;
-	}
+    #content{
+        margin-left:70px;
+        padding:16px;
+    }
 
 }
 
