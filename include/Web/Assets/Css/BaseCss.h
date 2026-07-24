@@ -39,7 +39,8 @@ const char BASE_CSS[] PROGMEM=R"rawliteral(
 html{
     height:100%;
 	direction:rtl;
-	font-size:14px;
+	font-size:16px;
+	font-family: "Vazirmatn", sans-serif;
 }
 
 body{
