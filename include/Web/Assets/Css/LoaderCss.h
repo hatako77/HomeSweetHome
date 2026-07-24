@@ -39,7 +39,7 @@ const char LOADER_CSS[] PROGMEM=R"rawliteral(
 }
 
 #loaderText{
-	font-size:15px;
+	font-size:1rem;
 	font-weight:500;
 	color:#e5e7eb;
 	text-align:center;
@@ -71,7 +71,7 @@ const char LOADER_CSS[] PROGMEM=R"rawliteral(
 	}
 
 	#loaderText{
-		font-size:14px;
+		font-size:1rem;
 	}
 
 }
