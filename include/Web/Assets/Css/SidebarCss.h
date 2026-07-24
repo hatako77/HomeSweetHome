@@ -62,6 +62,9 @@ const char SIDEBAR_CSS[] PROGMEM=R"rawliteral(
 	.menu-item span{
 		display:none;
 	}
+	.svg-icon span{
+		display:block;
+	}
 
 	.menu-item i{
 		width:auto;
