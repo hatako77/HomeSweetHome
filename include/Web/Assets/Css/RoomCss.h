@@ -118,19 +118,16 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .tile.on{
-    background:linear-gradient(180deg,#14532d,#0b1220);
+    background:#155e33;
     border-color:#22c55e;
 }
 
 .tile.off{
-    background:#0b1220;
+    background:#111827;
 }
 
 .tile.disabled{
     opacity:.35;
-    filter:grayscale(100%);
-    cursor:not-allowed;
-    pointer-events:none;
 }
 
 .channel-icon{
