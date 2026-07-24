@@ -152,51 +152,28 @@ async function addRoom()
 
 function renderRooms()
 {
-    if(App.currentPage !== "rooms")
-        return;
-
+    if(App.currentPage !== "rooms") return;
     const container = $("roomsContainer");
-
-    if(!container)
-        return;
-
+    if(!container) return;
     container.innerHTML = "";
-
     const channelsByRoom = new Map();
-
     getChannels().forEach(channel =>
     {
-        if(!channelsByRoom.has(channel.roomId))
-            channelsByRoom.set(channel.roomId, []);
-
+        if(!channelsByRoom.has(channel.roomId)) channelsByRoom.set(channel.roomId, []);
         channelsByRoom.get(channel.roomId).push(channel);
     });
-
     channelsByRoom.forEach(list =>
     {
-        list.sort((a,b)=>
-            (a.name || "").localeCompare(b.name || "", "fa")
-        );
+        list.sort((a,b)=> (a.name || "").localeCompare(b.name || "", "fa"));
     });
-
     getRooms().forEach(room =>
     {
         const roomChannels = channelsByRoom.get(room.id) || [];
-
         // سنسور Motion این اتاق
-        room.motion =
-            roomChannels.find(c =>
-                c.type === 0 &&
-                c.icon === 4);
-
+        room.motion = roomChannels.find(c => c.type == 0);
         // فقط خروجی‌ها
-        room.outputs =
-            roomChannels.filter(c =>
-                c.type === 1);
-
-        container.appendChild(
-            createRoomCard(room)
-        );
+        room.outputs = roomChannels.filter(c => c.type === 1);
+        container.appendChild(createRoomCard(room));
     });
 }
 
