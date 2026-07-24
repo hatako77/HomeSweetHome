@@ -40,7 +40,7 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 
 @media(max-width:768px){
 	html{
-		font-size:14px;
+		font-size:13px;
 	}
 	.topbar{
 		padding:0 14px;
@@ -89,7 +89,7 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 
 @media(max-width:480px){
 	html{
-		font-size:14px;
+		font-size:13px;
 	}
 	.channel-list{
 		grid-template-columns:1fr;
