@@ -28,11 +28,31 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 .room-title{
     display:flex;
     align-items:center;
-    gap:10px;
-    font-size:22px;
-    font-weight:600;
+    gap:12px;
 }
 
+.room-motion{
+    width:26px;
+    height:26px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+
+    color:#6b7280;
+    transition:.25s;
+}
+
+.room-motion.active{
+    color:#3b82f6;
+}
+
+.room-motion .svg-icon{
+    width:22px;
+    height:22px;
+}
 .room-header{
     display:flex;
     justify-content:space-between;
@@ -55,20 +75,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     align-items:center;
     gap:8px;
 }
-.room-motion{
-    width:40px;
-    height:40px;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    color:#7b7b7b;
-}
-
-.room-motion.active{
-    color:#3b82f6;
-}
 .room-count{
     padding:4px 10px;
     border-radius:999px;
