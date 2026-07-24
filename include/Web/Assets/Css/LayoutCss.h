@@ -24,7 +24,7 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 }
 
 .logo{
-	font-size:18px;
+	font-size:1rem;
 	font-weight:700;
 	color:#38bdf8;
 	display:flex;
@@ -36,7 +36,7 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 	display:flex;
 	align-items:center;
 	gap:6px;
-	font-size:13px;
+	font-size:1rem;
 }
 
 .status.online{
