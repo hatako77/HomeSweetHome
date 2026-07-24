@@ -72,7 +72,6 @@ void registerRoutes(WebServerService& web)
         response->print(CARD_CSS);
         response->print(BUTTON_CSS);
         response->print(FORM_CSS);
-        response->print(DASHBOARD_CSS);
         response->print(ROOM_CSS);
         response->print(DIALOG_CSS);
         response->print(TOAST_CSS);
