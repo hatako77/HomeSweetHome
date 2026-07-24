@@ -68,9 +68,17 @@ function on(element, event, callback)
         element.addEventListener(event, callback);
 }
 
-function icon(name)
+function icon(id, size = 22)
 {
-    return Icons[name] || Icons.generic;
+    const key = typeof id === "number"
+        ? (iconMap[id] ?? "generic")
+        : id;
+
+    return `
+        <span class="svg-icon" style="width:${size}px;height:${size}px">
+            ${Icons[key] ?? Icons.generic}
+        </span>
+    `;
 }
 
 function log()
