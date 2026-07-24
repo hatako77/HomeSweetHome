@@ -75,7 +75,7 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 #content{
     flex:1;
 	margin-top: 60px;
-    margin-left:260px;
+    margin-right:260px;
 
     padding:30px;
 
@@ -92,7 +92,7 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
     }
 
     #content{
-        margin-left:70px;
+        margin-right:70px;
         padding:16px;
     }
 
