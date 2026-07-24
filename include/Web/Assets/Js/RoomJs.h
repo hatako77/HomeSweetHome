@@ -208,8 +208,10 @@ function createRoomCard(room, channelsByRoom)
     `;
 
     const list = card.querySelector(".channel-list");
-    roomChannels.forEach(channel =>
-    {
+    roomChannels
+    .filter(channel => channel.type != 0)
+    .forEach(channel =>
+    {    
         list.appendChild(createChannelTile(channel));
     });
 
