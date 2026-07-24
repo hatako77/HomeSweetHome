@@ -36,16 +36,12 @@ const char LAYOUT_CSS[] PROGMEM=R"rawliteral(
 }
 
 .container{
-	width:100%;
-	height:calc(100vh - 60px);
-	margin:0;
-	padding:0;
+    width:100%;
 }
 
 .layout{
-	display:flex;
-	width:100%;
-	height:100%;
+    display:flex;
+    align-items:flex-start;
 }
 
 #sidebar{
