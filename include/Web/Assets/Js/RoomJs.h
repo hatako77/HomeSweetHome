@@ -191,51 +191,23 @@ function renderRooms()
 function createRoomCard(room, channelsByRoom)
 {
     const roomChannels = channelsByRoom.get(room.id) || [];
-
     const card = create("div","room-card");
 
     card.innerHTML = `
-        <div class="room-header">
-
-            <div class="room-name">
-                ${icon("generic")}
-                ${room.name}
-            </div>
-
-            <div class="room-actions">
-
-                <div class="room-count">
-                    ${roomChannels.length}
-                </div>
-
-                <button class="icon-btn add-channel-btn" title="Add Channel">
-                    ${icon("plus")}
-                </button>
-
-                <button
-                    class="icon-btn"
-                    onclick="editRoom(${room.id})"
-                    title="Edit">
-                    ${icon("edit")}
-                </button>
-
-                <button
-                    class="icon-btn danger"
-                    onclick="deleteRoom(${room.id})"
-                    title="Delete">
-                    ${icon("trash")}
-                </button>
-
-            </div>
-
+    <div class="room-header">    
+        <div class="room-title">    
+            <span> ${room.name} </span>    
+        </div>    
+        <div class="room-motion ${room.motionActive ? "active" : ""}"
+             style="${room.hasMotion ? "" : "display:none"}">    
+            ${icon("motion",22)}    
         </div>
-
-        <div class="channel-list" data-room="${room.id}">
-        </div>
+    
+    </div>
+        <div class="channel-list" data-room="${room.id}"></div>
     `;
 
     const list = card.querySelector(".channel-list");
-
     roomChannels.forEach(channel =>
     {
         list.appendChild(createChannelTile(channel));
