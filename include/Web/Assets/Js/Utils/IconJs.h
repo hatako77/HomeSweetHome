@@ -24,7 +24,7 @@ const iconMap =
     schedules:"schedules",
     rooms:"rooms",
     channels:"channels",
-
+    sensors: "sensors",  
     plus: "plus",
     edit: "edit",
     trash: "trash",
