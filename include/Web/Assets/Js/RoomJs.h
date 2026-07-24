@@ -196,10 +196,10 @@ function createRoomCard(room)
 
                 <span>${room.name}</span>
                 <div> 
-                    <button class="btn btn-primary" onclick="editRoom(${room.id})">
+                    <button style="background-color: #ffffff26;color: bisque;border-radius: 7rem;width: 2.5rem;height: 2.5rem;" onclick="editRoom(${room.id})">
                         ${icon("edit")}
                     </button>                
-                    <button class="btn btn-primary" onclick="deleteRoom(${room.id})">
+                    <button style="background-color: #ffffff26;color: bisque;border-radius: 7rem;width: 2.5rem;height: 2.5rem;" onclick="deleteRoom(${room.id})">
                         ${icon("delete")}
                     </button>
                 </div>
