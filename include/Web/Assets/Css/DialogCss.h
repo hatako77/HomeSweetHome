@@ -49,7 +49,7 @@ const char DIALOG_CSS[] PROGMEM=R"rawliteral(
 }
 
 .dialog-title{
-	font-size:18px;
+	font-size:1rem;
 	font-weight:600;
 	color:#f8fafc;
 }
