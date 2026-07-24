@@ -29,7 +29,7 @@ const char OTA_CSS[] PROGMEM=R"rawliteral(
 }
 
 .ota-version{
-	font-size:0.8rem;
+	font-size:1rem;
 	color:#94a3b8;
 }
 
