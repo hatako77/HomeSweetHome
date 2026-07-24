@@ -196,10 +196,10 @@ function createRoomCard(room)
 
                 <span>${room.name}</span>
                 <button class="btn btn-primary" onclick="editRoom(${room.id})">
-                    $icon("edit")
+                    ${icon("edit")}
                 </button>                
                 <button class="btn btn-primary" onclick="deleteRoom(${room.id})">
-                    $icon("delete")
+                    ${icon("delete")}
                 </button>
 
             </div>
