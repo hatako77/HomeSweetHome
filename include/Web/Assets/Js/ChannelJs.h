@@ -44,7 +44,9 @@ async function showChannelDialog(channel = null)
         content: `
             <div class="form-group">
                 <label>Name</label>
-                <input id="chName" class="textbox" value="${channel?.name ?? ""}">
+                <input id="chName"
+                       class="textbox"
+                       value="${channel?.name ?? ""}">
             </div>
             <div class="form-group">
                 <label>Room</label>
@@ -56,29 +58,27 @@ async function showChannelDialog(channel = null)
                 <label>Type</label>
                 <select id="chType" class="textbox">
                     <option value="0"
-                        ${channel?.type==0?"selected":""}>
+                        ${channel?.type == 0 ? "selected" : ""}>
                         Digital Input
                     </option>
                     <option value="1"
-                        ${channel?.type==1?"selected":""}>
+                        ${channel?.type == 1 ? "selected" : ""}>
                         Digital Output
                     </option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Driver</label>
-                <select id="chDriver" class="textbox">
-                </select>
+                <select id="chDriver" class="textbox"></select>
             </div>
             <div class="form-group">
                 <label>Device</label>
-                <select id="chDevice" class="textbox">
-                </select>
+                <select id="chDevice" class="textbox"></select>
             </div>
+
             <div class="form-group">
                 <label>Pin</label>
-                <select id="chPin" class="textbox">
-                </select>
+                <select id="chPin" class="textbox"></select>
             </div>
             <div class="form-group">
                 <label>Icon</label>
@@ -87,44 +87,51 @@ async function showChannelDialog(channel = null)
             <label class="checkbox">
                 <input id="chEnabled"
                        type="checkbox"
-                       ${channel?.enabled!==false?"checked":""}>
+                       ${channel?.enabled !== false ? "checked" : ""}>
                 Enabled
             </label>
             <label class="checkbox">
                 <input id="chFavorite"
                        type="checkbox"
-                       ${channel?.favorite?"checked":""}>
+                       ${channel?.favorite ? "checked" : ""}>
                 Favorite
             </label>
             <label class="checkbox">
                 <input id="chActiveLow"
                        type="checkbox"
-                       ${channel?.activeLow?"checked":""}>
+                       ${channel?.activeLow ? "checked" : ""}>
                 Active Low
             </label>
         `,
-        onSave: async() =>
+        onSave: async () =>
         {
             return saveChannel(channel?.id);
         }
     });
-
     fillDrivers(channel);
     fillDevices(channel);
-    fillPins(channel);  
+    fillPins(channel);
     const driver = $("chDriver");
     const device = $("chDevice");
-    const pin    = $("chPin");    
-    refreshPinList(driver.value,device.value,channel ? channel.id : 0,channel ? channel.pin : -1);    
-    driver.onchange = () =>
+    async function refreshPins(currentPin = -1)
     {
-        fillDevices(channel);    
-        refreshPinList(driver.value,$("chDevice").value,channel ? channel.id : 0,-1);
-    };    
-    device.onchange = () =>
+        await refreshPinList(
+            Number(driver.value),
+            Number(device.value),
+            channel?.id ?? 0,
+            currentPin
+        );
+    }
+    await refreshPins(channel?.pin ?? -1);
+    driver.onchange = async () =>
     {
-        fillPins(channel);    
-        refreshPinList(driver.value,device.value,channel ? channel.id : 0,-1);
+        fillDevices(channel);
+        await refreshPins(-1);
+    };
+    device.onchange = async () =>
+    {
+        fillPins(channel);
+        await refreshPins(-1);
     };
     selectedChannelIcon = channel?.icon ?? 0;
     buildIconPicker();
