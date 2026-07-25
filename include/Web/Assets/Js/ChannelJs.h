@@ -27,6 +27,14 @@ async function editChannel(id)
 //==============================================================
 async function showChannelDialog(channel = null)
 {
+    if(channel == null)
+    {
+        refreshPinList(driver.value,device.value,-1,0);
+    }
+    else
+    {
+        refreshPinList(channel.driverId,channel.device,channel.pin,channel.id);
+    }
     const rooms = await apiGet("/api/rooms");
     let roomOptions = `<option value="0">No Room</option>`;
     if(Array.isArray(rooms))
@@ -115,6 +123,7 @@ async function showChannelDialog(channel = null)
     selectedChannelIcon = channel?.icon ?? 0;
     buildIconPicker();
 }
+//==============================================================
 function fillDrivers(channel)
 {
     $("chDriver").innerHTML = `
