@@ -451,45 +451,8 @@ function removeChannelFromList(id)
 
 function renderChannelsTable()
 {
-    if(App.currentPage !== "channels")
-        return;
-    const container = $("channelsTable");
-
-    let html = `
-        <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Room</th>
-                <th>Type</th>
-                <th>Driver</th>
-                <th>Device</th>
-                <th>Pin</th>
-                <th>Icon</th>
-                <th>Favorite</th>
-                <th>Enabled</th>
-                <th>State</th>
-                <th></th>
-            </tr>
-        </thead>
-    <tbody>
-    `;
-        channels.forEach(channel =>
-        {
-            const room = findRoom(channel.roomId);
-        
-            html += buildChannelRow(
-                channel,
-                room ? room.name : "-"
-            );
-        });
-        
-        html += `
-            </tbody>
-        </table>
-    `;
-    container.innerHTML = html;
+    renderChannels();
+    console.log("test");
 }
 //==============================================================
 function buildChannelRow(channel, roomName)
