@@ -30,6 +30,8 @@ public:
     bool assignToRoom(uint16_t channelId, uint8_t roomId);
     const IOChannel* getAt(uint16_t index) const;
     IOChannel* getAt(uint16_t index);
+    bool isPinUsed(const IOAddress& address,uint16_t ignoreId = 0) const;
+
 private:
     static constexpr uint8_t MAX_DRIVERS = 8;
     IIODriver* drivers[MAX_DRIVERS];
