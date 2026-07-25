@@ -47,7 +47,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             {
                 const IOChannel* ch = ioManager.getAt(i);        
                 if(!ch)continue;        
-                Serial.println("channel=%d  ignore=%d\n", ch->id, ignore);
+                Serial.printf("channel=%d  ignore=%d\n", ch->id, ignore);
                 if(ch->id == ignore)
                 {
                     Serial.println("skip");
