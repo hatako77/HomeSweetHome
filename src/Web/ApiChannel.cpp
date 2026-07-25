@@ -11,11 +11,10 @@ void ApiChannel::registerRoutes(WebServerService& web)
     Serial.println(">>>>>>>> ApiChannel::registerRoutes");
     auto& server = web.server();
     Serial.println(">>>>>>>> Server OK");
-    
+//==============================================================================================    
     server.on("/api/channels/state", HTTP_POST,[](AsyncWebServerRequest*){},nullptr,
     [](AsyncWebServerRequest* request,uint8_t* data,size_t len,size_t,size_t)
-    {
-       
+    {       
         JsonDocument doc;    
         if(deserializeJson(doc, data, len))
         {
@@ -31,23 +30,18 @@ void ApiChannel::registerRoutes(WebServerService& web)
         }    
         request->send(200,"application/json","{\"success\":true}");
     });
-    Serial.println(">>>>>>>> Route Registered");
-    
-    server.on("/api/channels",HTTP_GET,
-    [](AsyncWebServerRequest* request)
+//==============================================================================================    
+    server.on("/api/channels",HTTP_GET, [](AsyncWebServerRequest* request)
     {
         if(request->hasParam("id"))
         {
-            uint16_t id=request->getParam("id")->value().toInt();
-    
-            const IOChannel* ch=ioManager.getChannel(id);
-    
+            uint16_t id=request->getParam("id")->value().toInt();    
+            const IOChannel* ch=ioManager.getChannel(id);    
             if(!ch)
             {
                 request->send(404,"application/json","{\"success\":false}");
                 return;
             }
-
             JsonDocument doc;
             doc["id"]=ch->id;
             doc["name"]=ch->name;
@@ -63,26 +57,16 @@ void ApiChannel::registerRoutes(WebServerService& web)
             doc["pin"]      = ch->address.pin;
             doc["connected"] = ch->connected;
             String out;
-            serializeJson(doc,out);
-    
-            request->send(
-                200,
-                "application/json",
-                out
-            );
-    
+            serializeJson(doc,out);    
+            request->send(200, "application/json", out);    
             return;
-        }
-    
-        JsonDocument doc;
-    
-        JsonArray arr=doc.to<JsonArray>();
-    
+        }    
+        JsonDocument doc;    
+        JsonArray arr=doc.to<JsonArray>();    
         for(uint16_t i=0;i<ioManager.count();i++)
         {
             const IOChannel* ch=ioManager.getAt(i);
             if(!ch) continue;
-
             JsonObject o=arr.add<JsonObject>();
             o["id"]=ch->id;
             o["name"]=ch->name;
@@ -97,146 +81,96 @@ void ApiChannel::registerRoutes(WebServerService& web)
             o["device"]   = ch->address.device;
             o["pin"]      = ch->address.pin;
             o["connected"] = ch->connected;
-        }
-    
+        }    
         String out;
-        serializeJson(doc,out);
-    
-        request->send(
-            200,
-            "application/json",
-            out
-        );
+        serializeJson(doc,out);    
+        request->send(200, "application/json", out);
     });
-    
-    server.on("/api/channels",HTTP_POST,
-    [](AsyncWebServerRequest*){},
-    nullptr,
-    [](AsyncWebServerRequest* request,
-    uint8_t* data,
-    size_t len,
-    size_t,
-    size_t)
+//==============================================================================================    
+    server.on("/api/channels/usedpins", HTTP_GET, [this]()
     {
-        JsonDocument doc;
-    
+        uint8_t driver = server.arg("driver").toInt();    
+        uint8_t device = server.arg("device").toInt();    
+        uint16_t ignore = server.hasArg("ignore") ? server.arg("ignore").toInt() : 0;    
+        JsonDocument doc;    
+        JsonArray pins = doc["pins"].to<JsonArray>();    
+        for(const auto& channel : manager.channels())
+        {
+            if(channel.id == ignore) continue;    
+            if(channel.address.driverId != driver) continue;    
+            if(channel.address.device != device) continue;    
+            JsonObject p = pins.add<JsonObject>();    
+            p["pin"] = channel.address.pin;
+            p["name"] = channel.name;
+        }    
+        String json;
+        serializeJson(doc, json);    
+        server.send(200, "application/json", json);
+    });
+//==============================================================================================    
+    server.on("/api/channels",HTTP_POST, [](AsyncWebServerRequest*){}, nullptr,
+    [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t, size_t)
+    {
+        JsonDocument doc;    
         if(deserializeJson(doc,data,len))
         {
-            request->send(
-                400,
-                "application/json",
-                "{\"success\":false,\"message\":\"Invalid JSON\"}"
-            );
+            request->send(400, "application/json", "{\"success\":false,\"message\":\"Invalid JSON\"}");
             return;
-        }
-    
-        IOChannel channel{};
-    
+        }    
+        IOChannel channel{};    
         channel.name=doc["name"]|"Channel";
         channel.roomId=doc["roomId"]|0;
         channel.enabled=doc["enabled"]|true;
         channel.favorite=doc["favorite"]|false;
-        channel.activeLow=doc["activeLow"]|false;
-    
+        channel.activeLow=doc["activeLow"]|false;    
         IOType type;
-        if(typeFromValue(doc["type"]|0,type)) channel.type=type;
-    
-        IOIcon icon;
-        
-        if(iconFromValue(doc["icon"] | 0, icon))
-            channel.icon = icon;
+        if(typeFromValue(doc["type"]|0,type)) channel.type=type;    
+        IOIcon icon;        
+        if(iconFromValue(doc["icon"] | 0, icon)) channel.icon = icon;
         channel.address.driverId = doc["driverId"] | 0;
         channel.address.device   = doc["device"]   | 0;
         channel.address.pin      = doc["pin"]      | 0;
-        IOChannel* created=ioManager.add(channel);
-    
+        IOChannel* created=ioManager.add(channel);    
         if(!created)
         {
-            request->send(
-                500,
-                "application/json",
-                "{\"success\":false,\"message\":\"Cannot create channel\"}"
-            );
+            request->send(500, "application/json", "{\"success\":false,\"message\":\"Cannot create channel\"}");
             return;
-        }
-    
-        ioManager.save();
-    
-        Notifier::channelCreated(*created);
-    
-        JsonDocument res;
-    
+        }    
+        ioManager.save();    
+        Notifier::channelCreated(*created);    
+        JsonDocument res;    
         res["success"]=true;
         res["id"]=created->id;
-        res["name"]=created->name;
-    
+        res["name"]=created->name;    
         String out;
-        serializeJson(res,out);
-    
-        AsyncWebServerResponse* response=
-            request->beginResponse(
-                201,
-                "application/json",
-                out
-            );
-    
-        response->addHeader(
-            "Location",
-            "/api/channels?id="+String(created->id)
-        );
-    
+        serializeJson(res,out);    
+        AsyncWebServerResponse* response= request->beginResponse(201, "application/json", out);    
+        response->addHeader("Location", "/api/channels?id="+String(created->id));    
         request->send(response);
     });
-    
-    server.on("/api/channels",HTTP_PUT,
-    [](AsyncWebServerRequest*){},
-    nullptr,
-    [](AsyncWebServerRequest* request,
-    uint8_t* data,
-    size_t len,
-    size_t,
-    size_t)
+//==============================================================================================   
+    server.on("/api/channels",HTTP_PUT, [](AsyncWebServerRequest*){}, nullptr,
+    [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t, size_t)
     {
         if(!request->hasParam("id"))
         {
-            request->send(
-                400,
-                "application/json",
-                "{\"success\":false,\"message\":\"Missing id\"}"
-            );
+            request->send(400, "application/json", "{\"success\":false,\"message\":\"Missing id\"}");
             return;
-        }
-    
-        uint16_t id=
-            request->getParam("id")->value().toInt();
-    
-        JsonDocument doc;
-    
+        }    
+        uint16_t id= request->getParam("id")->value().toInt();    
+        JsonDocument doc;    
         if(deserializeJson(doc,data,len))
         {
-            request->send(
-                400,
-                "application/json",
-                "{\"success\":false,\"message\":\"Invalid JSON\"}"
-            );
+            request->send(400,"application/json","{\"success\":false,\"message\":\"Invalid JSON\"}");
             return;
-        }
-    
-        IOChannel* current=
-            ioManager.getChannel(id);
-    
+        }    
+        IOChannel* current=ioManager.getChannel(id);    
         if(!current)
         {
-            request->send(
-                404,
-                "application/json",
-                "{\"success\":false,\"message\":\"Channel not found\"}"
-            );
+            request->send(404,"application/json","{\"success\":false,\"message\":\"Channel not found\"}");
             return;
-        }
-    
-        IOChannel updated=*current;
-    
+        }    
+        IOChannel updated=*current;    
         updated.name=doc["name"]|updated.name;
         updated.roomId=doc["roomId"]|updated.roomId;
         updated.enabled=doc["enabled"]|updated.enabled;
@@ -247,73 +181,37 @@ void ApiChannel::registerRoutes(WebServerService& web)
         updated.address.device   = doc["device"]   | updated.address.device;
         updated.address.pin      = doc["pin"]      | updated.address.pin;
         IOType type;
-        if(typeFromValue(doc["type"]|(uint8_t)updated.type,type))
-            updated.type=type;
-    
+        if(typeFromValue(doc["type"]|(uint8_t)updated.type,type)) updated.type=type;    
         IOIcon icon;
-        if(iconFromValue(doc["icon"]|(uint8_t)updated.icon,icon))
-            updated.icon=icon;
-    
+        if(iconFromValue(doc["icon"]|(uint8_t)updated.icon,icon)) updated.icon=icon;    
         if(!ioManager.update(updated))
         {
-            request->send(
-                500,
-                "application/json",
-                "{\"success\":false}"
-            );
+            request->send(500,"application/json","{\"success\":false}");
             return;
-        }
-    
-        ioManager.save();
-    
-        IOChannel* ch=
-            ioManager.getChannel(id);
-    
-        if(ch)
-            Notifier::channelUpdated(*ch);
-    
-    
-        request->send(
-            200,
-            "application/json",
-            "{\"success\":true}"
-        );
+        }    
+        ioManager.save();    
+        IOChannel* ch=ioManager.getChannel(id);    
+        if(ch) Notifier::channelUpdated(*ch);    
+        request->send(200,"application/json","{\"success\":true}");
     });
-    server.on("/api/channels",HTTP_DELETE,
-    [](AsyncWebServerRequest* request)
+//==============================================================================================    
+    server.on("/api/channels",HTTP_DELETE,[](AsyncWebServerRequest* request)
     {
         if(!request->hasParam("id"))
         {
-            request->send(
-                400,
-                "application/json",
-                "{\"success\":false,\"message\":\"Missing id\"}"
-            );
+            request->send(400,"application/json","{\"success\":false,\"message\":\"Missing id\"}");
             return;
-        }
-    
-        uint16_t id=
-            request->getParam("id")->value().toInt();
-    
+        }    
+        uint16_t id=request->getParam("id")->value().toInt();    
         if(!ioManager.remove(id))
         {
-            request->send(
-                404,
-                "application/json",
-                "{\"success\":false,\"message\":\"Channel not found\"}"
-            );
+            request->send(404,"application/json","{\"success\":false,\"message\":\"Channel not found\"}");
             return;
-        }
-    
-        ioManager.save();
-    
+        }    
+        ioManager.save();    
         Notifier::channelDeleted(id);
-        request->send(
-            200,
-            "application/json",
-            "{\"success\":true}"
-        );
-    });
-    
+        request->send(200,"application/json","{\"success\":true}");
+    });    
+//==============================================================================================    
     
 }
