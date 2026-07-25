@@ -11,6 +11,21 @@ async function loadChannels(id = null)
     return await apiGet(url);
 }
 //==============================================================
+const ChannelTypeNames =
+{
+    0: "Digital Input",
+    1: "Digital Output",
+    2: "Analog Input",
+    3: "PWM Output",
+    4: "Virtual",
+    5: "Disabled"
+};
+const DriverNames =
+{
+    0: "PCF8574",
+    1: "ESP32",
+    2: "Virtual"
+};
 let channels = [];
 let selectedChannelIcon = 0;
 //==============================================================
@@ -455,67 +470,6 @@ function renderChannelsTable()
     console.log("test");
 }
 //==============================================================
-function buildChannelRow(channel, roomName)
-{
-    const typeName =
-    {
-        0: "Input",
-        1: "Output"
-    }[channel.type] ?? "-";
-
-    const stateText = channel.state ? "ON" : "OFF";
-
-    const connected = channel.connected !== false;
-
-    return `
-        <tr data-id="${channel.id}">
-            <td>${channel.id}</td>
-
-            <td>${channel.name}</td>
-
-            <td>${roomName}</td>
-
-            <td>${typeName}</td>
-            <td>${channel.driverId}</td>
-            
-            <td>${channel.device}</td>
-            
-            <td>${channel.pin}</td>
-            
-            <td>${icon(channel.icon)}</td>
-            
-            <td>${channel.favorite ? "⭐" : "-"}</td>
-            
-            <td>${channel.enabled ? "Yes" : "No"}</td>
-
-            <td>
-                <span class="state-badge ${channel.state ? "on" : "off"}">
-                    ${channel.state ? "ON" : "OFF"}
-                </span>
-            
-                ${
-                    connected
-                    ? ""
-                    : `<span class="state-badge offline">
-                            Offline
-                       </span>`
-                }
-            </td>
-            <td class="actions">
-                <button class="icon-btn"
-                    onclick="editChannel(${channel.id})">
-                    ${icon("edit")}
-                </button>
-
-                <button class="icon-btn danger"
-                    onclick="deleteChannel(${channel.id})">
-                    ${icon("trash")}
-                </button>
-            </td>
-        </tr>
-    `;
-}
-//==============================================================
 async function editChannel(id)
 {
     const channel = findChannel(id);
@@ -598,11 +552,11 @@ function createChannelCard(channel)
                 <div class="channel-address">
 
                     <span>
-                        ${TypeHelper[channel.type]}
+                        ${ChannelTypeNames[channel.type] ?? "-"}
                     </span>
 
                     <span>
-                        ${DriverHelper[channel.driverId]}
+                        ${DriverNames[channel.driverId] ?? "-"}
                     </span>
 
                     <span class="device-status">
