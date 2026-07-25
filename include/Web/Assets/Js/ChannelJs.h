@@ -641,7 +641,7 @@ async function loadUsedPins(driver, device, ignore = 0)
 async function refreshPinList(driver, device, currentPin, ignoreId)
 {
     const used = await loadUsedPins(driver, device, ignoreId);
-    const select = $(chPin");
+    const select = $("chPin");
     select.innerHTML = "";
     for(let i=0;i<8;i++)
     {
