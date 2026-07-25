@@ -371,7 +371,7 @@ async function showChannels()
                     Add Channel
                 </button>
             </div>
-            <div id="channelsTable"></div>
+            <div id="channelsContainer"></div>
         </div>
     `;
     await initChannels();
