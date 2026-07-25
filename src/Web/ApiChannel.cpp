@@ -48,7 +48,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
                 Serial.printf("channel=%d  ignore=%d\n", ch->id, ignore);
                 if(ch->id == ignore)
                 {
-                    console.log("SKIP");
+                    Serial.println("skip");
                     continue;
                 }      
                 if(ch->address.driverId != driver)continue;        
@@ -59,7 +59,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             }
             String json;
             serializeJson(doc, json);
-            console.log(json);
+            Serial.println(json);
             request->send(200, "application/json", json);
             return;
         }
