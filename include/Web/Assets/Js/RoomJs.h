@@ -167,8 +167,6 @@ function renderRooms()
     getRooms().forEach(room =>
     {
         const roomChannels = channelsByRoom.get(room.id) || [];
-        // سنسور Motion این اتاق
-        room.motion = roomChannels.find(c => c.type == 0);
         // فقط خروجی‌ها
         room.outputs = roomChannels.filter(c => c.type === 1);
         container.appendChild(createRoomCard(room));
@@ -183,16 +181,6 @@ function createRoomCard(room)
         <div class="room-header">
 
             <div class="room-title">
-
-                ${
-                    room.motion
-                    ? `
-                        <div class="room-motion ${room.motion.state ? "active" : ""}">
-                            ${icon("motion",20)}
-                        </div>
-                    `
-                    : ""
-                }
 
                 <span>${room.name}</span>
                 <div style="display: flex;"> 
@@ -274,15 +262,7 @@ function createChannelTile(channel)
 
     return tile;
 }
-function updateRoomMotion(channel)
-{
-    if (channel.type !== 0) return;
-    const room = getRoom(channel.roomId);
-    if (!room) return;
-    room.motionActive = channel.state;
-    const icon = document.querySelector(`.room-header[data-room="${room.id}"] .room-motion`);
-    if (icon) icon.classList.toggle("active", room.motionActive);
-}
+
 
 function updateTile(tile, channel)
 {
