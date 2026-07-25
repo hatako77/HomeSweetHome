@@ -13,7 +13,31 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     flex-direction:column;
     gap:14px;
 }
+.device-status
+{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
 
+.status-dot
+{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.status-dot.online
+{
+    background:#2ecc71;
+    box-shadow:0 0 6px #2ecc71;
+}
+
+.status-dot.offline
+{
+    background:#6b7280;
+}
 .channel-header{
     display:flex;
     align-items:center;
