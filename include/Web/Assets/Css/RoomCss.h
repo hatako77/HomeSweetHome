@@ -33,28 +33,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     justify-content: space-between;
 }
 
-.room-motion{
-    width:26px;
-    height:26px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    flex-shrink:0;
-
-    color:#6b7280;
-    transition:.25s;
-}
-
-.room-motion.active{
-    color:#3b82f6;
-}
-
-.room-motion .svg-icon{
-    width:22px;
-    height:22px;
-}
 .room-header{
     display:flex;
     justify-content:space-between;
