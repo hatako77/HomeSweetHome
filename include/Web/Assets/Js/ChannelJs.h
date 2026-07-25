@@ -468,7 +468,6 @@ function updateChannelInList(channel)
             if(tile)
             {
                 updateTile(tile, local);
-                updateRoomMotion(channel);
             }
         }
     }
@@ -615,16 +614,6 @@ async function editChannel(id)
         device: channel.device,
         pin: channel.pin
     });
-}
-//==============================================================
-function updateRoomMotion(channel)
-{
-    if(channel.type !== 0 || channel.icon !== 4) return;
-    const roomCard = document.querySelector(`.room-card[data-room="${channel.roomId}"]`);
-    if(!roomCard) return;
-    const motion = roomCard.querySelector(".room-motion");
-    if(!motion) return;
-    motion.classList.toggle("active", channel.state);
 }
 //==============================================================
 
