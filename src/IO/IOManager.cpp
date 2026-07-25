@@ -7,7 +7,6 @@
 #include "IO/IconHelper.h"
 #include "Web/Notifier.h"
 
-
 IOManager ioManager;
 
 void IOManager::begin()
@@ -16,50 +15,35 @@ void IOManager::begin()
     DriverRegistry::registerDrivers();
     channelCount = 0;
     nextId = 1;
-
-    bool loaded = load();
-    
-    Serial.print("Load: ");
-    Serial.println(loaded ? "OK" : "NEW");
-    
-    Serial.print("Channel Count: ");
-    Serial.println(channelCount);
-    
+    bool loaded = load();    
     for (uint16_t i = 0; i < channelCount; i++)
     {
-        Serial.printf(
-            "%2d | %-12s | Room:%d | Driver:%d Device:%d Pin:%d\n",
-            channels[i].id,
-            channels[i].name.c_str(),
-            channels[i].roomId,
-            channels[i].address.driverId,
-            channels[i].address.device,
-            channels[i].address.pin
-        );
+        Serial.printf("%2d | %-12s | Room:%d | Driver:%d Device:%d Pin:%d\n", channels[i].id, channels[i].name.c_str(),
+            channels[i].roomId, channels[i].address.driverId, channels[i].address.device, channels[i].address.pin);
     }    
-    for (uint16_t i = 0; i < channelCount; i++)
-    {
-        Serial.print(channels[i].id);
-        Serial.print(" : ");
-        Serial.println(channels[i].name);
-    }
 }
-
+//====================================================================
+bool ChannelManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
+{
+    for(const auto& channel : channels)
+    {
+        if(channel.id == ignoreId) continue;
+        if(channel.address.driverId == address.driverId && channel.address.device == address.device && channel.address.pin == address.pin)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+//====================================================================
 void IOManager::update()
 {
-    for (uint16_t i = 0; i < driverCount; i++)
-        drivers[i]->update();
-
+    for (uint16_t i = 0; i < driverCount; i++) drivers[i]->update();
     for (uint16_t i = 0; i < channelCount; i++)
     {
         IIODriver* drv = getDriver(channels[i].address.driverId);
-
-        if (!drv)
-            continue;
-
-        channels[i].connected =
-            drv->isConnected(channels[i].address.device);
-
+        if (!drv) continue;
+        channels[i].connected = drv->isConnected(channels[i].address.device);
         // فقط ورودی‌ها را بخوان
         if (channels[i].type == IOType::DigitalInput)
         {
@@ -67,10 +51,7 @@ void IOManager::update()
                 channels[i].address.device,
                 channels[i].address.pin
             );
-
-            if (channels[i].activeLow)
-                state = !state;
-
+            if (channels[i].activeLow) state = !state;
             if (channels[i].state != state)
             {
                 channels[i].state = state;
@@ -79,101 +60,76 @@ void IOManager::update()
         }
     }
 }
-
-
+//====================================================================
 bool IOManager::write(uint16_t id, bool state)
 {
-
     IOChannel* ch = getChannel(id);
-    Serial.printf(
-        "WRITE -> id=%d state=%d\n",
-        ch->id,
-        ch->state
-    );
-    if (!ch)
-        return false;    
-    if (ch->type != IOType::DigitalOutput)
-        return false;    
+    Serial.printf("WRITE -> id=%d state=%d\n", ch->id, ch->state);
+    if (!ch) return false;    
+    if (ch->type != IOType::DigitalOutput) return false;    
     ch->state = state;    
     bool hwState = state;    
-    if (ch->activeLow)
-        hwState = !hwState;    
+    if (ch->activeLow) hwState = !hwState;    
     IIODriver* drv = getDriver(ch->address.driverId);    
-    if (!drv)
-        return false;    
-    drv->write(
-        ch->address.device,
-        ch->address.pin,
-        hwState);  
+    if (!drv) return false;    
+    drv->write(ch->address.device, ch->address.pin, hwState);  
     Notifier::channelChanged(*ch);
     return true;
 }
-
-
+//====================================================================
 bool IOManager::read(uint16_t id) const
 {
 const IOChannel* ch = getChannel(id);
-    if (!ch)
-        return false;
+    if (!ch) return false;
     return ch->state;}
     IOChannel* IOManager::getChannel(uint16_t id)
     {
         for (uint16_t i = 0; i < channelCount; i++)
         {
-            if (channels[i].id == id)
-                return &channels[i];
+            if (channels[i].id == id) return &channels[i];
         }
     return nullptr;
 }
+//====================================================================
 const IOChannel* IOManager::getChannel(uint16_t id) const
 {
     for (uint16_t i = 0; i < channelCount; i++)
     {
-        if (channels[i].id == id)
-            return &channels[i];
+        if (channels[i].id == id) return &channels[i];
     }
     return nullptr;
 }
-
+//====================================================================
 uint16_t IOManager::count() const
 {
     return channelCount;
 }
-
+//====================================================================
 IOChannel* IOManager::add(const IOChannel& channel)
 {
-    if(channelCount >= MAX_IO)
-        return nullptr;
-
+    if(channelCount >= MAX_IO) return nullptr;
     IOChannel ch = channel;
-
     if(ch.id == 0 || getChannel(ch.id)) ch.id = nextId++;
-
     channels[channelCount] = ch;
-
     return &channels[channelCount++];
 }
-
-
+//====================================================================
 IIODriver* IOManager::getDriver(uint16_t driverId)
 {
-    if (driverId >= driverCount)
-        return nullptr;
-
+    if (driverId >= driverCount) return nullptr;
     return drivers[driverId];
 }
-
+//====================================================================
 uint16_t IOManager::countByRoom(uint16_t roomId) const
 {
         uint16_t count = 0;
         for (uint16_t i = 0; i < channelCount; i++)
-    {
-        if (channels[i].roomId == roomId)
-            count++;
-    }
+        {
+            if (channels[i].roomId == roomId) count++;
+        }
     return count;
 }
-
+//====================================================================
 bool IOManager::remove(uint16_t id)
 {
     for (uint16_t i = 0; i < channelCount; i++)
@@ -184,14 +140,13 @@ bool IOManager::remove(uint16_t id)
             {
                 channels[j] = channels[j + 1];
             }
-
             channelCount--;
             return true;
         }
     }
-
     return false;
 }
+//====================================================================
 bool IOManager::update(const IOChannel& channel)
 {
     for (uint16_t i = 0; i < channelCount; i++)
@@ -217,18 +172,13 @@ bool IOManager::update(const IOChannel& channel)
     }
     return false;
 }
-
+//====================================================================
 bool IOManager::save() const
 {
     File f = LittleFS.open("/io.json", "w");
-
-    if (!f)
-        return false;
-
+    if (!f) return false;
     JsonDocument doc;
-
     JsonArray arr = doc.to<JsonArray>();
-
     for (uint16_t i = 0; i < channelCount; i++)
     {
         const auto* ch = &channels[i];
@@ -245,14 +195,11 @@ bool IOManager::save() const
         o["device"] = ch->address.device;
         o["pin"] = ch->address.pin;
     }
-
     serializeJson(doc, f);
-
     f.close();
-
     return true;
 }
-
+//====================================================================
 bool IOManager::load()
 {
     if (!LittleFS.exists("/io.json")) return false;
@@ -282,33 +229,24 @@ bool IOManager::load()
     f.close();
     return true;
 }
-
+//====================================================================
 bool IOManager::registerDriver(IIODriver* driver)
 {
-    if (driverCount >= MAX_DRIVERS)
-        return false;
-
+    if (driverCount >= MAX_DRIVERS) return false;
     drivers[driverCount++] = driver;
     driver->begin();
     return true;
 }
-
-
-
-
+//====================================================================
 IOChannel* IOManager::getAt(uint16_t index)
 {
-    if (index >= channelCount)
-        return nullptr;
-
+    if (index >= channelCount) return nullptr;
     return &channels[index];
 }
 
 const IOChannel* IOManager::getAt(uint16_t index) const
 {
-    if (index >= channelCount)
-        return nullptr;
-
+    if (index >= channelCount) return nullptr;
     return &channels[index];
 }
 
