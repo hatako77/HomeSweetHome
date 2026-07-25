@@ -45,7 +45,12 @@ void ApiChannel::registerRoutes(WebServerService& web)
             {
                 const IOChannel* ch = ioManager.getAt(i);        
                 if(!ch)continue;        
-                if(ch->id == ignore)continue;        
+                Serial.printf("channel=%d  ignore=%d\n", ch->id, ignore);
+                if(ch->id == ignore)
+                {
+                    console.log("SKIP");
+                    continue;
+                }      
                 if(ch->address.driverId != driver)continue;        
                 if(ch->address.device != device)continue;        
                 JsonObject p = pins.add<JsonObject>();
@@ -53,7 +58,8 @@ void ApiChannel::registerRoutes(WebServerService& web)
                 p["name"] = ch->name;
             }
             String json;
-            serializeJson(doc, json);        
+            serializeJson(doc, json);
+            console.log(json);
             request->send(200, "application/json", json);
             return;
         }
