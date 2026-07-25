@@ -107,6 +107,7 @@ uint16_t IOManager::count() const
 //====================================================================
 IOChannel* IOManager::add(const IOChannel& channel)
 {
+    if(isPinUsed(channel.address)) return nullptr;
     if(channelCount >= MAX_IO) return nullptr;
     IOChannel ch = channel;
     if(ch.id == 0 || getChannel(ch.id)) ch.id = nextId++;
@@ -149,6 +150,7 @@ bool IOManager::remove(uint16_t id)
 //====================================================================
 bool IOManager::update(const IOChannel& channel)
 {
+    if(isPinUsed(channel.address, channel.id)) return false;
     for (uint16_t i = 0; i < channelCount; i++)
     {
         if (channels[i].id == channel.id)
