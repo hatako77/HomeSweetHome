@@ -113,16 +113,17 @@ async function showChannelDialog(channel = null)
     fillPins(channel);
     const driver = $("chDriver");
     const device = $("chDevice");
-    await refreshPins(channel?.pin ?? -1);
+    await refreshPinList(Number($("chDriver").value),Number($("chDevice").value),channel?.id ?? 0,channel?.pin ?? -1);
     driver.onchange = async () =>
     {
         fillDevices(channel);
-        await refreshPins(-1);
+        await refreshPinList(Number($("chDriver").value),Number($("chDevice").value),channel?.id ?? 0,-1);
     };
+    
     device.onchange = async () =>
     {
         fillPins(channel);
-        await refreshPins(-1);
+        await refreshPinList(Number($("chDriver").value),Number($("chDevice").value),channel?.id ?? 0,-1);
     };
     selectedChannelIcon = channel?.icon ?? 0;
     buildIconPicker();
@@ -656,7 +657,12 @@ async function refreshPinList(driver, device, ignoreId = 0, currentPin = -1)
 //==============================================================
 async function refreshPins(currentPin = -1)
 {
-    await refreshPinList(Number(driver.value),Number(device.value),channel?.id ?? 0,currentPin);
+    await refreshPinList(
+    Number($("chDriver").value),
+    Number($("chDevice").value),
+    channel?.id ?? 0,
+    currentPin
+);
 }
 //==============================================================
 
