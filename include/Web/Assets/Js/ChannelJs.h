@@ -342,73 +342,19 @@ function updateChannelLocal(channel)
 //==============================================================
 function renderChannels()
 {
-    const body = $("page");
-    let html = `
-            <button
-                class="btn primary"
-                onclick="showChannelDialog()">
-                ${icon("plus")}
-                Add Channel
-            </button>
-    <table class="table channels-table">
-        <thead>
-            <tr>
-                <th style="width:70px">ID</th>
-                <th>Name</th>
-                <th style="width:180px">Room</th>
-                <th style="width:110px">Type</th>
-                <th style="width:120px">State</th>
-                <th style="width:120px;text-align:center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-    `;
-    channels.forEach(channel =>
+    const container = $("channelsContainer");
+
+    if(!container)
+        return;
+
+    container.innerHTML = "";
+
+    getChannels().forEach(channel =>
     {
-        const room = findRoom(channel.roomId);
-        html += `
-            <tr>
-                <td>
-                    ${iconByIndex(channel.icon)}
-                    ${channel.name}
-                </td>
-                <td>
-                    ${room ? room.name : "-"}
-                </td>
-                <td>
-                    ${
-                        channel.type == 0 ?
-                        "Input" :
-                        "Output"
-                    }
-                </td>
-                <td>
-                    ${
-                        channel.state ?
-                        "ON" :
-                        "OFF"
-                    }
-                </td>
-                <td class="actions">
-                    <button
-                        class="icon-btn"
-                        onclick="editChannel(${channel.id})">
-                        ${icon("edit")}
-                    </button>
-                    <button
-                        class="icon-btn danger"
-                        onclick="deleteChannel(${channel.id})">
-                        ${icon("trash")}
-                    </button>
-                </td>
-            </tr>
-        `;
+        container.appendChild(
+            createChannelCard(channel)
+        );
     });
-    html += `
-            </tbody>
-        </table>
-    `;
-    body.innerHTML = html;
 }
 //==============================================================
 async function showChannels()
@@ -666,46 +612,78 @@ async function refreshPins(currentPin = -1)
 //==============================================================
 function createChannelCard(channel)
 {
-    return `
-    <div class="channel-card" data-id="${channel.id}">
+    const card = create("div", "channel-card");
+
+    if(channel.state)
+        card.classList.add("active");
+
+    card.dataset.id = channel.id;
+
+    card.innerHTML = `
         <div class="channel-header">
+
             <div class="channel-icon">
-                ${icon(channel.icon, 22)}
+                ${icon(channel.icon, 26)}
             </div>
+
             <div class="channel-info">
+
                 <div class="channel-name">
                     ${channel.name}
                 </div>
-                <div class="channel-device">
-                    <span class="device-name">
-                        PCF${channel.device + 1}
+
+                <div class="channel-address">
+
+                    <span>
+                        ${TypeHelper[channel.type]}
                     </span>
-                    <span class="device-status ${channel.connected ? "online" : "offline"}"></span>
+
+                    <span>
+                        ${DriverHelper[channel.driverId]}
+                    </span>
+
+                    <span class="device-status">
+                        <span class="status-dot ${channel.connected ? "online" : "offline"}"></span>
+                        PCF${channel.device}
+                    </span>
+
+                    <span>
+                        Pin ${channel.pin}
+                    </span>
+
                 </div>
+
             </div>
+
             <div class="channel-actions">
-                <button class="icon-btn"
-                        onclick="editChannel(${channel.id})">
+
+                <button class="icon-button edit">
                     ${icon("edit",18)}
                 </button>
-                <button class="icon-btn danger"
-                        onclick="deleteChannel(${channel.id})">
+
+                <button class="icon-button delete">
                     ${icon("trash",18)}
                 </button>
-            </div>
-        </div>
-        <div class="channel-footer">
-            <span class="channel-pin">
-                Pin ${channel.pin}
-            </span>
-            <span class="channel-type">
-                ${channel.type == 0 ? "Digital Input" : "Digital Output"}
-            </span>
-        </div>
-    </div>
-    `;
-}
 
+            </div>
+
+        </div>
+    `;
+
+    card.querySelector(".edit").onclick = e =>
+    {
+        e.stopPropagation();
+        editChannel(channel.id);
+    };
+
+    card.querySelector(".delete").onclick = e =>
+    {
+        e.stopPropagation();
+        deleteChannel(channel.id);
+    };
+
+    return card;
+}
 
 
 //==============================================================
