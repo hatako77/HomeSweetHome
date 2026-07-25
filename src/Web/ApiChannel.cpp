@@ -108,8 +108,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
         server.send(200, "application/json", json);
     });
 //==============================================================================================    
-    server.on("/api/channels",HTTP_POST, [](AsyncWebServerRequest*){}, nullptr,
-    [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t, size_t)
+    server.on("/api/channels",HTTP_POST, [](AsyncWebServerRequest*){}, nullptr,[](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t, size_t)
     {
         JsonDocument doc;    
         if(deserializeJson(doc,data,len))
