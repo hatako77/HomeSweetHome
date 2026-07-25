@@ -616,8 +616,33 @@ async function editChannel(id)
     });
 }
 //==============================================================
-
-
+async function loadUsedPins(driver, device, ignore = 0)
+{
+    const res = await fetch(`/api/channels/usedpins?driver=${driver}&device=${device}&ignore=${ignore}`);
+    const data = await res.json();
+    return data.pins;
+}
+//==============================================================
+async function refreshPinList(driver, device, currentPin, ignoreId)
+{
+    const used = await loadUsedPins(driver, device, ignoreId);
+    const select = $("pin");
+    select.innerHTML = "";
+    for(let i=0;i<8;i++)
+    {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = `P${i}`;
+        const pin = used.find(x => x.pin == i);
+        if(pin && i != currentPin)
+        {
+            option.disabled = true;
+            option.textContent += ` (In Use - ${pin.name})`;
+        }
+        if(i == currentPin) option.selected = true;
+        select.appendChild(option);
+    }
+}
 
 
 )rawliteral";
