@@ -640,9 +640,7 @@ async function editChannel(id)
 //==============================================================
 async function loadUsedPins(driver, device, ignore = 0)
 {
-    const res = await fetch(`/api/channels?usedpins=1&driver=${driver}&device=${device}&ignore=${ignore}`);
-    const data = await res.json();
-    return data.pins ?? [];
+    return await apiGet(`/api/channels/usedpins?driver=${driver}&device=${device}&ignore=${ignore}`);
 }
 //==============================================================
 async function refreshPinList(driver, device, ignoreId = 0, currentPin = -1)
