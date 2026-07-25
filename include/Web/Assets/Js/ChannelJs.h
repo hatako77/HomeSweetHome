@@ -113,15 +113,6 @@ async function showChannelDialog(channel = null)
     fillPins(channel);
     const driver = $("chDriver");
     const device = $("chDevice");
-    async function refreshPins(currentPin = -1)
-    {
-        await (
-            Number(driver.value),
-            Number(device.value),
-            channel?.id ?? 0,
-            currentPin
-        );
-    }
     await refreshPins(channel?.pin ?? -1);
     driver.onchange = async () =>
     {
@@ -645,29 +636,34 @@ async function loadUsedPins(driver, device, ignore = 0)
 //==============================================================
 async function refreshPinList(driver, device, ignoreId = 0, currentPin = -1)
 {
-    const used = await loadUsedPins(driver, device, ignoreId);
+    const data = await loadUsedPins(driver, device, ignoreId);
+    const used = data.pins || [];
     const select = $("chPin");
     select.innerHTML = "";
     for(let i = 0; i < 8; i++)
     {
         const option = document.createElement("option");
         option.value = i;
-        const pin = used.find(x => x.pin === i);
-        if(pin && i !== currentPin)
-        {
-            option.disabled = true;
-            option.textContent = `P${i} (In Use)`;
-        }
-        else
-        {
-            option.textContent = `P${i}`;
-        }
-        if(i === currentPin)option.selected = true;
+        const inUse = used.find(x => Number(x.pin) === i);
+        option.textContent = inUse
+            ? `P${i} (In Use)`
+            : `P${i}`;
+        option.disabled = !!inUse && i !== currentPin;
+        option.selected = i === currentPin;
         select.appendChild(option);
     }
 }
+//==============================================================
+async function refreshPins(currentPin = -1)
+{
+    await refreshPinList(Number(driver.value),Number(device.value),channel?.id ?? 0,currentPin);
+}
+//==============================================================
 
 
+
+
+//==============================================================
 )rawliteral";
 
 #endif
