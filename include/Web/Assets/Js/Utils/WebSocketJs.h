@@ -122,12 +122,10 @@ function handleChannelMessage(msg)
 
         case "updated":
             updateChannelInList(msg.data);
-            updateRoomMotion(msg.data);
             break;
 
         case "changed":
             updateChannelInList(msg.data);
-            updateRoomMotion(msg.data);
             break;
 
         case "deleted":
