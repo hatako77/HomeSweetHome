@@ -38,14 +38,16 @@ void ApiChannel::registerRoutes(WebServerService& web)
             uint8_t driver = request->getParam("driver")->value().toInt();
             uint8_t device = request->getParam("device")->value().toInt();        
             uint16_t ignore = 0;        
-            if(request->hasParam("ignore"))ignore = request->getParam("ignore")->value().toInt();        
+            if(request->hasParam("ignore"))ignore = request->getParam("ignore")->value().toInt(); 
+            Serial.println("usedpins");
+            Serial.println("usedpins");
             JsonDocument doc;
             JsonArray pins = doc["pins"].to<JsonArray>();        
             for(uint16_t i = 0; i < ioManager.count(); i++)
             {
                 const IOChannel* ch = ioManager.getAt(i);        
                 if(!ch)continue;        
-                Serial.printf("channel=%d  ignore=%d\n", ch->id, ignore);
+                Serial.println("channel=%d  ignore=%d\n", ch->id, ignore);
                 if(ch->id == ignore)
                 {
                     Serial.println("skip");
