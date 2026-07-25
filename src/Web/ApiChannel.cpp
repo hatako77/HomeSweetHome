@@ -33,6 +33,30 @@ void ApiChannel::registerRoutes(WebServerService& web)
 //==============================================================================================    
     server.on("/api/channels",HTTP_GET, [](AsyncWebServerRequest* request)
     {
+        if(request->hasParam("usedpins"))
+        {
+            uint8_t driver = request->getParam("driver")->value().toInt();
+            uint8_t device = request->getParam("device")->value().toInt();        
+            uint16_t ignore = 0;        
+            if(request->hasParam("ignore"))ignore = request->getParam("ignore")->value().toInt();        
+            JsonDocument doc;
+            JsonArray pins = doc["pins"].to<JsonArray>();        
+            for(uint16_t i = 0; i < ioManager.count(); i++)
+            {
+                const IOChannel* ch = ioManager.getAt(i);        
+                if(!ch)continue;        
+                if(ch->id == ignore)continue;        
+                if(ch->address.driverId != driver)continue;        
+                if(ch->address.device != device)continue;        
+                JsonObject p = pins.add<JsonObject>();
+                p["pin"] = ch->address.pin;
+                p["name"] = ch->name;
+            }
+            String json;
+            serializeJson(doc, json);        
+            request->send(200, "application/json", json);
+            return;
+        }
         if(request->hasParam("id"))
         {
             uint16_t id=request->getParam("id")->value().toInt();    
