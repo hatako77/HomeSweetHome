@@ -23,7 +23,7 @@ void IOManager::begin()
     }    
 }
 //====================================================================
-bool ChannelManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
+bool IOManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
 {
     for(const auto& channel : channels)
     {
