@@ -111,30 +111,30 @@ void ApiChannel::registerRoutes(WebServerService& web)
         request->send(200, "application/json", out);
     });
 //==============================================================================================    
-    server.on("/api/channels/usedpins", HTTP_GET,[&](AsyncWebServerRequest *request)
+server.on("/api/channels/usedpins", HTTP_GET,[](AsyncWebServerRequest *request)
+{
+    uint8_t driver = request->getParam("driver")->value().toInt();
+    uint8_t device = request->getParam("device")->value().toInt();
+    uint16_t ignore = 0;
+    if(request->hasParam("ignore"))ignore = request->getParam("ignore")->value().toInt();
+    JsonDocument doc;
+    JsonArray pins = doc["pins"].to<JsonArray>();
+    for(uint16_t i=0;i<ioManager.count();i++)
     {
-        uint8_t driver =request->getParam("driver")->value().toInt();    
-        uint8_t device =request->getParam("device")->value().toInt();    
-        uint16_t ignore = 0;
-        if(request->hasParam("ignore"))ignore =request->getParam("ignore")->value().toInt();    
-        JsonDocument doc;
-        JsonArray pins = doc["pins"].to<JsonArray>();    
-        for(uint16_t i = 0; i < ioManager.count(); i++)
-        {
-            const IOChannel* channel = ioManager.getAt(i);    
-            if(!channel)continue;    
-            if(channel->id == ignore)continue;    
-            if(channel->address.driverId != driver)continue;    
-            if(channel->address.device != device)continue;    
-            JsonObject p = pins.add<JsonObject>();    
-            p["pin"]  = channel->address.pin;
-            p["name"] = channel->name;
-        }    
-        String json;
-        serializeJson(doc, json);    
-        request->send(200,"application/json",json);
-    });
-//==============================================================================================    
+        const IOChannel* ch = ioManager.getAt(i);
+        if(!ch)continue;
+        if(ch->id == ignore);
+        if(ch->address.driverId != driver)continue;
+        if(ch->address.device != device)continue;
+        JsonObject p = pins.add<JsonObject>();
+        p["pin"] = ch->address.pin;
+        p["name"] = ch->name;
+    }
+    String json;
+    serializeJson(doc, json);
+    request->send(200, "application/json", json);
+});
+    //==============================================================================================    
     server.on("/api/channels",HTTP_POST, [](AsyncWebServerRequest*){}, nullptr,[](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t, size_t)
     {
         JsonDocument doc;    
