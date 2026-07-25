@@ -115,7 +115,7 @@ async function showChannelDialog(channel = null)
     const device = $("chDevice");
     async function refreshPins(currentPin = -1)
     {
-        await refreshPinList(
+        await (
             Number(driver.value),
             Number(device.value),
             channel?.id ?? 0,
@@ -645,23 +645,26 @@ async function loadUsedPins(driver, device, ignore = 0)
     return data.pins ?? [];
 }
 //==============================================================
-async function refreshPinList(driver, device, currentPin, ignoreId)
+async function refreshPinList(driver, device, ignoreId = 0, currentPin = -1)
 {
     const used = await loadUsedPins(driver, device, ignoreId);
     const select = $("chPin");
     select.innerHTML = "";
-    for(let i=0;i<8;i++)
+    for(let i = 0; i < 8; i++)
     {
         const option = document.createElement("option");
         option.value = i;
-        option.textContent = `P${i}`;
-        const pin = used.find(x => x.pin == i);
-        if(pin && i != currentPin)
+        const pin = used.find(x => x.pin === i);
+        if(pin && i !== currentPin)
         {
             option.disabled = true;
-            option.textContent += ` (In Use - ${pin.name})`;
+            option.textContent = `P${i} (In Use)`;
         }
-        if(i == currentPin) option.selected = true;
+        else
+        {
+            option.textContent = `P${i}`;
+        }
+        if(i === currentPin)option.selected = true;
         select.appendChild(option);
     }
 }
