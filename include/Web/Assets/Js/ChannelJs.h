@@ -664,7 +664,47 @@ async function refreshPins(currentPin = -1)
 );
 }
 //==============================================================
-
+function createChannelCard(channel)
+{
+    return `
+    <div class="channel-card" data-id="${channel.id}">
+        <div class="channel-header">
+            <div class="channel-icon">
+                ${icon(channel.icon, 22)}
+            </div>
+            <div class="channel-info">
+                <div class="channel-name">
+                    ${channel.name}
+                </div>
+                <div class="channel-device">
+                    <span class="device-name">
+                        PCF${channel.device + 1}
+                    </span>
+                    <span class="device-status ${channel.connected ? "online" : "offline"}"></span>
+                </div>
+            </div>
+            <div class="channel-actions">
+                <button class="icon-btn"
+                        onclick="editChannel(${channel.id})">
+                    ${icon("edit",18)}
+                </button>
+                <button class="icon-btn danger"
+                        onclick="deleteChannel(${channel.id})">
+                    ${icon("trash",18)}
+                </button>
+            </div>
+        </div>
+        <div class="channel-footer">
+            <span class="channel-pin">
+                Pin ${channel.pin}
+            </span>
+            <span class="channel-type">
+                ${channel.type == 0 ? "Digital Input" : "Digital Output"}
+            </span>
+        </div>
+    </div>
+    `;
+}
 
 
 
