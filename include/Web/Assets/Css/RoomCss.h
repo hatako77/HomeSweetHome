@@ -4,7 +4,102 @@
 #include <pgmspace.h>
 
 const char ROOM_CSS[] PROGMEM = R"rawliteral(
+.channel-card{
+    background:var(--card-bg);
+    border:1px solid var(--border-color);
+    border-radius:16px;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
 
+.channel-header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.channel-icon{
+    width:54px;
+    height:54px;
+    border-radius:14px;
+    background:rgba(255,255,255,.05);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+
+.channel-info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.channel-name{
+    font-size:18px;
+    font-weight:600;
+}
+
+.channel-device{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--text-secondary);
+    font-size:13px;
+}
+
+.device-status{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+}
+
+.device-status.online{
+    background:#22c55e;
+    box-shadow:0 0 8px rgba(34,197,94,.5);
+}
+
+.device-status.offline{
+    background:#6b7280;
+}
+
+.channel-actions{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:10px;
+    background:rgba(255,255,255,.05);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.icon-btn:hover{
+    background:rgba(255,255,255,.1);
+}
+
+.icon-btn.danger:hover{
+    background:#7f1d1d;
+}
+
+.channel-footer{
+    display:flex;
+    justify-content:space-between;
+    padding-top:12px;
+    border-top:1px solid var(--border-color);
+    color:var(--text-secondary);
+    font-size:14px;
+}
 #roomsContainer{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
