@@ -26,10 +26,6 @@ const char SIDEBAR_CSS[] PROGMEM=R"rawliteral(
 	user-select:none;
 }
 
-.menu-item:hover{
-	background:#2b3248;
-	transform:translateX(3px);
-}
 
 .menu-item.active{
 	background:#3d7bfd;
