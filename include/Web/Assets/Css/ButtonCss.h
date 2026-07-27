@@ -22,11 +22,6 @@ const char BUTTON_CSS[] PROGMEM=R"rawliteral(
 	user-select:none;
 }
 
-.btn:hover{
-	background:#1d4ed8;
-	transform:translateY(-2px);
-	box-shadow:0 6px 18px rgba(37,99,235,.35);
-}
 
 .btn:active{
 	transform:scale(.98);
@@ -47,37 +42,19 @@ const char BUTTON_CSS[] PROGMEM=R"rawliteral(
 	background:#16a34a;
 }
 
-.btn-success:hover{
-	background:#15803d;
-	box-shadow:0 6px 18px rgba(22,163,74,.35);
-}
-
 .btn-danger{
 	background:#dc2626;
-}
-
-.btn-danger:hover{
-	background:#b91c1c;
-	box-shadow:0 6px 18px rgba(220,38,38,.35);
 }
 
 .btn-warning{
 	background:#d97706;
 }
 
-.btn-warning:hover{
-	background:#b45309;
-	box-shadow:0 6px 18px rgba(217,119,6,.35);
-}
 
 .btn-secondary{
 	background:#374151;
 }
 
-.btn-secondary:hover{
-	background:#4b5563;
-	box-shadow:0 6px 18px rgba(75,85,99,.35);
-}
 
 .btn-outline{
 	background:transparent;
@@ -85,10 +62,6 @@ const char BUTTON_CSS[] PROGMEM=R"rawliteral(
 	color:#e5e7eb;
 }
 
-.btn-outline:hover{
-	background:#1e293b;
-	border-color:#38bdf8;
-}
 
 .btn-block{
 	width:100%;
