@@ -7,7 +7,7 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 
 @media(max-width:1200px){
 	html{
-		font-size:14px;
+		font-size:15px;
 	}
 
 	#roomsContainer{
