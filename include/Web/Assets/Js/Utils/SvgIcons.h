@@ -84,27 +84,26 @@ channels: `
 </svg>`,
 
 scenes: `
-<svg viewBox="0 0 24 24" fill="none"
-stroke="currentColor" stroke-width="2"
-stroke-linecap="round" stroke-linejoin="round">
-<path d="M4 7h16"/>
-<path d="M4 12h16"/>
-<path d="M4 17h16"/>
-<circle cx="7" cy="7" r="1"/>
-<circle cx="12" cy="12" r="1"/>
-<circle cx="17" cy="17" r="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Icons" viewBox="0 0 32 32" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#ffffff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<path class="st0" d="M27,31H5c-1.1,0-2-0.9-2-2V16h26v13C29,30.1,28.1,31,27,31z" style="
+    fill: white;
+    stroke: none;
+"></path>
+<path class="st0" d="M23.5,1.1L2.8,8.7c-1,0.4-1.6,1.5-1.2,2.6L3,15l24.4-8.9l-1.4-3.8C25.7,1.3,24.5,0.8,23.5,1.1z" style="fill: rgb(0 255 0);stroke: none;"></path>
+<line class="st0" x1="3" y1="21" x2="29" y2="21"></line>
 </svg>`,
 
 schedules: `
-<svg viewBox="0 0 24 24" fill="none"
-stroke="currentColor" stroke-width="2"
-stroke-linecap="round" stroke-linejoin="round">
-<rect x="4" y="5" width="16" height="15" rx="2"/>
-<path d="M8 3v4"/>
-<path d="M16 3v4"/>
-<path d="M4 10h16"/>
-<path d="M12 13v3"/>
-<path d="M12 13l2 1"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none">
+<path d="M2 8H21" stroke="rgb(0, 255, 0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9 20H6C3.79086 20 2 18.2091 2 16V7C2 4.79086 3.79086 3 6 3H17C19.2091 3 21 4.79086 21 7V10" stroke="rgb(255, 255, 255)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M8 2V4" stroke="rgb(255, 255, 255)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 2V4" stroke="rgb(255, 255, 255)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+<path d="M18.5 15.6429L17 17.1429" stroke="rgb(0, 255, 0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="17" cy="17" r="5" stroke="rgb(255, 255, 255)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
 </svg>`,
 
 sensors: `
