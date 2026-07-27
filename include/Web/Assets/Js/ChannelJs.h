@@ -579,11 +579,11 @@ function createChannelCard(channel)
             <div class="channel-actions">
 
                 <button class="icon-button edit">
-                    ${icon("edit",18)}
+                    ${icon("edit",22)}
                 </button>
 
                 <button class="icon-button delete">
-                    ${icon("trash",18)}
+                    ${icon("delete",22)}
                 </button>
 
             </div>
