@@ -63,7 +63,10 @@ color:inherit;
 flex-shrink:0;
 }
 
-
+.svg-icon svg{
+    width: 100%;
+    height: 100%;
+}
 
 .channel-icon{
 display:flex;
