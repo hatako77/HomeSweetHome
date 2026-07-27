@@ -144,7 +144,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:18px 20px;
+    padding:8px 15px;
     border-bottom:1px solid #1f2937;
     font-size: 1.3rem;
     font-weight: 800;
