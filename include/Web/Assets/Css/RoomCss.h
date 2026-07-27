@@ -107,13 +107,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     transition:.2s;
 }
 
-.icon-btn:hover{
-    background:rgba(255,255,255,.1);
-}
-
-.icon-btn.danger:hover{
-    background:#7f1d1d;
-}
 
 .channel-footer{
     display:flex;
@@ -139,10 +132,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     box-shadow:0 8px 24px rgba(0,0,0,.25);
 }
 
-.room-card:hover{
-    transform:translateY(-4px);
-    border-color:#38bdf8;
-}
 .room-title{
     display:flex;
     align-items:center;
@@ -217,11 +206,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     cursor:pointer;
 
     user-select:none;
-}
-
-.tile:hover{
-    transform:translateY(-4px);
-    border-color:#38bdf8;
 }
 
 .tile.on{
