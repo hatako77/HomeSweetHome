@@ -92,7 +92,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 
 .channel-actions{
     display:flex;
-    gap:8px;
 }
 
 .icon-btn{
