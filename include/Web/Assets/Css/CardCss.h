@@ -15,10 +15,6 @@ const char CARD_CSS[] PROGMEM=R"rawliteral(
 	transition:.25s;
 }
 
-.card:hover{
-	border-color:#38bdf8;
-	box-shadow:0 12px 30px rgba(56,189,248,.18);
-}
 
 .card-title{
 	font-size:1rem;
