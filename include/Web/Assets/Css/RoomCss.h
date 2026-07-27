@@ -7,7 +7,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 .channel-card{
     background:var(--card-bg);
     border:1px solid var(--border-color);
-    border-radius:16px;
+    border-radius:5px 10px;
     padding:16px;
     display:flex;
     flex-direction:column;
@@ -56,7 +56,11 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     justify-content:center;
     flex-shrink:0;
 }
+.channel-address{
+    font-size:0.8rem;
+    direction: ltr;
 
+}
 .channel-info{
     flex:1;
     display:flex;
@@ -93,7 +97,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .channel-actions{
-    display:flex;
+    display:inline;
 }
 
 .icon-btn{
