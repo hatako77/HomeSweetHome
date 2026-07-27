@@ -16,7 +16,7 @@ function initSidebar()
     <div class="sidebar-menu">
 
         <div class="menu-item" data-page="rooms">
-            ${icon("rooms",22)}
+            ${icon("home",22)}
             <span>خانه</span>
         </div>
 
