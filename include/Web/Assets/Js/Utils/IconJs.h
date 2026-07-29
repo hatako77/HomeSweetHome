@@ -17,7 +17,7 @@ const iconMap =
     7: "outlet",
     8: "bell",
     9: "curtain",
-    10: "tv",
+    //10: "tv",
     settings:"settings",
     ota:"ota",
     scenes:"scenes",
@@ -35,9 +35,9 @@ const iconMap =
     edit:"edit",
     generic: "generic",
     home: "home",
-    ac: "ac",
-    garage: "garage",
-    tv: "tv"
+    //ac: "ac",
+    //garage: "garage",
+    //tv: "tv"
 };
 
 function getIcon(id)
