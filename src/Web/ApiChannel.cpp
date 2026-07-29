@@ -82,7 +82,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             doc["favorite"]=ch->favorite;
             doc["activeLow"]=ch->activeLow;
             doc["type"]=(uint8_t)ch->type;
-            doc["icon"]=(uint8_t)ch->icon;
+            doc["icon"]= ch->icon;
             doc["driverId"] = ch->address.driverId;
             doc["device"]   = ch->address.device;
             doc["pin"]      = ch->address.pin;
@@ -107,7 +107,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
             o["favorite"]=ch->favorite;
             o["activeLow"]=ch->activeLow;
             o["type"]=(uint8_t)ch->type;
-            o["icon"]=(uint8_t)ch->icon;
+            o["icon"]= ch->icon;
             o["driverId"] = ch->address.driverId;
             o["device"]   = ch->address.device;
             o["pin"]      = ch->address.pin;
@@ -158,8 +158,7 @@ server.on("/api/channels/usedpins", HTTP_GET,[](AsyncWebServerRequest *request)
         channel.activeLow=doc["activeLow"]|false;    
         IOType type;
         if(typeFromValue(doc["type"]|0,type)) channel.type=type;    
-        IOIcon icon;        
-        if(iconFromValue(doc["icon"] | 0, icon)) channel.icon = icon;
+        channel.icon = doc["icon"]|"generic";
         channel.address.driverId = doc["driverId"] | 0;
         channel.address.device   = doc["device"]   | 0;
         channel.address.pin      = doc["pin"]      | 0;
@@ -215,8 +214,7 @@ server.on("/api/channels/usedpins", HTTP_GET,[](AsyncWebServerRequest *request)
         updated.address.pin      = doc["pin"]      | updated.address.pin;
         IOType type;
         if(typeFromValue(doc["type"]|(uint8_t)updated.type,type)) updated.type=type;    
-        IOIcon icon;
-        if(iconFromValue(doc["icon"]|(uint8_t)updated.icon,icon)) updated.icon=icon;    
+        updated.icon= =doc["icon"]|updated.icon;    
         if(!ioManager.update(updated))
         {
             request->send(500,"application/json","{\"success\":false}");
