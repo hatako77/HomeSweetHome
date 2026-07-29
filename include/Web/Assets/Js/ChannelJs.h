@@ -27,7 +27,7 @@ const DriverNames =
     2: "Virtual"
 };
 let channels = [];
-let selectedChannelIcon = 0;
+let selectedChannelIcon = "generic";
 //==============================================================
 async function editChannel(id)
 {
@@ -140,7 +140,7 @@ async function showChannelDialog(channel = null)
         fillPins(channel);
         await refreshPinList(Number($("chDriver").value),Number($("chDevice").value),channel?.id ?? 0,-1);
     };
-    selectedChannelIcon = channel?.icon ?? 0;
+    selectedChannelIcon = channel?.icon ?? "generic";
     buildIconPicker();
 }
 //==============================================================
@@ -191,18 +191,18 @@ function buildIconPicker()
 
     const icons =
     [
-        "Light",
-        "Fan",
-        "Door",
-        "Lock",
-        "Motion",
-        "Temperature",
-        "Water",
-        "Outlet",
-        "Bell",
-        "Curtain",
-        "TV",
-        "Generic",
+        "light",
+        "fan",
+        "door",
+        "lock",
+        "motion",
+        "temperature",
+        "water",
+        "outlet",
+        "bell",
+        "curtain",
+        "tv",
+        "generic",
         "ac",
         "garage"
         
