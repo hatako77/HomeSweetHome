@@ -257,7 +257,10 @@ generic: `
 </svg>`
 
 };
-
+function getIcon(id)
+{
+    return Icons[id] ?? Icons.generic;
+}
 )rawliteral";
 
 #endif
