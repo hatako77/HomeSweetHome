@@ -1,6 +1,5 @@
 #include "Web/ApiSettings.h"
 #include "IO/TypeHelper.h"
-#include "IO/IconHelper.h"
 #include <ArduinoJson.h>
 
 #include "Web/WebServerService.h"
