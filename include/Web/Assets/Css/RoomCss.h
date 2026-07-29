@@ -54,6 +54,8 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 
 }
 .channel-info{
+    color: #969696;
+    font-weight: 600;
     flex:1;
     display:flex;
     flex-direction:column;
