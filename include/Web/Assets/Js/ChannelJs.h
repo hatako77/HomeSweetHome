@@ -379,7 +379,6 @@ async function showChannels()
     app.innerHTML = `
         <div class="page">
             <div class="page-header">
-                <h2>Channels</h2>
                 <button class="btn primary" style="z-index: 999;border-radius: 5rem;position: fixed;bottom: 2rem;left: 2rem;height: 4rem;width: 4rem;"
                         onclick="showChannelDialog()">
                     <span class="svg-icon" style="width:24px;height:24px">                                
@@ -567,7 +566,7 @@ function createChannelCard(channel)
                 <div class="channel-address">
 
                     <span>${ChannelTypeNames[channel.type] ?? "-"}</span>
-                    <span>${DriverNames[channel.driverId] ?? "-"}</span>
+                    <span>${DriverNames[channel.driverId] ?? "-"}</span></br>
                     <span class="status-dot ${channel.connected ? "online" : "offline"}"></span>
                     <span class="">PCF${channel.device}</span>
                     <span>Pin ${channel.pin}</span>
