@@ -22,7 +22,7 @@ static void sendChannel(const char* action, const IOChannel& channel)
     msg.data["favorite"]  = channel.favorite;
     msg.data["activeLow"] = channel.activeLow;
     msg.data["type"]      = (uint8_t)channel.type;
-    msg.data["icon"]      = (uint8_t)channel.icon;
+    msg.data["icon"]      = channel.icon;
     msg.data["driverId"]  = channel.address.driverId;
     msg.data["device"]    = channel.address.device;
     msg.data["pin"]       = channel.address.pin;
@@ -111,7 +111,7 @@ void Notifier::channelChanged(const IOChannel& channel)
     msg.data["favorite"]  = channel.favorite;
     msg.data["activeLow"] = channel.activeLow;
     msg.data["type"]      = (uint8_t)channel.type;
-    msg.data["icon"]      = (uint8_t)channel.icon;
+    msg.data["icon"]      = channel.icon;
     Serial.printf(
         "WS SEND -> id=%d state=%d\n",
         channel.id,
