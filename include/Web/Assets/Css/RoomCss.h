@@ -204,7 +204,8 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .tile.off{
-    background:#111827;
+
+
 }
 
 .tile.disabled{
