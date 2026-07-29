@@ -34,7 +34,10 @@ const iconMap =
     delete:"delete",
     edit:"edit",
     generic: "generic",
-    home: "home"
+    home: "home",
+    ac: "ac",
+    garage: "garage",
+    tv: "tv"
 };
 
 function getIcon(id)
