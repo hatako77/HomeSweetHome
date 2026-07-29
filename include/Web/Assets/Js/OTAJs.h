@@ -24,7 +24,7 @@ async function initOTA()
         </div>
 
         <div class="info-row">
-            <span>وضیت</span>
+            <span>وضعیت</span>
             <b id="otaState">Idle</b>
         </div>
 
