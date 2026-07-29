@@ -60,7 +60,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .channel-name{
-    font-size:18px;
+    font-size:1.1rem;
     font-weight:600;
 }
 
@@ -257,12 +257,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     flex-direction:column;
     align-items:center;
     gap:6px;
-}
-
-.channel-name{
-    font-size:1rem;
-    font-weight:600;
-    text-align:center;
 }
 
 .channel-state{
