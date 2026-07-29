@@ -29,7 +29,6 @@ const char SIDEBAR_CSS[] PROGMEM=R"rawliteral(
 
 .menu-item.active{
 	background:#3d7bfd;
-	box-shadow:0 6px 18px rgba(61,123,253,.35);
 }
 
 .menu-item i{
