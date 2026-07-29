@@ -146,13 +146,16 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .room-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:8px 15px;
-    border-bottom:1px solid #1f2937;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    border: 1px solid #1f2937;
+    border-radius: 0px 20px;
     font-size: 1.3rem;
     font-weight: 800;
+    background: #111827;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
 }
 
 
@@ -183,6 +186,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
     gap:12px;
     padding:14px;
+    border-right: 1px solid #1f2937;
 }
 
 .channel-tile{
