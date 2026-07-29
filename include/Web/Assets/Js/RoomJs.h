@@ -197,7 +197,7 @@ function createRoomCard(room)
 
         </div>
 
-        <div class="channel-list" style="display: inline-flex;" data-room="${room.id}"></div>
+        <div class="channel-list" data-room="${room.id}"></div>
     `;
 
     const list = card.querySelector(".channel-list");
