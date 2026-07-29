@@ -51,7 +51,6 @@ namespace ApiSettings
                     IOType type;
                     if (typeFromValue(o["type"] | (uint8_t)ch->type, type))
                         ch->type = type;    
-                    IOIcon icon;
                     ch->icon = o["icon"] | ch->icon;    
                     i++;
                 }    
