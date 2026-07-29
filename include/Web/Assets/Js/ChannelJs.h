@@ -565,10 +565,10 @@ function createChannelCard(channel)
 
                 <div class="channel-address">
 
-                    <span>${ChannelTypeNames[channel.type] ?? "-"}</span>
+                    <span>${ChannelTypeNames[channel.type] ?? "-"}</span>&nbsp; - &nbsp;
                     <span>${DriverNames[channel.driverId] ?? "-"}</span></br>
                     <span class="status-dot ${channel.connected ? "online" : "offline"}"></span>
-                    <span class="">PCF${channel.device}</span>
+                    <span class="">PCF${channel.device}</span>&nbsp; - &nbsp;
                     <span>Pin ${channel.pin}</span>
 
                 </div>
