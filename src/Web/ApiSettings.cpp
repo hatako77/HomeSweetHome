@@ -52,8 +52,7 @@ namespace ApiSettings
                     if (typeFromValue(o["type"] | (uint8_t)ch->type, type))
                         ch->type = type;    
                     IOIcon icon;
-                    if (iconFromValue(o["icon"] | (uint8_t)ch->icon, icon))
-                        ch->icon = icon;    
+                    ch->icon = o["icon"] | ch->icon;    
                     i++;
                 }    
                 ioManager.save();    
