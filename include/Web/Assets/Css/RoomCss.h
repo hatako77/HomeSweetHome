@@ -47,16 +47,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     gap:16px;
 }
 
-.channel-icon{
-    width:54px;
-    height:54px;
-    border-radius:14px;
-    background:rgba(255,255,255,.05);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-}
 .channel-address{
     font-size:0.8rem;
     direction: ltr;
