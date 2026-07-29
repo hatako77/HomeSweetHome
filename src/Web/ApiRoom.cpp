@@ -46,7 +46,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
                     c["enabled"] = ch->enabled;
                     c["favorite"] = ch->favorite;
                     c["type"] = (uint8_t)ch->type;
-                    c["icon"] = (uint8_t)ch->icon;
+                    c["icon"] = ch->icon;
                 }
                 String out;
                 serializeJson(doc,out);
@@ -78,7 +78,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
                     c["enabled"] = ch->enabled;
                     c["favorite"] = ch->favorite;
                     c["type"] = (uint8_t)ch->type;
-                    c["icon"] = (uint8_t)ch->icon;
+                    c["icon"] = ch->icon;
                 }
             }
             String out;
@@ -231,7 +231,7 @@ void ApiRoom::registerRoutes(WebServerService& web)
                 c["enabled"] = ch->enabled;
                 c["favorite"] = ch->favorite;
                 c["type"] = (uint8_t)ch->type;
-                c["icon"] = (uint8_t)ch->icon;
+                c["icon"] = ch->icon;
             }
             String out;
             serializeJson(doc,out);
