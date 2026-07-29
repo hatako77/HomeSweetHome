@@ -16,7 +16,7 @@ Dialog.form = function(options)
         title: options.title,
         content: options.content,
         footer:`
-            <button class="btn" id="dialogCancel">
+            <button class="btn btn-secondary" id="dialogCancel">
                 Cancel
             </button>
 
@@ -161,11 +161,11 @@ Dialog.confirm=function(title,message,onYes)
         `,
 
         footer:`
-            <button class="btn" id="dialogCancel">
+            <button class="btn btn-secondary" id="dialogCancel">
                 Cancel
             </button>
 
-            <button class="btn btn-primary" id="dialogYes">
+            <button class="btn btn-danger" id="dialogYes">
                 OK
             </button>
         `
@@ -205,11 +205,11 @@ Dialog.prompt=function(options)
 
         footer:`
 
-            <button class="btn" id="dialogCancel">
+            <button class="btn btn-secondary" id="dialogCancel">
                 Cancel
             </button>
 
-            <button class="btn btn-primary" id="dialogSave">
+            <button class="btn btn-success" id="dialogSave">
                 Save
             </button>
 
