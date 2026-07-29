@@ -47,13 +47,33 @@ void PCF8574Driver::update()
 {
     for (uint8_t i = 0; i < DEVICE_COUNT; i++)
     {
-        if (!connected[i])
-            continue;
+        uint8_t addr = 0x20 + i;
 
-        pcf[i]->read8();
+        Wire.beginTransmission(addr);
+
+        bool ok = (Wire.endTransmission() == 0);
+
+        if (ok != connected[i])
+        {
+            connected[i] = ok;
+
+            Serial.printf("PCF %02X %s\n",
+                          addr,
+                          ok ? "CONNECTED" : "DISCONNECTED");
+
+            if (ok)
+            {
+                pcf[i]->begin();
+                pcf[i]->write8(0xFF);
+            }
+        }
+
+        if (connected[i])
+        {
+            pcf[i]->read8();
+        }
     }
 }
-
 bool PCF8574Driver::isConnected(uint8_t index)
 {
     if (index >= DEVICE_COUNT)
