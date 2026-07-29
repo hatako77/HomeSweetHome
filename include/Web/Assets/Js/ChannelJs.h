@@ -188,7 +188,8 @@ function buildIconPicker()
 {
     const picker = $("iconPicker");
     picker.innerHTML = "";
-    const names =
+
+    const icons =
     [
         "light",
         "fan",
@@ -203,19 +204,25 @@ function buildIconPicker()
         "bell",
         "curtain",
         "tv",
-        "generic",
-        "schedules"
+        "generic"
     ];
-    names.forEach((_, index) =>
+
+    icons.forEach(name =>
     {
-        const item = document.createElement("div");    
-        item.className = "icon-item" + (index === selectedChannelIcon ? " selected" : "");    
-        item.innerHTML = icon(index, 26);    
+        const item = document.createElement("div");
+
+        item.className =
+            "icon-item" +
+            (selectedChannelIcon === name ? " selected" : "");
+
+        item.innerHTML = icon(name, 26);
+
         item.onclick = () =>
         {
-            selectedChannelIcon = index;
+            selectedChannelIcon = name;
             buildIconPicker();
-        };    
+        };
+
         picker.appendChild(item);
     });
 }
