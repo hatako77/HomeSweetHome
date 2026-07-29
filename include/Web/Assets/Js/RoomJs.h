@@ -236,7 +236,7 @@ function createChannelTile(channel)
         <div class="tile ${channel.state ? "on" : "off"} ${disabled ? "disabled" : ""}">
 
             <div class="channel-icon">
-                ${icon(channel.icon)}
+                ${icon(channel.icon,32)}
             </div>
 
             <div class="channel-text">
