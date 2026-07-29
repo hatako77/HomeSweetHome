@@ -563,7 +563,7 @@ function createChannelCard(channel)
                         ${DriverNames[channel.driverId] ?? "-"}
                     </span>
 
-                    <span class="device-status">
+                    <span class="">
                         <span class="status-dot ${channel.connected ? "online" : "offline"}"></span>
                         PCF${channel.device}
                     </span>
