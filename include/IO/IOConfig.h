@@ -18,6 +18,9 @@ enum class IOIcon : uint8_t
     Curtain,
     TV,
     Generic,
+    ac,
+    garage,
+    
     Count
 };
 
