@@ -28,7 +28,7 @@ struct IOChannel
 
     String name = "";
 
-    string icon ="generic";
+    String icon ="generic";
     IOType type = IOType::DigitalOutput;
 
     bool state = false;
