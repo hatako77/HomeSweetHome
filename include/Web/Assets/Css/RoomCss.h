@@ -8,7 +8,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     background:var(--card-bg);
     border:1px solid var(--border-color);
     border-radius:5px 10px;
-    padding:16px;
+    padding:6px;
     display:flex;
     flex-direction:column;
     gap:14px;
