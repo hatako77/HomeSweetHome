@@ -192,7 +192,9 @@ function buildIconPicker()
     [
         "light",
         "fan",
+        "ac",
         "door",
+        "garage",
         "lock",
         "motion",
         "temperature",
