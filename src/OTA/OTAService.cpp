@@ -139,8 +139,8 @@ bool OTAService::checkForUpdate()
 
     status.state =
         available
-        ? "Update Available"
-        : "Up To Date";
+        ? "نسخه جدید موجود است"
+        : "نسخه شما بروز است";
 
     sendStatus();
 
@@ -161,7 +161,7 @@ bool OTAService::downloadAndUpdate(const String& url)
     status.eta = 0;
 
     status.error = "";
-    status.state = "Connecting";
+    status.state = "در حال اتصال";
 
     sendStatus();
 
@@ -218,7 +218,7 @@ bool OTAService::downloadAndUpdate(const String& url)
 
     uint8_t lastPercent = 255;
 
-    status.state = "Downloading";
+    status.state = "در حال دانلود ...";
 
     sendStatus();
 
@@ -247,7 +247,7 @@ bool OTAService::downloadAndUpdate(const String& url)
                     status.finished = true;
                     status.success = false;
 
-                    status.state = "Error";
+                    status.state = "خطا";
                     status.error =
                         Update.errorString();
 
@@ -303,7 +303,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         delay(1);
     }
 
-    status.state = "Verifying";
+    status.state = "بررسی ...";
 
     sendStatus();
 
@@ -313,7 +313,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.finished = true;
         status.success = false;
 
-        status.state = "Error";
+        status.state = "خطا";
         status.error =
             Update.errorString();
 
@@ -330,7 +330,7 @@ bool OTAService::downloadAndUpdate(const String& url)
         status.finished = true;
         status.success = false;
 
-        status.state = "Error";
+        status.state = "خطا";
         status.error =
             "Update not finished";
 
@@ -351,7 +351,7 @@ bool OTAService::downloadAndUpdate(const String& url)
     status.speedKB = 0;
     status.eta = 0;
 
-    status.state = "Completed";
+    status.state = "اتمام";
 
     sendStatus();
 
