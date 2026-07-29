@@ -64,8 +64,8 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 
 .channel-name{
     padding-right: 9px;
-    font-size:1.1rem;
-    font-weight:600;
+    font-size: 1rem;
+    font-weight: 400;
     color: white;
 }
 
@@ -200,7 +200,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .tile.on{
-    background:#155e33;
     border-color:#22c55e;
 }
 
