@@ -127,7 +127,9 @@ sensors: `
 ota: `
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 <path d="M12 3v11"></path>
-<path d="M8 10l4 4l4-4" style=""></path>
+<path d="M8 10l4 4l4-4" style="
+    stroke: rgb(0 255 0);
+"></path>
 <path d="M5 20h14"></path>
 </svg>`,
 
