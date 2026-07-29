@@ -190,6 +190,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .tile{
+    width: stretch;
     display: inline-flex;
     align-items: center;
     padding: 5px;
