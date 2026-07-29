@@ -14,6 +14,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     gap:14px;
     background: #111827;
     border: 1px solid #1f2937;
+    margin-bottom: 15px;
 }
 .device-status
 {
