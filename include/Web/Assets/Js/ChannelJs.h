@@ -504,19 +504,30 @@ async function loadUsedPins(driver, device, ignore = 0)
 //==============================================================
 async function refreshPinList(driver, device, ignoreId = 0, currentPin = -1)
 {
-    const used = await loadUsedPins(driver, device, ignoreId);
+    const channels = await loadUsedPins(driver, device, ignoreId);
+
     const select = $("chPin");
     select.innerHTML = "";
+
     for(let i = 0; i < 8; i++)
     {
         const option = document.createElement("option");
         option.value = i;
-        const inUse = used.find(x => Number(x.pin) === i);
+
+        const inUse = channels.find(ch =>
+            Number(ch.driverId) === Number(driver) &&
+            Number(ch.device)   === Number(device) &&
+            Number(ch.pin)      === i &&
+            Number(ch.id)       !== Number(ignoreId)
+        );
+
         option.textContent = inUse
             ? `P${i} (In Use)`
             : `P${i}`;
+
         option.disabled = !!inUse && i !== currentPin;
         option.selected = i === currentPin;
+
         select.appendChild(option);
     }
 }
