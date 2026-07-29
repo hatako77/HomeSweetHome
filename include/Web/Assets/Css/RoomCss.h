@@ -231,8 +231,8 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .channel-icon svg{
-    width:26px;
-    height:26px;
+    width:32px;
+    height:32px;
     fill:#94a3b8;
     transition:.25s;
 }
