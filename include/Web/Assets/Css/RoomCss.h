@@ -99,6 +99,9 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 
 .channel-actions{
     display:inline;
+    border-right-style: solid;
+    border-color: #1f2937;
+    padding-right: 6px;
 }
 
 .icon-btn{
