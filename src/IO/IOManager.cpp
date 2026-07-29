@@ -38,6 +38,12 @@ bool IOManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
 //====================================================================
 void IOManager::update()
 {
+    if (millis() - lastDriverScan >= 1000)
+    {
+        lastDriverScan = millis();
+        scanDrivers();
+    }
+
     for (uint16_t i = 0; i < driverCount; i++) drivers[i]->update();
     for (uint16_t i = 0; i < channelCount; i++)
     {
