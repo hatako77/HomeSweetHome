@@ -129,12 +129,8 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .room-card{
-    background:#111827;
-    border:1px solid #1f2937;
-    border-radius:18px;
-    overflow:hidden;
-    transition:.25s;
-    box-shadow:0 8px 24px rgba(0,0,0,.25);
+
+
 }
 
 .room-title{
