@@ -2,7 +2,6 @@
 #include "Web/WebServerService.h"
 #include "Web/Notifier.h"
 #include "IO/IOManager.h"
-#include "IO/IconHelper.h"
 #include "IO/TypeHelper.h"
 #include <ArduinoJson.h>
 
