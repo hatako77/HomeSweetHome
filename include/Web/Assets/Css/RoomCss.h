@@ -190,27 +190,11 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .tile{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-
-    height:130px;
-
-    padding:16px;
-
-    border-radius:16px;
-
-    background:#0b1220;
-
-    border:1px solid #1f2937;
-
-    transition:.25s;
-
-    cursor:pointer;
-
-    user-select:none;
+    display: inline-flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 9px;
+    border: 1px solid #1f2937;
 }
 
 .tile.on{
