@@ -92,6 +92,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
     border-right-style: solid;
     border-color: #1f2937;
     padding-right: 6px;
+    border-width: 2px;
 }
 
 .icon-btn{
