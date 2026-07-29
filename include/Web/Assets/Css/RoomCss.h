@@ -44,7 +44,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 .channel-header{
     display:flex;
     align-items:center;
-    gap:16px;
+    gap:8px;
 }
 
 .channel-address{
