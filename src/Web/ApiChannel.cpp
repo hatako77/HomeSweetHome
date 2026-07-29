@@ -214,7 +214,7 @@ server.on("/api/channels/usedpins", HTTP_GET,[](AsyncWebServerRequest *request)
         updated.address.pin      = doc["pin"]      | updated.address.pin;
         IOType type;
         if(typeFromValue(doc["type"]|(uint8_t)updated.type,type)) updated.type=type;    
-        updated.icon= =doc["icon"]|updated.icon;    
+        updated.icon = doc["icon"]|updated.icon;    
         if(!ioManager.update(updated))
         {
             request->send(500,"application/json","{\"success\":false}");
