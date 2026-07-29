@@ -227,7 +227,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .tile.on .channel-icon{
-    background:#14532d;
+
 }
 
 .channel-icon svg{
