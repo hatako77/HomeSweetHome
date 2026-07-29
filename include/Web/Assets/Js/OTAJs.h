@@ -84,7 +84,7 @@ async function initOTA()
 function checkOTA()
 {
     $("otaError").innerText = "";
-    $("otaMessage").innerText = "Checking...";
+    $("otaMessage").innerText = "در حال بررسی ...";
 
     $("otaCheckButton").disabled = true;
     $("otaUpdateButton").disabled = true;
@@ -95,7 +95,7 @@ function checkOTA()
 function startOTA()
 {
     $("otaError").innerText = "";
-    $("otaMessage").innerText = "Starting update...";
+    $("otaMessage").innerText = "شروع آپدیت ...";
 
     $("otaCheckButton").disabled = true;
     $("otaUpdateButton").disabled = true;
@@ -174,7 +174,7 @@ function updateOTA(data)
         $("otaCheckButton").disabled = false;
         $("otaUpdateButton").disabled = false;
         $("otaMessage").innerText =
-            "New firmware available.";
+            "نسخه جدبد موجود است";
         return;
     }
 
@@ -183,7 +183,7 @@ function updateOTA(data)
         $("otaCheckButton").disabled = false;
         $("otaUpdateButton").disabled = true;
         $("otaMessage").innerText =
-            "Firmware is already up to date.";
+            "نسخه شما بروز است";
         return;
     }
 
@@ -202,7 +202,7 @@ function updateOTA(data)
             sec--;
 
             $("otaMessage").innerText =
-                "Restarting in " + sec + "...";
+                "ریستارت " + sec + "...";
 
             if(sec <= 0)
             {
