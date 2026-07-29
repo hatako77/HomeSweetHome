@@ -95,17 +95,10 @@ const char RESPONSIVE_CSS[] PROGMEM=R"rawliteral(
 		grid-template-columns:1fr;
 	}
 
-	.tile{
-		height:110px;
-	}
-
-	.tile-icon{
-		width:44px;
-		height:44px;
-	}
+	
 
 	.tile-name{
-		font-size:1rem;
+		font-size:0.8rem;
 	}
 
 	.btn{
