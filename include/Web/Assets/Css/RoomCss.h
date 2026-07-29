@@ -63,6 +63,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .channel-name{
+    padding-right: 9px;
     font-size:1.1rem;
     font-weight:600;
     color: white;
