@@ -25,6 +25,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 
 .status-dot
 {
+    margin-top: 0.6rem;
     width:8px;
     height:8px;
     border-radius:50%;
@@ -33,7 +34,6 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 
 .status-dot.online
 {
-    margin-top: 0.6rem;
     background:#2ecc71;
     box-shadow:0 0 6px #2ecc71;
 }
