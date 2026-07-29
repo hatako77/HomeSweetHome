@@ -209,7 +209,7 @@ bool IOManager::save() const
         o["favorite"] = ch->favorite;        
         o["activeLow"] = ch->activeLow;        
         o["type"] = static_cast<uint8_t>(ch->type);
-        o["icon"] = static_cast<uint8_t>(ch->icon);        
+        o["icon"] = ch->icon;        
         o["roomId"] = ch->roomId;
         o["driverId"] = ch->address.driverId;
         o["device"] = ch->address.device;
@@ -241,7 +241,7 @@ bool IOManager::load()
         ch.favorite = o["favorite"] | false;
         ch.roomId = o["roomId"] | 0;    
         typeFromValue(o["type"] | 1, ch.type);
-        iconFromValue(o["icon"] | 0, ch.icon);    
+        ch.icon = o["icon"] | "";    
         ch.address.driverId = o["driverId"] | 0;
         ch.address.device   = o["device"]   | 0;
         ch.address.pin      = o["pin"]      | 0;
