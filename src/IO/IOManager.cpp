@@ -38,26 +38,39 @@ bool IOManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
 //====================================================================
 void IOManager::update()
 {
+    static uint32_t lastDriverScan = 0;
+
     if (millis() - lastDriverScan >= 1000)
     {
         lastDriverScan = millis();
-        scanDrivers();
+
+        for (uint16_t i = 0; i < driverCount; i++)
+            drivers[i]->update();
     }
 
-    for (uint16_t i = 0; i < driverCount; i++) drivers[i]->update();
     for (uint16_t i = 0; i < channelCount; i++)
     {
         IIODriver* drv = getDriver(channels[i].address.driverId);
-        if (!drv) continue;
+        if (!drv)
+            continue;
+
+        bool oldConnected = channels[i].connected;
         channels[i].connected = drv->isConnected(channels[i].address.device);
-        // فقط ورودی‌ها را بخوان
-        if (channels[i].type == IOType::DigitalInput)
+
+        if (oldConnected != channels[i].connected)
+        {
+            Notifier::channelChanged(channels[i]);
+        }
+
+        if (channels[i].type == IOType::DigitalInput && channels[i].connected)
         {
             bool state = drv->read(
                 channels[i].address.device,
-                channels[i].address.pin
-            );
-            if (channels[i].activeLow) state = !state;
+                channels[i].address.pin);
+
+            if (channels[i].activeLow)
+                state = !state;
+
             if (channels[i].state != state)
             {
                 channels[i].state = state;
