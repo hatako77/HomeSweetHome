@@ -191,20 +191,22 @@ function buildIconPicker()
 
     const icons =
     [
-        "light",
-        "fan",
+        "Light",
+        "Fan",
+        "Door",
+        "Lock",
+        "Motion",
+        "Temperature",
+        "Water",
+        "Outlet",
+        "Bell",
+        "Curtain",
+        "TV",
+        "Generic",
         "ac",
-        "door",
-        "garage",
-        "lock",
-        "motion",
-        "temperature",
-        "water",
-        "outlet",
-        "bell",
-        "curtain",
-        "tv",
-        "generic"
+        "garage"
+        
+
     ];
 
     icons.forEach(name =>
