@@ -42,8 +42,8 @@ const iconMap =
 
 function getIcon(id)
 {
-    const key = iconMap[id] ?? "generic";
-    return Icons[key] ?? Icons.generic;
+    //const key = iconMap[id] ?? "generic";
+    return Icons[id] ?? Icons.generic;
 }
 
 
