@@ -203,7 +203,8 @@ function buildIconPicker()
         "bell",
         "curtain",
         "tv",
-        "generic"
+        "generic",
+        "schedules"
     ];
     names.forEach((_, index) =>
     {
