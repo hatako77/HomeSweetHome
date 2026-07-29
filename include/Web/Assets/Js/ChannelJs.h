@@ -160,7 +160,7 @@ function fillDevices(channel)
         html += `
             <option value="${i}"
                 ${channel?.device==i?"selected":""}>
-                PCF ${i+1}
+                PCF ${i}
             </option>
         `;
     }
