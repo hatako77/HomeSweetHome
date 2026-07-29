@@ -57,8 +57,7 @@ body{
 display:inline-flex;
 align-items:center;
 justify-content:center;
-width:22px;
-height:22px;
+
 color:inherit;
 flex-shrink:0;
 }
