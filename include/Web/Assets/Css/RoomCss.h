@@ -129,7 +129,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .room-card{
-
+    overflow: hidden;
 
 }
 
