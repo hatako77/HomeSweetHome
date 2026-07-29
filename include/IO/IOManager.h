@@ -33,6 +33,8 @@ public:
     bool isPinUsed(const IOAddress& address,uint16_t ignoreId = 0) const;
 
 private:
+    uint32_t lastDriverScan = 0;
+    void scanDrivers();
     static constexpr uint8_t MAX_DRIVERS = 8;
     IIODriver* drivers[MAX_DRIVERS];
     uint16_t driverCount = 0;
