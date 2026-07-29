@@ -4,27 +4,6 @@
 #include <Arduino.h>
 #include "IO/IIODriver.h"
 
-enum class IOIcon : uint8_t
-{
-    Light,
-    Fan,
-    Door,
-    Lock,
-    Motion,
-    Temperature,
-    Water,
-    Outlet,
-    Bell,
-    Curtain,
-    TV,
-    Generic,
-    ac,
-    garage,
-    
-    Count
-};
-
-
 enum class IOType : uint8_t
 {
     DigitalInput = 0,
@@ -49,7 +28,7 @@ struct IOChannel
 
     String name = "";
 
-    IOIcon icon = IOIcon::Generic;
+    string icon ="generic";
     IOType type = IOType::DigitalOutput;
 
     bool state = false;
