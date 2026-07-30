@@ -215,6 +215,13 @@ server.on("/api/channels/usedpins", HTTP_GET,[](AsyncWebServerRequest *request)
         IOType type;
         if(typeFromValue(doc["type"]|(uint8_t)updated.type,type)) updated.type=type;    
         updated.icon = doc["icon"]|updated.icon;    
+        Serial.printf(
+            "PUT -> id=%d driver=%d device=%d pin=%d\n",
+            updated.id,
+            updated.address.driverId,
+            updated.address.device,
+            updated.address.pin
+        );
         if(!ioManager.update(updated))
         {
             request->send(500,"application/json","{\"success\":false}");
