@@ -37,6 +37,13 @@ bool IOManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
 //====================================================================
 void IOManager::update()
 {
+    Serial.printf(
+        "UPDATE -> id=%d driver=%d device=%d pin=%d\n",
+        channel.id,
+        channel.address.driverId,
+        channel.address.device,
+        channel.address.pin
+    );
     static uint32_t lastDriverScan = 0;
 
     if (millis() - lastDriverScan >= 1000)
