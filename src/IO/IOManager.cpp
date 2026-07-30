@@ -37,13 +37,7 @@ bool IOManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
 //====================================================================
 void IOManager::update()
 {
-    Serial.printf(
-        "UPDATE -> id=%d driver=%d device=%d pin=%d\n",
-        channel.id,
-        channel.address.driverId,
-        channel.address.device,
-        channel.address.pin
-    );
+
     static uint32_t lastDriverScan = 0;
 
     if (millis() - lastDriverScan >= 1000)
@@ -175,6 +169,13 @@ bool IOManager::remove(uint16_t id)
 //====================================================================
 bool IOManager::update(const IOChannel& channel)
 {
+    Serial.printf(
+        "UPDATE CHANNEL -> id=%d driver=%d device=%d pin=%d\n",
+        channel.id,
+        channel.address.driverId,
+        channel.address.device,
+        channel.address.pin
+    );
     if(isPinUsed(channel.address, channel.id))return false;
     for (uint16_t i = 0; i < channelCount; i++)
     {
