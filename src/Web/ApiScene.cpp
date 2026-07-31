@@ -37,6 +37,7 @@ void ApiScene::registerRoutes(WebServerService& server)
                 a["channelId"]  = scene->actions[i].channelId;
                 a["state"]      = scene->actions[i].state;
                 a["durationMs"] = scene->actions[i].durationMs;
+                a["delayMs"]    = scene->actions[i].delayMs;
             }  
             String json;
             serializeJson(doc, json);  
@@ -106,9 +107,10 @@ void ApiScene::registerRoutes(WebServerService& server)
             {
                 if (scene.actionCount >= Scene::MAX_ACTIONS)break;
                 SceneAction& action =scene.actions[scene.actionCount++];
-                action.channelId = a["channelId"] | 0;
-                action.state = a["state"] | false;
+                action.channelId  = a["channelId"]  | 0;
+                action.state      = a["state"]      | false;
                 action.durationMs = a["durationMs"] | 0;
+                action.delayMs    = a["delayMs"]    | 0;
             }
             if (!sceneManager.saveScene(scene))
             {
@@ -159,9 +161,10 @@ void ApiScene::registerRoutes(WebServerService& server)
               {
                   if (updated.actionCount >= Scene::MAX_ACTIONS)break;  
                   SceneAction& action =updated.actions[updated.actionCount++];  
-                  action.channelId =a["channelId"] | 0;  
-                  action.state =a["state"] | false;  
+                  action.channelId  =a["channelId"]  | 0;  
+                  action.state      =a["state"]      | false;  
                   action.durationMs =a["durationMs"] | 0;
+                  action.delayMs    =a["delayMs"]    | 0;
               }
           }  
           if (!sceneManager.update(updated))
