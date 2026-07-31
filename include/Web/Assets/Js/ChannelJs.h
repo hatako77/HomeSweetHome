@@ -29,17 +29,6 @@ const DriverNames =
 let channels = [];
 let selectedChannelIcon = "generic";
 //==============================================================
-async function editChannel(id)
-{
-    const channel = await apiGet(`/api/channels?id=${id}`);
-    if(!channel)
-    {
-        showToast("Channel not found","error");
-        return;
-    }
-    showChannelDialog(channel);
-}
-//==============================================================
 async function showChannelDialog(channel = null)
 {
     const rooms = await apiGet("/api/rooms");
@@ -135,7 +124,7 @@ await refreshPinList(
 
 $("chDriver").onchange = async () =>
 {
-    fillDevices();
+    fillDevices(channel);
 
     await refreshPinList(
         Number($("chDriver").value),
@@ -158,6 +147,7 @@ $("chDevice").onchange = async () =>
 selectedChannelIcon = channel?.icon ?? "generic";
 
 buildIconPicker();
+}
 //==============================================================
 function fillDrivers(channel)
 {
@@ -551,16 +541,6 @@ async function refreshPinList(driver, device, ignoreId = 0, currentPin = -1)
         select.value = String(currentPin);
 }
 //==============================================================
-async function refreshPins(currentPin = -1)
-{
-    await refreshPinList(
-    Number($("chDriver").value),
-    Number($("chDevice").value),
-    channel?.id ?? 0,
-    currentPin
-);
-}
-//==============================================================
 function createChannelCard(channel)
 {
     const card = create("div", "channel-card");
@@ -625,8 +605,6 @@ function createChannelCard(channel)
     return card;
 }
 
-
-//==============================================================
 )rawliteral";
 
 #endif
