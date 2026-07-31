@@ -7,9 +7,18 @@
 struct SceneTimer
 {
     bool active = false;
+    SceneTaskStage stage = SceneTaskStage::Waiting;
     uint16_t channelId = 0;
     bool targetState = false;
+    bool previousState = false;
+    uint32_t durationMs = 0;
     uint32_t expiresAt = 0;
+};
+
+enum class SceneTaskStage : uint8_t
+{
+    Waiting,
+    Restoring
 };
 
 class SceneManager
@@ -31,7 +40,8 @@ public:
     Scene* getAt(uint16_t index);    
     const Scene* getAt(uint16_t index) const;
     void update();    
-    void addTimer(uint16_t channelId,bool targetState,uint32_t durationMs);
+    void addTimer(uint16_t channelId,bool targetState,bool previousState,uint32_t delayMs,uint32_t durationMs);
+    void removeTimers(uint16_t channelId);
 
 private:
     static constexpr uint8_t MAX_TIMERS = 32;    
