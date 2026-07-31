@@ -123,65 +123,70 @@ async function showChannelDialog(channel = null)
             return saveChannel(channel?.id);
         }
     });
-    fillDrivers(channel);
-    fillDevices(channel);
-    fillPins(channel);
-    const driver = $("chDriver");
-    const device = $("chDevice");
-    await refreshPinList(Number($("chDriver").value),Number($("chDevice").value),channel?.id ?? 0,channel?.pin ?? -1);
-    driver.onchange = async () =>
-    {
-        fillDevices(channel);
-        await refreshPinList(Number($("chDriver").value),Number($("chDevice").value),channel?.id ?? 0,-1);
-    };
-    
-    device.onchange = async () =>
-    {
-        fillPins(channel);
-        await refreshPinList(Number($("chDriver").value),Number($("chDevice").value),channel?.id ?? 0,-1);
-    };
-    selectedChannelIcon = channel?.icon ?? "generic";
-    buildIconPicker();
-}
+fillDrivers(channel);
+fillDevices(channel);
+
+await refreshPinList(
+    Number($("chDriver").value),
+    Number($("chDevice").value),
+    channel?.id ?? 0,
+    channel?.pin ?? -1
+);
+
+$("chDriver").onchange = async () =>
+{
+    fillDevices();
+
+    await refreshPinList(
+        Number($("chDriver").value),
+        Number($("chDevice").value),
+        channel?.id ?? 0,
+        -1
+    );
+};
+
+$("chDevice").onchange = async () =>
+{
+    await refreshPinList(
+        Number($("chDriver").value),
+        Number($("chDevice").value),
+        channel?.id ?? 0,
+        -1
+    );
+};
+
+selectedChannelIcon = channel?.icon ?? "generic";
+
+buildIconPicker();
 //==============================================================
 function fillDrivers(channel)
 {
-    $("chDriver").innerHTML = `
+    const select = $("chDriver");
+
+    select.innerHTML = `
         <option value="0">PCF8574</option>
     `;
+
+    select.value = String(channel?.driverId ?? 0);
 }
 //==============================================================
 function fillDevices(channel)
 {
     const select = $("chDevice");
+
     let html = "";
-    for(let i=0;i<8;i++)
+
+    for (let i = 0; i < 8; i++)
     {
         html += `
-            <option value="${i}"
-                ${channel?.device==i?"selected":""}>
+            <option value="${i}">
                 PCF ${i}
             </option>
         `;
     }
+
     select.innerHTML = html;
-}
-//==============================================================
-function fillPins(channel)
-{
-    const select = $("chPin");
-    let html = "";
-    for(let i=0;i<8;i++)
-    {
-        html += `
-            <option
-                value="${i}"
-                ${channel?.pin==i?"selected":""}>
-                Pin ${i}
-            </option>
-        `;
-    }
-    select.innerHTML = html;
+    select.value = String(channel?.device ?? 0);
 }
 //==============================================================
 function buildIconPicker()
@@ -489,11 +494,10 @@ async function editChannel(id)
 {
     const channel = findChannel(id);
 
-    if(!channel)
+    if (!channel)
         return;
 
-    showChannelDialog(
-    {
+    await showChannelDialog({
         id: channel.id,
         name: channel.name,
         roomId: channel.roomId,
@@ -518,11 +522,13 @@ async function refreshPinList(driver, device, ignoreId = 0, currentPin = -1)
     const channels = await loadUsedPins(driver, device, ignoreId);
 
     const select = $("chPin");
+
     select.innerHTML = "";
 
-    for(let i = 0; i < 8; i++)
+    for (let i = 0; i < 8; i++)
     {
         const option = document.createElement("option");
+
         option.value = i;
 
         const inUse = channels.find(ch =>
@@ -533,14 +539,16 @@ async function refreshPinList(driver, device, ignoreId = 0, currentPin = -1)
         );
 
         option.textContent = inUse
-            ? `P${i} (In Use)`
-            : `P${i}`;
+            ? `Pin ${i} (In Use)`
+            : `Pin ${i}`;
 
         option.disabled = !!inUse && i !== currentPin;
-        option.selected = i === currentPin;
 
         select.appendChild(option);
     }
+
+    if (currentPin >= 0)
+        select.value = String(currentPin);
 }
 //==============================================================
 async function refreshPins(currentPin = -1)
