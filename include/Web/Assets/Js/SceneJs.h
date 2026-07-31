@@ -224,12 +224,12 @@ async function showSceneDialog(scene = null)
     renderSceneActions();
     $("btnAddAction").onclick = () =>
     {
-        sceneActions.push(
-        {
-            channelId:0,
-            state:false,
-            durationMs:0
-        });
+    sceneActions.push({
+        channelId:0,
+        state:false,
+        delayMs:0,
+        durationMs:0
+    });
         renderSceneActions();
     };
 }
@@ -239,52 +239,39 @@ let sceneActions = [];
 async function renderSceneActions()
 {
     const container = $("sceneActions");
-
     container.innerHTML = "";
-
     const channels = await apiGet("/api/channels");
-
     sceneActions.forEach((action,index)=>
     {
         const row = document.createElement("div");
-
         row.className = "scene-action-row";
-
         const options = channels.map(ch => `
-            <option
-                value="${ch.id}"
-                ${Number(action.channelId)===Number(ch.id)?"selected":""}>
+            <option value="${ch.id}" ${Number(action.channelId)===Number(ch.id)?"selected":""}>
                 ${ch.name}
             </option>
         `).join("");
-
         row.innerHTML = `
-            <select class="textbox actionChannel">
-                ${options}
-            </select>
-
+            <select class="textbox actionChannel"> ${options} </select>
             <select class="textbox actionState">
-                <option value="1"
-                    ${action.state?"selected":""}>
+                <option value="1" ${action.state?"selected":""}>
                     ON
                 </option>
-
-                <option value="0"
-                    ${!action.state?"selected":""}>
+                <option value="0" ${!action.state?"selected":""}>
                     OFF
                 </option>
             </select>
 
-            <input
-                class="textbox actionDuration"
-                type="number"
-                min="0"
-                value="${action.durationMs}">
+            <div class="time-column">
+                <small>Delay</small>
+                <input class="textbox actionDelay" type="number" min="0" value="${action.delayMs}">            
+            </div>
 
-            <button
-                class="btn danger actionDelete">
-                <i class="fa-solid fa-trash"></i>
-            </button>
+            <div class="time-column">
+                <small>Duration</small>
+                <input class="textbox actionDuration" type="number" min="0" value="${action.durationMs}">
+            </div>
+
+            <button class="btn danger actionDelete"> <i class="fa-solid fa-trash"></i> </button>
         `;
 
         row.querySelector(".actionChannel").onchange=e=>
@@ -301,7 +288,10 @@ async function renderSceneActions()
         {
             action.durationMs = Number(e.target.value);
         };
-
+        row.querySelector(".actionDelay").onchange = e =>
+        {
+            action.delayMs = Number(e.target.value);
+        };
         row.querySelector(".actionDelete").onclick=()=>
         {
             sceneActions.splice(index,1);
