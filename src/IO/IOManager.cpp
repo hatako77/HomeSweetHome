@@ -5,7 +5,9 @@
 #include "IO/DriverRegistry.h"
 #include "IO/TypeHelper.h"
 #include "Web/Notifier.h"
+#include "Core/SceneManager.h"
 
+extern SceneManager sceneManager;
 IOManager ioManager;
 
 void IOManager::begin()
@@ -101,11 +103,12 @@ void IOManager::update()
     }
 }
 //====================================================================
-bool IOManager::write(uint16_t id, bool state)
+bool IOManager::write(uint16_t id, bool state, bool fromScene = false)
 {
     IOChannel* ch = getChannel(id);
     if (!ch) return false;    
-    if (ch->type != IOType::DigitalOutput) return false;    
+    if (ch->type != IOType::DigitalOutput) return false; 
+    if (!fromScene) sceneManager.removeTimers(id);
     ch->state = state;    
     bool hwState = state;    
     if (ch->activeLow) hwState = !hwState;    
