@@ -6,7 +6,6 @@
 const char SCENE_JS[] PROGMEM=R"rawliteral(
 
 let scenes=[];
-let scenes = [];
 
 async function initScenes()
 {
