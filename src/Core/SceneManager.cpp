@@ -10,6 +10,7 @@ SceneManager sceneManager;
 
 void SceneManager::begin()
 {
+    load();
 }
 void SceneManager::update()
 {
@@ -54,7 +55,8 @@ void SceneManager::update()
             {
                 ioManager.write(
                     timer.channelId,
-                    timer.previousState);
+                    timer.previousState,
+                    true);
 
                 timer.active = false;
 
@@ -63,37 +65,48 @@ void SceneManager::update()
         }
     }
 }
-void SceneManager::addTimer(uint16_t channelId,bool targetState,bool previousState,uint32_t delayMs,uint32_t durationMs)
+void SceneManager::addTimer(
+    uint16_t channelId,
+    bool targetState,
+    bool previousState,
+    uint32_t delayMs,
+    uint32_t durationMs)
 {
-    uint32_t expiresAt = millis() + delayMs;
-    // اگر قبلاً برای این کانال تایمر وجود دارد
+    uint32_t now = millis();
+
+    // اگر قبلاً برای این کانال تایمر وجود دارد، جایگزینش کن
     for(auto& timer : timers)
     {
         if(timer.active && timer.channelId == channelId)
         {
-            timer.stage = SceneTaskStage::Waiting;
-            timer.targetState = targetState;
+            timer.active        = true;
+            timer.stage         = SceneTaskStage::Waiting;
+            timer.channelId     = channelId;
+            timer.targetState   = targetState;
             timer.previousState = previousState;
-            timer.durationMs = durationMs;
-            timer.expiresAt = expiresAt;
+            timer.durationMs    = durationMs;
+            timer.expiresAt     = now + delayMs;
             return;
         }
     }
-    // پیدا کردن اولین خانه آزاد
+
+    // اولین خانه آزاد
     for(auto& timer : timers)
     {
         if(!timer.active)
         {
-            timer.active = true;
-            timer.stage = SceneTaskStage::Waiting;
-            timer.channelId = channelId;
-            timer.targetState = targetState;
+            timer.active        = true;
+            timer.stage         = SceneTaskStage::Waiting;
+            timer.channelId     = channelId;
+            timer.targetState   = targetState;
             timer.previousState = previousState;
-            timer.durationMs = durationMs;
-            timer.expiresAt = expiresAt;
+            timer.durationMs    = durationMs;
+            timer.expiresAt     = now + delayMs;
             return;
         }
     }
+
+    Serial.println("No free Scene timers.");
 }
 
 bool SceneManager::saveScene(Scene& scene)
@@ -147,6 +160,8 @@ bool SceneManager::load()
         {
             if (scene.actionCount >= Scene::MAX_ACTIONS) break;
             SceneAction& a = scene.actions[scene.actionCount++];
+            a.delayMs = action["delayMs"] | 0;
+            a.durationMs = action["durationMs"] | 0;
             a.durationMs   = action["durationMs"] | 0;
             a.channelId = action["channelId"] | 0;
             a.state     = action["state"] | false;
@@ -195,6 +210,7 @@ bool SceneManager::save()
             JsonObject a   = actions.add<JsonObject>();
             a["channelId"] = scenes[i].actions[j].channelId;
             a["state"]     = scenes[i].actions[j].state;
+            a["delayMs"] = scenes[i].actions[j].delayMs;
             a["durationMs"]   = scenes[i].actions[j].durationMs;
         }
     }
@@ -298,28 +314,39 @@ bool SceneManager::execute(uint16_t id)
         if(channel == nullptr)
             continue;
 
-        // لغو هر Scene قبلی روی این کانال
-        removeTimers(action.channelId);
-
+        // وضعیت اولیه کانال
         bool previousState = channel->state;
 
-        //--------------------------------------------------
-        // اجرای فوری بدون هیچ تایمری
-        //--------------------------------------------------
-        if(action.delayMs == 0 &&
-           action.durationMs == 0)
+        // هر Scene قبلی روی این کانال لغو شود
+        removeTimers(action.channelId);
+
+        //----------------------------------------------------
+        // Delay = 0
+        //----------------------------------------------------
+        if(action.delayMs == 0)
         {
             ioManager.write(
                 action.channelId,
                 action.state,
                 true);
 
+            // اگر Duration دارد، فقط تایمر بازگشت بساز
+            if(action.durationMs > 0)
+            {
+                addTimer(
+                    action.channelId,
+                    action.state,
+                    previousState,
+                    0,
+                    action.durationMs);
+            }
+
             continue;
         }
 
-        //--------------------------------------------------
-        // زمان‌بندی اجرای اکشن
-        //--------------------------------------------------
+        //----------------------------------------------------
+        // Delay > 0
+        //----------------------------------------------------
         addTimer(
             action.channelId,
             action.state,
