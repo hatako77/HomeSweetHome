@@ -298,26 +298,27 @@ bool SceneManager::execute(uint16_t id)
         if(channel == nullptr)
             continue;
 
-        // اگر قبلاً تایمری برای این کانال وجود دارد حذف شود
+        // لغو هر Scene قبلی روی این کانال
         removeTimers(action.channelId);
 
         bool previousState = channel->state;
 
         //--------------------------------------------------
-        // بدون Delay و بدون Duration
+        // اجرای فوری بدون هیچ تایمری
         //--------------------------------------------------
         if(action.delayMs == 0 &&
            action.durationMs == 0)
         {
             ioManager.write(
                 action.channelId,
-                action.state);
+                action.state,
+                true);
 
             continue;
         }
 
         //--------------------------------------------------
-        // زمان‌بندی اجرا
+        // زمان‌بندی اجرای اکشن
         //--------------------------------------------------
         addTimer(
             action.channelId,
