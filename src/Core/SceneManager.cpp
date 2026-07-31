@@ -11,16 +11,6 @@ SceneManager sceneManager;
 void SceneManager::begin()
 {
 }
-void SceneManager::removeTimer(uint16_t channelId)
-{
-    for(auto& timer:timers)
-    {
-        if(timer.active&&timer.channelId==channelId)
-        {
-            timer.active=false;
-        }
-    }
-}
 void SceneManager::update()
 {
     uint32_t now=millis();
@@ -40,26 +30,34 @@ void SceneManager::update()
     }
 }
 
-void SceneManager::addTimer(uint16_t channelId,bool targetState,uint32_t durationMs)
+void SceneManager::addTimer(uint16_t channelId,bool targetState,bool previousState,uint32_t delayMs,uint32_t durationMs)
 {
-    uint32_t expiresAt=millis()+durationMs;
-    for(auto& timer:timers)
+    uint32_t expiresAt = millis() + delayMs;
+    // اگر قبلاً برای این کانال تایمر وجود دارد
+    for(auto& timer : timers)
     {
-        if(timer.active&&timer.channelId==channelId)
+        if(timer.active && timer.channelId == channelId)
         {
-            timer.targetState=targetState;
-            timer.expiresAt=expiresAt;
+            timer.stage = SceneTaskStage::Waiting;
+            timer.targetState = targetState;
+            timer.previousState = previousState;
+            timer.durationMs = durationMs;
+            timer.expiresAt = expiresAt;
             return;
         }
     }
-    for(auto& timer:timers)
+    // پیدا کردن اولین خانه آزاد
+    for(auto& timer : timers)
     {
         if(!timer.active)
         {
-            timer.active=true;
-            timer.channelId=channelId;
-            timer.targetState=targetState;
-            timer.expiresAt=expiresAt;
+            timer.active = true;
+            timer.stage = SceneTaskStage::Waiting;
+            timer.channelId = channelId;
+            timer.targetState = targetState;
+            timer.previousState = previousState;
+            timer.durationMs = durationMs;
+            timer.expiresAt = expiresAt;
             return;
         }
     }
@@ -215,7 +213,16 @@ bool SceneManager::remove(uint16_t id)
     return false;
 }
 
-
+void SceneManager::removeTimers(uint16_t channelId)
+{
+    for(auto& timer : timers)
+    {
+        if(timer.active && timer.channelId == channelId)
+        {
+            timer.active = false;
+        }
+    }
+}
 
 Scene* SceneManager::get(uint16_t id)
 {
@@ -252,7 +259,7 @@ bool SceneManager::execute(uint16_t id)
     {
         SceneAction& action = scene->actions[i];    
         if(action.durationMs > 0) addTimer(action.channelId,!action.state,action.durationMs); 
-        removeTimer(action.channelId);
+        removeTimers(action.channelId);
         if(ioManager.write(action.channelId,action.state))
         {
             if(action.durationMs>0)
