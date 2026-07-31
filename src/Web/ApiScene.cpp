@@ -86,7 +86,7 @@ void ApiScene::registerRoutes(WebServerService& server)
           request->send(400,"application/json","{\"success\":false}");
           return;
       }  
-      Scene scene;  
+      Scene scene{};
       scene.id = doc["id"] | 0; 
       scene.name = doc["name"] | ""; 
       scene.icon = doc["icon"] | "bolt";  
