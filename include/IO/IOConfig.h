@@ -36,7 +36,6 @@ struct IOChannel
     bool activeLow = false;
 
     uint8_t roomId = 0;
-    uint8_t groupId = 0;
 
     bool favorite = false;
 
