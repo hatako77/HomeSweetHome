@@ -24,8 +24,10 @@ void IOManager::begin()
 //====================================================================
 bool IOManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
 {
-    for(const auto& channel : channels)
+    for (uint16_t i = 0; i < channelCount; i++)
     {
+        const IOChannel& channel = channels[i];
+
         Serial.printf(
             "CHECK -> id=%d ignore=%d driver=%d device=%d pin=%d\n",
             channel.id,
@@ -35,15 +37,15 @@ bool IOManager::isPinUsed(const IOAddress& address, uint16_t ignoreId) const
             channel.address.pin
         );
 
-        if(channel.id == ignoreId)
+        if (channel.id == ignoreId)
         {
             Serial.println("SKIP SELF");
             continue;
         }
 
-        if(channel.address.driverId == address.driverId &&
-           channel.address.device   == address.device &&
-           channel.address.pin      == address.pin)
+        if (channel.address.driverId == address.driverId &&
+            channel.address.device   == address.device &&
+            channel.address.pin      == address.pin)
         {
             Serial.println("PIN ALREADY USED");
             return true;
