@@ -13,23 +13,56 @@ void SceneManager::begin()
 }
 void SceneManager::update()
 {
-    uint32_t now=millis();
-    for(auto& timer:timers)
+    uint32_t now = millis();
+
+    for(auto& timer : timers)
     {
         if(!timer.active)
             continue;
-        if((int32_t)(now-timer.expiresAt)>=0)
+
+        if((int32_t)(now - timer.expiresAt) < 0)
+            continue;
+
+        switch(timer.stage)
         {
-            timer.active=false;
-            IOChannel* channel=ioManager.getChannel(timer.channelId);
-            if(channel&&channel->state!=timer.targetState)
+            //--------------------------------------------------
+            // Delay finished
+            //--------------------------------------------------
+            case SceneTaskStage::Waiting:
             {
-                ioManager.write(timer.channelId,timer.targetState);
+                ioManager.write(
+                    timer.channelId,
+                    timer.targetState);
+
+                if(timer.durationMs == 0)
+                {
+                    timer.active = false;
+                }
+                else
+                {
+                    timer.stage = SceneTaskStage::Restoring;
+                    timer.expiresAt = now + timer.durationMs;
+                }
+
+                break;
+            }
+
+            //--------------------------------------------------
+            // Duration finished
+            //--------------------------------------------------
+            case SceneTaskStage::Restoring:
+            {
+                ioManager.write(
+                    timer.channelId,
+                    timer.previousState);
+
+                timer.active = false;
+
+                break;
             }
         }
     }
 }
-
 void SceneManager::addTimer(uint16_t channelId,bool targetState,bool previousState,uint32_t delayMs,uint32_t durationMs)
 {
     uint32_t expiresAt = millis() + delayMs;
@@ -254,24 +287,49 @@ uint16_t SceneManager::count() const
 bool SceneManager::execute(uint16_t id)
 {
     Scene* scene = get(id);
-    if(scene == nullptr) return false;
+    if(scene == nullptr)
+        return false;
+
     for(uint8_t i = 0; i < scene->actionCount; i++)
     {
-        SceneAction& action = scene->actions[i];    
-        if(action.durationMs > 0) addTimer(action.channelId,!action.state,action.durationMs); 
+        SceneAction& action = scene->actions[i];
+
+        IOChannel* channel = ioManager.getChannel(action.channelId);
+        if(channel == nullptr)
+            continue;
+
+        // اگر قبلاً تایمری برای این کانال وجود دارد حذف شود
         removeTimers(action.channelId);
-        if(ioManager.write(action.channelId,action.state))
+
+        bool previousState = channel->state;
+
+        //--------------------------------------------------
+        // بدون Delay و بدون Duration
+        //--------------------------------------------------
+        if(action.delayMs == 0 &&
+           action.durationMs == 0)
         {
-            if(action.durationMs>0)
-            {
-                addTimer(action.channelId,!action.state,action.durationMs);
-            }
-        }    
-    } 
-    //if(scene->notificationSend)
-    //{
-    //    notificationService.send(scene->notificationText);
-    //}
+            ioManager.write(
+                action.channelId,
+                action.state);
+
+            continue;
+        }
+
+        //--------------------------------------------------
+        // زمان‌بندی اجرا
+        //--------------------------------------------------
+        addTimer(
+            action.channelId,
+            action.state,
+            previousState,
+            action.delayMs,
+            action.durationMs);
+    }
+
     ioManager.save();
+
+    Notifier::sceneExecuted(id);
+
     return true;
 }
