@@ -33,7 +33,8 @@ void SceneManager::update()
             {
                 ioManager.write(
                     timer.channelId,
-                    timer.targetState);
+                    timer.targetState,
+                    true);
 
                 if(timer.durationMs == 0)
                 {
