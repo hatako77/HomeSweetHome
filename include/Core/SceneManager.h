@@ -4,16 +4,26 @@
 #include "Core/Scene.h"
 #include "IO/IOManager.h"
 
+enum class SceneTaskStage
+{
+    Waiting,
+    Restoring
+};
+
 struct SceneTimer
 {
     bool active = false;
+
     SceneTaskStage stage = SceneTaskStage::Waiting;
+
     uint16_t channelId = 0;
+
     bool targetState = false;
     bool previousState = false;
+
     uint32_t durationMs = 0;
     uint32_t expiresAt = 0;
-};
+
 
 enum class SceneTaskStage : uint8_t
 {
