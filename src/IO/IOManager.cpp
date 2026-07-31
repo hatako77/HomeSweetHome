@@ -191,6 +191,7 @@ bool IOManager::update(const IOChannel& channel)
             channels[i].address.driverId = channel.address.driverId;
             channels[i].address.device   = channel.address.device;
             channels[i].address.pin      = channel.address.pin;
+            Serial.println("UPDATE SUCCESS");
             if(channels[i].state != channel.state)
             {
                 write(channel.id,channel.state);
