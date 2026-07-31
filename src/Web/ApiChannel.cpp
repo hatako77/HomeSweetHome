@@ -22,7 +22,7 @@ void ApiChannel::registerRoutes(WebServerService& web)
         }    
         uint16_t id = doc["id"] | 0;
         bool state  = doc["state"] | false;    
-        if(!ioManager.write(id, state))
+        if(!ioManager.write(id, state,false))
         {
             request->send(404,"application/json","{\"success\":false}");
             return;
