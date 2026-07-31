@@ -6,6 +6,7 @@
 const char SCENE_JS[] PROGMEM=R"rawliteral(
 
 let scenes=[];
+let channels = [];
 
 async function initScenes()
 {
@@ -93,7 +94,7 @@ function createSceneCard(scene)
         <div class="card-body">
             <div>
                 Actions :
-                ${scene.actions}
+                ${scene.actions.length}
             </div>
             <div>
                 ${scene.enabled ? "Enabled" : "Disabled"}
@@ -110,7 +111,7 @@ async function newScene()
 //==============================================================
 async function editScene(id)
 {
-    const scene = findScene(id);
+    const scene = await apiGet(`/api/scenes?id=${id}`);
     if(!scene)return;
     await showSceneDialog(scene);
 }
@@ -194,53 +195,39 @@ async function showSceneDialog(scene = null)
                     maxlength="63"
                     value="${scene?.notificationText ?? ""}">
             </div>
-
             <hr>
-
             <h3>Actions</h3>
-
             <div id="sceneActions"></div>
-
-            <button
-                class="btn"
-                id="btnAddAction">
-
-                <i class="fa-solid fa-plus"></i>
-
-                Add Action
-
-            </button>
+            <button class="btn" id="btnAddAction"> <i class="fa-solid fa-plus"></i> Add Action </button>
         `,
 
-        onSave: async () =>
-        {
-            return await saveScene(scene?.id);
-        }
+        onSave: async () => { return await saveScene(scene?.id); }
     });
 
     selectedSceneIcon = scene?.icon ?? "bolt";
     buildSceneIconPicker();
     sceneActions = structuredClone(scene?.actions ?? []);
+    if(channels.length === 0) channels = await apiGet("/api/channels") ?? [];
     renderSceneActions();
     $("btnAddAction").onclick = () =>
     {
-    sceneActions.push({
-        channelId:0,
-        state:false,
-        delayMs:0,
-        durationMs:0
-    });
+        sceneActions.push({
+            channelId:0,
+            state:false,
+            delayMs:0,
+            durationMs:0
+        });    
         renderSceneActions();
     };
+
 }
 //==============================================================
 let sceneActions = [];
 //==============================================================
-async function renderSceneActions()
+function renderSceneActions()
 {
     const container = $("sceneActions");
     container.innerHTML = "";
-    const channels = await apiGet("/api/channels");
     sceneActions.forEach((action,index)=>
     {
         const row = document.createElement("div");
