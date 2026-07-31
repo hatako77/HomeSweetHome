@@ -4,7 +4,7 @@
 #include "Core/Scene.h"
 #include "IO/IOManager.h"
 
-enum class SceneTaskStage
+enum class SceneTaskStage : uint8_t
 {
     Waiting,
     Restoring
@@ -23,39 +23,51 @@ struct SceneTimer
 
     uint32_t durationMs = 0;
     uint32_t expiresAt = 0;
-
-
-enum class SceneTaskStage : uint8_t
-{
-    Waiting,
-    Restoring
-};
+};   // ← این ; خیلی مهمه
 
 class SceneManager
 {
 public:
     static constexpr uint8_t MAX_SCENES = 32;
+
     void begin();
     bool load();
     bool save();
+
     bool saveScene(Scene& scene);
+
     bool add(const Scene& scene);
     bool update(const Scene& scene);
     bool remove(uint16_t id);
+
     Scene* get(uint16_t id);
     const Scene* get(uint16_t id) const;
+
     uint16_t count() const;
+
     bool execute(uint16_t id);
-    Scene* getAt(uint16_t index);    
+
+    Scene* getAt(uint16_t index);
     const Scene* getAt(uint16_t index) const;
-    void update();    
-    void addTimer(uint16_t channelId,bool targetState,bool previousState,uint32_t delayMs,uint32_t durationMs);
+
+    void update();
+
+    void addTimer(
+        uint16_t channelId,
+        bool targetState,
+        bool previousState,
+        uint32_t delayMs,
+        uint32_t durationMs);
+
     void removeTimers(uint16_t channelId);
 
 private:
-    static constexpr uint8_t MAX_TIMERS = 32;    
+    static constexpr uint8_t MAX_TIMERS = 32;
+
     SceneTimer timers[MAX_TIMERS];
+
     Scene scenes[MAX_SCENES];
+
     uint16_t sceneCount = 0;
     uint16_t nextId = 1;
 };
