@@ -104,7 +104,6 @@ void IOManager::update()
 bool IOManager::write(uint16_t id, bool state)
 {
     IOChannel* ch = getChannel(id);
-    Serial.printf("WRITE -> id=%d state=%d\n", ch->id, ch->state);
     if (!ch) return false;    
     if (ch->type != IOType::DigitalOutput) return false;    
     ch->state = state;    
@@ -121,13 +120,15 @@ bool IOManager::read(uint16_t id) const
 {
 const IOChannel* ch = getChannel(id);
     if (!ch) return false;
-    return ch->state;}
-    IOChannel* IOManager::getChannel(uint16_t id)
+    return ch->state;
+}
+//====================================================================
+IOChannel* IOManager::getChannel(uint16_t id)
+{
+    for (uint16_t i = 0; i < channelCount; i++)
     {
-        for (uint16_t i = 0; i < channelCount; i++)
-        {
-            if (channels[i].id == id) return &channels[i];
-        }
+        if (channels[i].id == id) return &channels[i];
+    }
     return nullptr;
 }
 //====================================================================
@@ -209,10 +210,7 @@ bool IOManager::update(const IOChannel& channel)
             channels[i].favorite   = channel.favorite;
             channels[i].activeLow  = channel.activeLow;
             channels[i].roomId     = channel.roomId;
-            channels[i].address.driverId = channel.address.driverId;
-            channels[i].address.device   = channel.address.device;
-            channels[i].address.pin      = channel.address.pin;
-            Serial.println("UPDATE SUCCESS");
+            channels[i].address    = channel.address;
             if(channels[i].state != channel.state)
             {
                 write(channel.id,channel.state);
