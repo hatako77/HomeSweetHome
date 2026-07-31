@@ -224,12 +224,17 @@ server.on("/api/channels/usedpins", HTTP_GET,[](AsyncWebServerRequest *request)
         );
         if(!ioManager.update(updated))
         {
+            Serial.println("ioManager.update FAILED");
             request->send(500,"application/json","{\"success\":false}");
             return;
-        }    
-        ioManager.save();    
+        }
+        
+        Serial.println("ioManager.update OK");
+        ioManager.save();
+        Serial.println("SAVE OK");
         IOChannel* ch=ioManager.getChannel(id);    
         if(ch) Notifier::channelUpdated(*ch);    
+        Serial.println("NOTIFY OK");
         request->send(200,"application/json","{\"success\":true}");
     });
 //==============================================================================================    
