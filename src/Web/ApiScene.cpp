@@ -59,7 +59,7 @@ void ApiScene::registerRoutes(WebServerService& server)
             obj["enabled"] = scene->enabled;
             obj["notificationSend"] = scene->notificationSend;
             obj["notificationText"] = scene->notificationText;
-            obj["actions"] = scene->actionCount;
+            obj["actionCount"] = scene->actionCount;
         }  
         String json;
         serializeJson(doc, json);  
