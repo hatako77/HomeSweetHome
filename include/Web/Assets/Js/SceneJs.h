@@ -198,7 +198,7 @@ async function showSceneDialog(scene = null)
     $("btnAddAction").onclick = () =>
     {
         sceneActions.push({
-            channelId:0,
+            channelId: channels.length ? channels[0].id : 0,
             state:false,
             delayMs:0,
             durationMs:0
@@ -218,7 +218,7 @@ function renderSceneActions()
     {
         const row = document.createElement("div");
         row.className = "scene-action-row";
-        const options = channels.map(ch => `
+        const options = (channels ?? []).map(ch => `
             <option value="${ch.id}" ${Number(action.channelId)===Number(ch.id)?"selected":""}>
                 ${ch.name}
             </option>
@@ -312,7 +312,7 @@ async function saveScene(id = null)
         action.channelId  = Number(action.channelId);
         action.delayMs    = Number(action.delayMs)    || 0;
         action.durationMs = Number(action.durationMs) || 0;
-        action.state      = !!action.state;
+        action.state = Number(action.state) === 1 || action.state === true;
     }
     //--------------------------------------------------
     // Send request
