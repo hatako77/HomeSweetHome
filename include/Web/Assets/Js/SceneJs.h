@@ -47,20 +47,6 @@ function findScene(id)
     return scenes.find(x => Number(x.id) === Number(id));
 }
 //==============================================================
-function addSceneToList(scene)
-{
-    scenes.push(scene);
-    renderScenes();
-}
-//==============================================================
-function updateSceneInList(scene)
-{
-    const index = scenes.findIndex(x => Number(x.id) === Number(scene.id));
-    if(index < 0)return;
-    scenes[index] = scene;
-    renderScenes();
-}
-//==============================================================
 function removeSceneFromList(id)
 {
     scenes = scenes.filter(x => Number(x.id) !== Number(id));
@@ -297,13 +283,13 @@ async function saveScene(id = null)
         icon: selectedSceneIcon,
         enabled: $("sceneEnabled").checked,
         favorite: $("sceneFavorite").checked,
-
         notificationSend: $("sceneNotification").checked,
         notificationText: $("sceneNotificationText").value.trim(),
-
         actions: sceneActions
     };
-
+    //--------------------------------------------------
+    // Validation
+    //--------------------------------------------------
     if(body.name === "")
     {
         showToast("Name is required","error");
@@ -311,53 +297,46 @@ async function saveScene(id = null)
         return false;
     }
 
+    if(body.actions.length === 0)
+    {
+        showToast("At least one action is required","error");
+        return false;
+    }
+    for(const action of body.actions)
+    {
+        if(Number(action.channelId) <= 0)
+        {
+            showToast("Select channel for all actions","error");
+            return false;
+        }
+        action.channelId  = Number(action.channelId);
+        action.delayMs    = Number(action.delayMs)    || 0;
+        action.durationMs = Number(action.durationMs) || 0;
+        action.state      = !!action.state;
+    }
+    //--------------------------------------------------
+    // Send request
+    //--------------------------------------------------
     let result;
-
     if(id)
     {
-        result = await apiPut(
-            `/api/scenes?id=${id}`,
-            body
-        );
+        result = await apiPut(`/api/scenes?id=${id}`,body);
     }
     else
     {
-        result = await apiPost(
-            "/api/scenes",
-            body
-        );
+        result = await apiPost("/api/scenes",body);
     }
 
     if(!result || result.success === false)
     {
-        showToast(
-            result?.message ?? "Save failed",
-            "error"
-        );
+        showToast(result?.message ?? "Save failed","error");
         return false;
     }
-
-    showToast("Saved","success");
-
-    if(id)
-    {
-        updateSceneInList(
-        {
-            id,
-            ...body,
-            actions: sceneActions.length
-        });
-    }
-    else
-    {
-        addSceneToList(
-        {
-            id: result.id,
-            ...body,
-            actions: sceneActions.length
-        });
-    }
-
+    //--------------------------------------------------
+    // Refresh list
+    //--------------------------------------------------
+    await initScenes();
+    showToast("Scene saved","success");
     return true;
 }
 //==============================================================
