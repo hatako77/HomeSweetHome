@@ -80,7 +80,7 @@ function createSceneCard(scene)
         <div class="card-body">
             <div>
                 Actions :
-                ${scene.actions.length}
+                ${scene.actionCount}
             </div>
             <div>
                 ${scene.enabled ? "Enabled" : "Disabled"}
