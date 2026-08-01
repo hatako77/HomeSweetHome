@@ -247,23 +247,23 @@ function renderSceneActions()
             <button class="btn danger actionDelete"> <i class="fa-solid fa-trash"></i> </button>
         `;
 
-        row.querySelector(".actionChannel").onchange=e=>
+        row.querySelector(".actionChannel").oninput=e=>
         {
             action.channelId = Number(e.target.value);
         };
 
-        row.querySelector(".actionState").onchange=e=>
+        row.querySelector(".actionState").oninput=e=>
         {
             action.state = Number(e.target.value)===1;
         };
 
-        row.querySelector(".actionDuration").onchange=e=>
+        row.querySelector(".actionDuration").oninput=e=>
         {
-            action.durationMs = Number(e.target.value);
+            action.durationMs = Number(e.target.value) || 0;
         };
-        row.querySelector(".actionDelay").onchange = e =>
+        row.querySelector(".actionDelay").oninput = e =>
         {
-            action.delayMs = Number(e.target.value);
+            action.delayMs = Number(e.target.value) || 0;
         };
         row.querySelector(".actionDelete").onclick=()=>
         {
@@ -337,6 +337,7 @@ async function saveScene(id = null)
     //--------------------------------------------------
     await initScenes();
     showToast("Scene saved","success");
+    Dialog.close();
     return true;
 }
 //==============================================================
