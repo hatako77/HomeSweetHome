@@ -33,7 +33,10 @@ function showScenes()
 //==============================================================
 function renderScenes()
 {
+    if(App.currentPage !== "scenes") return;
+    if(!container) return;
     const list = $("sceneList");
+    if(!list) return;
     list.innerHTML = "";
     scenes.forEach(scene =>
     {
