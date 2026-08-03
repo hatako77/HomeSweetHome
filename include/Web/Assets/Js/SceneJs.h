@@ -104,7 +104,7 @@ async function editScene(id)
 //==============================================================
 async function executeScene(id)
 {
-    const result =await apiPost(`/api/scenes?action=execute&id=${id}`);
+    const result =await apiPost(`/api/scenes/execute?id=${id}`);
 
     if(!result || result.success === false)
     {
