@@ -193,7 +193,7 @@ async function showSceneDialog(scene = null)
     });
 
     selectedSceneIcon = scene?.icon ?? "bolt";
-    buildSceneIconPicker();
+    //buildSceneIconPicker();
     sceneActions = structuredClone(scene?.actions ?? []);
     if(channels.length === 0) channels = await apiGet("/api/channels") ?? [];
     renderSceneActions();
