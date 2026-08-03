@@ -104,7 +104,10 @@ async function editScene(id)
 //==============================================================
 async function executeScene(id)
 {
-    const result = await apiPost(`/api/scenes?action=execute&id=${id}`);
+    const result = await apiPost(
+        `/api/scenes?action=execute&id=${id}`,
+        {}
+    );
 
     console.log("test");
 
