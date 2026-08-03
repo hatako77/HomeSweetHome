@@ -209,7 +209,7 @@ const char ROOM_CSS[] PROGMEM = R"rawliteral(
 }
 
 .tile.disabled{
-    opacity:.35;
+    opacity:.1;
 }
 
 .channel-icon{
