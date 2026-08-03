@@ -66,117 +66,65 @@ void ApiScene::registerRoutes(WebServerService& server)
         request->send(200, "application/json", json);
     });
 //=============================================================================
-web.on(
-    "/api/scenes",
-    HTTP_POST,
-    [](AsyncWebServerRequest*){},
-    nullptr,
-    [](AsyncWebServerRequest* request,
-       uint8_t* data,
-       size_t len,
-       size_t,
-       size_t)
-    {
-        JsonDocument doc;
-
-        if(deserializeJson(doc, data, len))
+    web.on("/api/scenes",HTTP_POST,[](AsyncWebServerRequest* request){},nullptr,
+        [](AsyncWebServerRequest* request,uint8_t* data,size_t len,size_t,size_t)
         {
-            request->send(
-                400,
-                "application/json",
-                "{\"success\":false,\"message\":\"Invalid JSON\"}"
-            );
-            return;
-        }
+            // ---------- Execute ----------
+            if (request->hasParam("action") && request->getParam("action")->value() == "execute")
+            {
+                if (!request->hasParam("id"))
+                {
+                    request->send(400,"application/json","{\"success\":false,\"message\":\"Missing id\"}");
+                    return;
+                }
+                uint16_t id =request->getParam("id")->value().toInt();
+                if (!sceneManager.execute(id))
+                {
+                    request->send(404,"application/json","{\"success\":false,\"message\":\"Scene not found\"}");
+                    return;
+                }
+                request->send(200,"application/json","{\"success\":true}");
+                return;
+            }
+            // ---------- Create ----------
+            JsonDocument doc;
+            if (deserializeJson(doc, data, len))
+            {
+                request->send(400,"application/json","{\"success\":false,\"message\":\"Invalid JSON\"}");
+                return;
+            }
+        
+            Scene scene{};
+            scene.name = doc["name"] | "";
+            scene.icon = doc["icon"] | "bolt";
+            scene.enabled = doc["enabled"] | true;
+            scene.favorite = doc["favorite"] | false;
+            scene.notificationSend = doc["notificationSend"] | false;
+            strlcpy(scene.notificationText,doc["notificationText"] | "",sizeof(scene.notificationText));
+            scene.actionCount = 0;
+            JsonArray actions = doc["actions"].as<JsonArray>();
+            for (JsonObject a : actions)
+            {
+                if (scene.actionCount >= Scene::MAX_ACTIONS)break;
+                SceneAction& action =scene.actions[scene.actionCount++];
+                action.channelId  = a["channelId"]  | 0;
+                action.state      = a["state"]      | false;
+                action.durationMs = a["durationMs"] | 0;
+                action.delayMs    = a["delayMs"]    | 0;
+            }
+            if (!sceneManager.saveScene(scene))
+            {
+                request->send(500,"application/json","{\"success\":false}");
+                return;
+            }
+            JsonDocument res;
+            res["success"] = true;
+            res["id"] = scene.id;
+            String json;
+            serializeJson(res, json);
+            request->send(201, "application/json", json);
+        });
 
-        Scene scene{};
-
-        scene.name = doc["name"] | "";
-        scene.icon = doc["icon"] | "bolt";
-        scene.enabled = doc["enabled"] | true;
-        scene.favorite = doc["favorite"] | false;
-        scene.notificationSend = doc["notificationSend"] | false;
-
-        strlcpy(
-            scene.notificationText,
-            doc["notificationText"] | "",
-            sizeof(scene.notificationText)
-        );
-
-        scene.actionCount = 0;
-
-        JsonArray actions = doc["actions"].as<JsonArray>();
-
-        for(JsonObject a : actions)
-        {
-            if(scene.actionCount >= Scene::MAX_ACTIONS)
-                break;
-
-            SceneAction& action = scene.actions[scene.actionCount++];
-
-            action.channelId  = a["channelId"]  | 0;
-            action.state      = a["state"]      | false;
-            action.delayMs    = a["delayMs"]    | 0;
-            action.durationMs = a["durationMs"] | 0;
-        }
-
-        if(!sceneManager.saveScene(scene))
-        {
-            request->send(
-                500,
-                "application/json",
-                "{\"success\":false}"
-            );
-            return;
-        }
-
-        JsonDocument res;
-        res["success"] = true;
-        res["id"] = scene.id;
-
-        String json;
-        serializeJson(res, json);
-
-        request->send(201, "application/json", json);
-    }
-);
-//=============================================================================
-web.on(
-    "/api/scenes/execute",
-    HTTP_POST,
-    [](AsyncWebServerRequest* request)
-    {
-        if(!request->hasParam("id"))
-        {
-            request->send(
-                400,
-                "application/json",
-                "{\"success\":false,\"message\":\"Missing id\"}"
-            );
-            return;
-        }
-
-        uint16_t id = request->getParam("id")->value().toInt();
-
-        if(!sceneManager.execute(id))
-        {
-            request->send(
-                404,
-                "application/json",
-                "{\"success\":false,\"message\":\"Scene not found\"}"
-            );
-            return;
-        }
-
-        JsonDocument doc;
-        doc["success"] = true;
-
-        String json;
-        serializeJson(doc, json);
-
-        request->send(200, "application/json", json);
-    }
-);
 //=============================================================================
     web.on("/api/scenes",HTTP_PUT,[](AsyncWebServerRequest* request) {},nullptr,
       [](AsyncWebServerRequest* request,uint8_t* data,size_t len,size_t,size_t)
