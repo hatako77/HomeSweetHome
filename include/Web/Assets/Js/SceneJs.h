@@ -64,17 +64,16 @@ function createSceneCard(scene)
                 <span>${scene.name}</span>
             </div>
             <div class="card-actions">
-                <button class="icon-btn"
-                        onclick="executeScene(${scene.id})">
-                    <i class="fa-solid fa-play"></i>
+                <button class="icon-btn" onclick="executeScene(${scene.id})">
+                    ${icon("play",20)}
                 </button>
                 <button class="icon-btn"
                         onclick="editScene(${scene.id})">
-                    <i class="fa-solid fa-pen"></i>
+                    ${icon("edit",20)}
                 </button>
                 <button class="icon-btn danger"
                         onclick="deleteScene(${scene.id})">
-                    <i class="fa-solid fa-trash"></i>
+                    ${icon("delete",20)}
                 </button>
             </div>
         </div>
