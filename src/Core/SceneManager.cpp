@@ -161,11 +161,11 @@ bool SceneManager::load()
         {
             if (scene.actionCount >= Scene::MAX_ACTIONS) break;
             SceneAction& a = scene.actions[scene.actionCount++];
-            a.delayMs = action["delayMs"] | 0;
+            a.delayMs    = action["delayMs"] | 0;
             a.durationMs = action["durationMs"] | 0;
-            a.durationMs   = action["durationMs"] | 0;
-            a.channelId = action["channelId"] | 0;
-            a.state     = action["state"] | false;
+            a.durationMs = action["durationMs"] | 0;
+            a.channelId  = action["channelId"] | 0;
+            a.state      = action["state"] | false;
         }
         if (scene.id >= nextId)
             nextId = scene.id + 1;
@@ -203,15 +203,14 @@ bool SceneManager::save()
         sceneObj["favorite"] = scenes[i].favorite;        
         sceneObj["enabled"] = scenes[i].enabled;  
         sceneObj["notificationSend"] = scenes[i].notificationSend;  
-        sceneObj["notificationText"] = scenes[i].notificationText;  
-        
+        sceneObj["notificationText"] = scenes[i].notificationText;        
         JsonArray actions = sceneObj["actions"].to<JsonArray>();
         for(uint8_t j=0; j<scenes[i].actionCount; j++)
         {
-            JsonObject a   = actions.add<JsonObject>();
-            a["channelId"] = scenes[i].actions[j].channelId;
-            a["state"]     = scenes[i].actions[j].state;
-            a["delayMs"] = scenes[i].actions[j].delayMs;
+            JsonObject a      = actions.add<JsonObject>();
+            a["channelId"]    = scenes[i].actions[j].channelId;
+            a["state"]        = scenes[i].actions[j].state;
+            a["delayMs"]      = scenes[i].actions[j].delayMs;
             a["durationMs"]   = scenes[i].actions[j].durationMs;
         }
     }
@@ -241,8 +240,6 @@ bool SceneManager::update(const Scene& scene)
     Notifier::sceneUpdated(*s);
     return true;
 }
-
-
 
 bool SceneManager::remove(uint16_t id)
 {
@@ -278,10 +275,8 @@ Scene* SceneManager::get(uint16_t id)
 {
     for(uint16_t i = 0; i < sceneCount; i++)
     {
-        if(scenes[i].id == id)
-            return &scenes[i];
+        if(scenes[i].id == id) return &scenes[i];
     }
-
     return nullptr;
 }
 
@@ -289,10 +284,8 @@ const Scene* SceneManager::get(uint16_t id) const
 {
     for(uint16_t i = 0; i < sceneCount; i++)
     {
-        if(scenes[i].id == id)
-            return &scenes[i];
+        if(scenes[i].id == id) return &scenes[i];
     }
-
     return nullptr;
 }
 
@@ -304,61 +297,24 @@ uint16_t SceneManager::count() const
 bool SceneManager::execute(uint16_t id)
 {
     Scene* scene = get(id);
-    if(scene == nullptr)
-        return false;
-
+    if(scene == nullptr) return false;
     for(uint8_t i = 0; i < scene->actionCount; i++)
     {
         SceneAction& action = scene->actions[i];
-
         IOChannel* channel = ioManager.getChannel(action.channelId);
-        if(channel == nullptr)
-            continue;
-
-        // وضعیت اولیه کانال
+        if(channel == nullptr) continue;
         bool previousState = channel->state;
-
-        // هر Scene قبلی روی این کانال لغو شود
         removeTimers(action.channelId);
-
-        //----------------------------------------------------
-        // Delay = 0
-        //----------------------------------------------------
         if(action.delayMs == 0)
         {
-            ioManager.write(
-                action.channelId,
-                action.state,
-                true);
-
+            ioManager.write(action.channelId,action.state,true);
             // اگر Duration دارد، فقط تایمر بازگشت بساز
-            if(action.durationMs > 0)
-            {
-                addTimer(
-                    action.channelId,
-                    action.state,
-                    previousState,
-                    0,
-                    action.durationMs);
-            }
-
+            if(action.durationMs > 0) addTimer(action.channelId,action.state,previousState,0,action.durationMs);
             continue;
         }
-
-        //----------------------------------------------------
-        // Delay > 0
-        //----------------------------------------------------
-        addTimer(
-            action.channelId,
-            action.state,
-            previousState,
-            action.delayMs,
-            action.durationMs);
+        addTimer(action.channelId,action.state,previousState,action.delayMs,action.durationMs);
     }
-
     ioManager.save();
-
     Notifier::sceneExecuted(id);
-
     return true;
 }
