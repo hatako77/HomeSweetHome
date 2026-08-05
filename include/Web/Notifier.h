@@ -17,7 +17,7 @@ public:
     static void channelCreated(const IOChannel& channel);
     static void channelUpdated(const IOChannel& channel);
     static void channelDeleted(uint16_t id);
-
+    static void sceneProgressChanged();
     static void sceneAdded(const Scene& scene);
     static void sceneUpdated(const Scene& scene);    
     static void sceneRemoved(uint16_t id);    
