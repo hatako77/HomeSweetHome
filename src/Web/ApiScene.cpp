@@ -30,6 +30,8 @@ void ApiScene::registerRoutes(WebServerService& server)
             doc["enabled"] = scene->enabled;
             doc["notificationSend"] = scene->notificationSend;
             doc["notificationText"] = scene->notificationText;  
+            obj["running"] = sceneManager.getRuntime(scene->id) != nullptr;
+            obj["progress"] = sceneManager.getProgress(scene->id);
             JsonArray actions = doc["actions"].to<JsonArray>();  
             for(uint8_t i = 0; i < scene->actionCount; i++)
             {
