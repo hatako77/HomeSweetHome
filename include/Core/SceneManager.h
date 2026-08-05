@@ -9,7 +9,16 @@ enum class SceneTaskStage : uint8_t
     Waiting,
     Restoring
 };
+struct RunningScene
+{
+    bool active = false;
 
+    uint16_t sceneId = 0;
+
+    uint32_t startedAt = 0;
+
+    uint32_t totalDuration = 0;
+};
 struct SceneTimer
 {
     bool active = false;
@@ -65,7 +74,7 @@ private:
     static constexpr uint8_t MAX_TIMERS = 32;
 
     SceneTimer timers[MAX_TIMERS];
-
+    RunningScene runningScenes[MAX_SCENES];
     Scene scenes[MAX_SCENES];
 
     uint16_t sceneCount = 0;
