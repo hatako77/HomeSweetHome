@@ -4,38 +4,26 @@
 #include "Core/FileStorage.h"
 #include "Core/Paths.h"
 
-
 extern IOManager ioManager;
 SceneManager sceneManager;
-
+//===========================================================================
 void SceneManager::begin()
 {
     load();
 }
+//===========================================================================
 void SceneManager::update()
 {
     uint32_t now = millis();
-
     for(auto& timer : timers)
     {
-        if(!timer.active)
-            continue;
-
-        if((int32_t)(now - timer.expiresAt) < 0)
-            continue;
-
+        if(!timer.active)continue;
+        if((int32_t)(now - timer.expiresAt) < 0)continue;
         switch(timer.stage)
         {
-            //--------------------------------------------------
-            // Delay finished
-            //--------------------------------------------------
             case SceneTaskStage::Waiting:
             {
-                ioManager.write(
-                    timer.channelId,
-                    timer.targetState,
-                    true);
-
+                ioManager.write(timer.channelId,timer.targetState,true);
                 if(timer.durationMs == 0)
                 {
                     timer.active = false;
@@ -45,37 +33,21 @@ void SceneManager::update()
                     timer.stage = SceneTaskStage::Restoring;
                     timer.expiresAt = now + timer.durationMs;
                 }
-
                 break;
             }
-
-            //--------------------------------------------------
-            // Duration finished
-            //--------------------------------------------------
             case SceneTaskStage::Restoring:
             {
-                ioManager.write(
-                    timer.channelId,
-                    timer.previousState,
-                    true);
-
+                ioManager.write(timer.channelId,timer.previousState,true);
                 timer.active = false;
-
                 break;
             }
         }
     }
 }
-void SceneManager::addTimer(
-    uint16_t channelId,
-    bool targetState,
-    bool previousState,
-    uint32_t delayMs,
-    uint32_t durationMs)
+//===========================================================================
+void SceneManager::addTimer(uint16_t channelId,bool targetState,bool previousState,uint32_t delayMs,uint32_t durationMs)
 {
     uint32_t now = millis();
-
-    // اگر قبلاً برای این کانال تایمر وجود دارد، جایگزینش کن
     for(auto& timer : timers)
     {
         if(timer.active && timer.channelId == channelId)
@@ -90,8 +62,6 @@ void SceneManager::addTimer(
             return;
         }
     }
-
-    // اولین خانه آزاد
     for(auto& timer : timers)
     {
         if(!timer.active)
@@ -106,10 +76,9 @@ void SceneManager::addTimer(
             return;
         }
     }
-
     Serial.println("No free Scene timers.");
 }
-
+//===========================================================================
 bool SceneManager::saveScene(Scene& scene)
 {
     if(scene.id == 0)
@@ -128,7 +97,7 @@ bool SceneManager::saveScene(Scene& scene)
     Notifier::sceneUpdated(scene);
     return true;
 }
-
+//===========================================================================
 bool SceneManager::load()
 {
     sceneCount = 0;
@@ -172,21 +141,21 @@ bool SceneManager::load()
     }
     return true;
 }
-
+//===========================================================================
 Scene* SceneManager::getAt(uint16_t index)
 {
     if(index>=sceneCount)
         return nullptr;
     return &scenes[index];
 }
-
+//===========================================================================
 const Scene* SceneManager::getAt(uint16_t index) const
 {
     if(index>=sceneCount)
         return nullptr;
     return &scenes[index];
 }
-
+//===========================================================================
 bool SceneManager::save()
 {
     File file = FileStorage::open(Paths::Scenes, "w");
@@ -218,7 +187,7 @@ bool SceneManager::save()
     file.close();
     return true;
 }
-
+//===========================================================================
 bool SceneManager::add(const Scene& scene)
 {
     if(sceneCount >= MAX_SCENES)
@@ -230,17 +199,18 @@ bool SceneManager::add(const Scene& scene)
     Notifier::sceneAdded(scene);
     return true;
 }
-
+//===========================================================================
 bool SceneManager::update(const Scene& scene)
 {
     Scene* s = get(scene.id);
     if(s == nullptr) return false;
     *s = scene;
+    updateRuntime();
     save();
     Notifier::sceneUpdated(*s);
     return true;
 }
-
+//===========================================================================
 bool SceneManager::remove(uint16_t id)
 {
     for(uint16_t i = 0; i < sceneCount; i++)
@@ -259,18 +229,15 @@ bool SceneManager::remove(uint16_t id)
     }
     return false;
 }
-
+//===========================================================================
 void SceneManager::removeTimers(uint16_t channelId)
 {
     for(auto& timer : timers)
     {
-        if(timer.active && timer.channelId == channelId)
-        {
-            timer.active = false;
-        }
+        if(timer.active && timer.channelId == channelId) timer.active = false;
     }
 }
-
+//===========================================================================
 Scene* SceneManager::get(uint16_t id)
 {
     for(uint16_t i = 0; i < sceneCount; i++)
@@ -279,7 +246,7 @@ Scene* SceneManager::get(uint16_t id)
     }
     return nullptr;
 }
-
+//===========================================================================
 const Scene* SceneManager::get(uint16_t id) const
 {
     for(uint16_t i = 0; i < sceneCount; i++)
@@ -288,12 +255,12 @@ const Scene* SceneManager::get(uint16_t id) const
     }
     return nullptr;
 }
-
+//===========================================================================
 uint16_t SceneManager::count() const
 {
     return sceneCount;
 }
-
+//===========================================================================
 bool SceneManager::execute(uint16_t id)
 {
     Scene* scene = get(id);
@@ -314,7 +281,67 @@ bool SceneManager::execute(uint16_t id)
         }
         addTimer(action.channelId,action.state,previousState,action.delayMs,action.durationMs);
     }
+    startRuntime(*scene);
     ioManager.save();
     Notifier::sceneExecuted(id);
     return true;
+}
+//===========================================================================
+uint32_t SceneManager::calculateDuration(const Scene& scene) const
+{
+    uint32_t maxDuration = 0;
+    for(uint8_t i=0;i<scene.actionCount;i++)
+    {
+        uint32_t t = scene.actions[i].delayMs + scene.actions[i].durationMs;
+        if(t > maxDuration) maxDuration = t;
+    }
+    return maxDuration;
+}
+//===========================================================================
+void SceneManager::startRuntime(const Scene& scene)
+{
+    RunningScene* slot = nullptr;
+    for(auto& s : runningScenes)
+    {
+        if(s.active && s.sceneId == scene.id)
+        {
+            slot = &s;
+            break;
+        }
+        if(!slot && !s.active) slot = &s;
+    }
+    if(!slot) return;
+    slot->active = true;
+    slot->sceneId = scene.id;
+    slot->startedAt = millis();
+    slot->totalDuration = calculateDuration(scene);
+}
+//===========================================================================
+void SceneManager::updateRuntime()
+{
+    uint32_t now = millis();
+    for(auto& s : runningScenes)
+    {
+        if(!s.active) continue;
+        if(now - s.startedAt >= s.totalDuration) s.active = false;
+    }
+}
+//===========================================================================
+const RunningScene* SceneManager::getRuntime(uint16_t sceneId) const
+{
+    for(const auto& s : runningScenes)
+    {
+        if(s.active && s.sceneId == sceneId) return &s;
+    }
+    return nullptr;
+}
+//===========================================================================
+uint8_t SceneManager::getProgress(uint16_t sceneId) const
+{
+    const RunningScene* s = getRuntime(sceneId);
+    if(!s) return 0;
+    if(s->totalDuration == 0) return 100;
+    uint32_t elapsed = millis() - s->startedAt;
+    if(elapsed >= s->totalDuration) return 100;
+    return (elapsed * 100UL) / s->totalDuration;
 }
