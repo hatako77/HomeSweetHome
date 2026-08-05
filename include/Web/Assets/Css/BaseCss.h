@@ -104,6 +104,61 @@ h5,
 h6{
 	font-weight:600;
 }
+.scene-info
+{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.scene-progress
+{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.scene-progress-track
+{
+    flex:1;
+    height:8px;
+
+    background:#2c2c2c;
+
+    border-radius:999px;
+
+    overflow:hidden;
+}
+
+.scene-progress-bar
+{
+    height:100%;
+
+    background:#22c55e;
+
+    width:0;
+
+    transition:width .35s;
+}
+
+.status.running
+{
+    color:#22c55e;
+
+    font-weight:600;
+}
+
+.status.running i
+{
+    font-size:8px;
+
+    margin-right:6px;
+}
+
+.status.idle
+{
+    color:#888;
+}
 
 )rawliteral";
 
