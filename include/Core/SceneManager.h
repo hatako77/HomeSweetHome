@@ -12,12 +12,12 @@ enum class SceneTaskStage : uint8_t
 struct RunningScene
 {
     bool active = false;
-    bool dirty = false;
     uint16_t sceneId = 0;
     uint32_t startedAt = 0;
     uint32_t totalDuration = 0;
     uint8_t progress = 0;
 };
+
 struct SceneTimer
 {
     bool active = false;
