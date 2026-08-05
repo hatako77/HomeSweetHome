@@ -58,9 +58,13 @@ public:
     RunningScene* getRuntimeAt(uint8_t index);
 private:
     static constexpr uint8_t MAX_TIMERS = 32;
+    static constexpr uint8_t MAX_RUNNING_SCENES = MAX_SCENES;
+
+    void updateProgress();
     SceneTimer timers[MAX_TIMERS];
-    RunningScene runningScenes[MAX_SCENES];
+    RunningScene runningScenes[MAX_RUNNING_SCENES];
     Scene scenes[MAX_SCENES];
+    static constexpr uint8_t MAX_TIMERS = 32;
     uint16_t sceneCount = 0;
     uint16_t nextId = 1;
 };
