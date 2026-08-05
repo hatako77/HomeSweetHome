@@ -1,4 +1,5 @@
 #include "Web/Notifier.h"
+#include "Core/SceneManager.h"
 
 #include "Core/Scene.h"
 #include "Web/Message.h"
