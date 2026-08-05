@@ -13,22 +13,22 @@ void Notifier::reload()
 //==================================================================
 void Notifier::sceneProgressChanged()
 {
-    Message msg("scene", "progress");
-    JsonArray items = msg.data["items"].to<JsonArray>();
-    bool hasData = false;
-    for(uint16_t i = 0; i < sceneManager.runtimeCount(); i++)
+    JsonDocument doc;
+    doc["type"] = "sceneProgress";
+    JsonArray items = doc["items"].to<JsonArray>();
+    for(uint16_t i=0;i<sceneManager.count();i++)
     {
-        RunningScene* rt = sceneManager.getRuntimeAt(i);
-        if(rt == nullptr)continue;
-        if(!rt->dirty)continue;
+        const Scene* scene = sceneManager.getAt(i);
+        if(!scene) continue;
+        uint8_t progress = sceneManager.getProgress(scene->id);
         JsonObject obj = items.add<JsonObject>();
-        obj["id"] = rt->sceneId;
-        obj["running"] = rt->active;
-        obj["progress"] = rt->progress;
-        rt->dirty = false;
-        hasData = true;
+        obj["id"] = scene->id;
+        obj["running"] = progress > 0 && progress < 100;
+        obj["progress"] = progress;
     }
-    if(hasData)websocket.send(msg);
+    String json;
+    serializeJson(doc,json);
+    websocket.broadcast(json);
 }
 //==================================================================
 static void sendChannel(const char* action, const IOChannel& channel)
