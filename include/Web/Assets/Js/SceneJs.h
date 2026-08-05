@@ -7,6 +7,17 @@ const char SCENE_JS[] PROGMEM=R"rawliteral(
 
 let scenes=[];
 
+function updateSceneProgress(items)
+{
+    if(!Array.isArray(items))
+        return;
+
+    items.forEach(item =>
+    {
+        updateSceneCard(item);
+    });
+}
+//==============================================================
 async function initScenes()
 {
     const data = await apiGet("/api/scenes");
@@ -17,19 +28,65 @@ async function initScenes()
 //==============================================================
 function updateSceneCard(scene)
 {
-    const card = document.querySelector(`[data-scene-id="${scene.id}"]`);
-    if(!card)return;
-    const progress =card.querySelector(".scene-progress-bar");
-    if(progress)progress.style.width =scene.progress + "%";
-    const text =card.querySelector(".scene-progress-text");
-    if(text)text.textContent =scene.progress + "%";
-    const status =card.querySelector(".scene-status");
+    const card = document.querySelector(
+        `[data-scene-id="${scene.id}"]`
+    );
+
+    if(!card)
+        return;
+
+    //-------------------------------------------------
+    // Progress
+    //-------------------------------------------------
+
+    const progressBar =
+        card.querySelector(".scene-progress-bar");
+
+    if(progressBar)
+        progressBar.style.width =
+            `${scene.progress}%`;
+
+    const progressText =
+        card.querySelector(".scene-progress-text");
+
+    if(progressText)
+        progressText.textContent =
+            `${scene.progress}%`;
+
+    //-------------------------------------------------
+    // Status
+    //-------------------------------------------------
+
+    const status =
+        card.querySelector(".scene-status");
+
     if(status)
     {
-        status.classList.toggle("running",scene.running);
-        status.innerHTML = scene.running
-            ? `<i class="fa-solid fa-circle"></i> Running`
-            : "Idle";
+        if(scene.running)
+        {
+            status.classList.add("running");
+
+            status.innerHTML =
+                `<i class="fa-solid fa-circle"></i> Running`;
+        }
+        else
+        {
+            status.classList.remove("running");
+
+            status.innerHTML = "Idle";
+        }
+    }
+
+    //-------------------------------------------------
+    // بروزرسانی آبجکت داخل آرایه
+    //-------------------------------------------------
+
+    const s = findScene(scene.id);
+
+    if(s)
+    {
+        s.progress = scene.progress;
+        s.running = scene.running;
     }
 }
 //==============================================================
@@ -75,6 +132,7 @@ function removeSceneFromList(id)
 function createSceneCard(scene)
 {
     const card = create("div","card");
+    card.dataset.sceneId = scene.id;
     card.innerHTML = `
         <div class="card-header">
             <div class="card-title">
@@ -98,7 +156,7 @@ function createSceneCard(scene)
         <div class="card-body">
             <div class="scene-info">
             
-                <div class="scene-status">
+                <div class="scene-status status ${scene.running ? "running" : ""}">
                     ${
                         scene.running
                         ? `<span class="status running">
@@ -118,10 +176,10 @@ function createSceneCard(scene)
                         </div>
                     </div>
             
-                    <small>
-                        ${scene.progress ?? 0}%
-                    </small>
-                </div>
+                        <small class="scene-progress-text">
+                            ${scene.progress ?? 0}%
+                        </small>
+                    </div>
             
                 <div class="scene-actions-count">
                     Actions : ${scene.actionCount}
