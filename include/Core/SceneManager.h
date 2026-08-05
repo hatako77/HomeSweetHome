@@ -15,6 +15,7 @@ struct RunningScene
     uint16_t sceneId = 0;
     uint32_t startedAt = 0;
     uint32_t totalDuration = 0;
+    uint8_t progress = 0;
 };
 struct SceneTimer
 {
