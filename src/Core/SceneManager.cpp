@@ -25,15 +25,30 @@ RunningScene* SceneManager::getRuntimeAt(uint8_t index)
 void SceneManager::update()
 {
     uint32_t now = millis();
+
+    // ==========================
+    // Timer Processing
+    // ==========================
+
     for(auto& timer : timers)
     {
-        if(!timer.active)continue;
-        if((int32_t)(now - timer.expiresAt) < 0)continue;
+        if(!timer.active)
+            continue;
+
+        if((int32_t)(now - timer.expiresAt) < 0)
+            continue;
+
+
         switch(timer.stage)
         {
             case SceneTaskStage::Waiting:
             {
-                ioManager.write(timer.channelId,timer.targetState,true);
+                ioManager.write(
+                    timer.channelId,
+                    timer.targetState,
+                    true);
+
+
                 if(timer.durationMs == 0)
                 {
                     timer.active = false;
@@ -43,39 +58,61 @@ void SceneManager::update()
                     timer.stage = SceneTaskStage::Restoring;
                     timer.expiresAt = now + timer.durationMs;
                 }
+
                 break;
             }
+
+
             case SceneTaskStage::Restoring:
             {
-                ioManager.write(timer.channelId,timer.previousState,true);
+                ioManager.write(
+                    timer.channelId,
+                    timer.previousState,
+                    true);
+
                 timer.active = false;
+
                 break;
             }
         }
-        static uint32_t lastProgressUpdate = 0;
-        if (millis() - lastProgressUpdate >= 500)
-        {
-            lastProgressUpdate = millis();        
-            updateProgress();        
-            Notifier::sceneProgressChanged();
-        }
     }
+
+
+    // ==========================
+    // Scene Progress
+    // ==========================
+
+    static uint32_t lastProgressUpdate = 0;
+
+
+    if(now - lastProgressUpdate >= 500)
+    {
+        lastProgressUpdate = now;
+
+        updateProgress();
+
+        Notifier::sceneProgressChanged();
+    }
+
+
+    // پایان Scene ها
+    updateRuntime();
 }
 //===========================================================================
 void SceneManager::updateProgress()
 {
     uint32_t now = millis();
-    for (auto &rt : runtimes)
+    for (auto &rt : runningScenes)
     {
-        if (!rt.active) continue;
-        uint32_t elapsed = now - rt.startTime;
+        if (!rt.active)  continue;
+        uint32_t elapsed = now - rt.startedAt;
         if (elapsed >= rt.totalDuration)
         {
             rt.progress = 100;
             rt.active = false;
             continue;
         }
-        rt.progress = (elapsed * 100) / rt.totalDuration;
+        rt.progress = (elapsed * 100UL) / rt.totalDuration;
     }
 }
 //===========================================================================
@@ -334,6 +371,8 @@ uint32_t SceneManager::calculateDuration(const Scene& scene) const
 //===========================================================================
 void SceneManager::startRuntime(const Scene& scene)
 {
+    uint32_t duration = calculateDuration(scene);
+    if(duration == 0) return;
     RunningScene* slot = nullptr;
     for(auto& s : runningScenes)
     {
@@ -348,7 +387,8 @@ void SceneManager::startRuntime(const Scene& scene)
     slot->active = true;
     slot->sceneId = scene.id;
     slot->startedAt = millis();
-    slot->totalDuration = calculateDuration(scene);
+    slot->totalDuration = duration;
+    slot->progress = 0;
 }
 //===========================================================================
 void SceneManager::updateRuntime()
