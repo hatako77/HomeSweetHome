@@ -11,6 +11,16 @@ void SceneManager::begin()
 {
     load();
 }
+uint8_t SceneManager::runtimeCount() const
+{
+    return MAX_RUNNING_SCENES;
+}
+//===========================================================================
+RunningScene* SceneManager::getRuntimeAt(uint8_t index)
+{
+    if(index >= MAX_RUNNING_SCENES)return nullptr;
+    return &runningScenes[index];
+}
 //===========================================================================
 void SceneManager::update()
 {
