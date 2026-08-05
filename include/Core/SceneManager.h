@@ -54,7 +54,8 @@ public:
     void updateRuntime();    
     const RunningScene* getRuntime(uint16_t sceneId) const;    
     uint8_t getProgress(uint16_t sceneId) const;
-
+    uint8_t runtimeCount() const;
+    RunningScene* getRuntimeAt(uint8_t index);
 private:
     static constexpr uint8_t MAX_TIMERS = 32;
     SceneTimer timers[MAX_TIMERS];
