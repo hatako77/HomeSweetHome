@@ -84,7 +84,9 @@ function connectWebSocket()
             //--------------------------------------------------
             // sceneProgress
             //--------------------------------------------------
-            case "sceneProgress":            
+            case "sceneProgress":
+            {
+                if(!Array.isArray(msg.items)) break;            
                 for(const item of msg.items)
                 {
                     const scene = findScene(item.id);            
@@ -94,6 +96,7 @@ function connectWebSocket()
                     updateSceneCard(scene);
                 }            
                 break;
+            }
             //--------------------------------------------------
             // NOTIFICATION
             //--------------------------------------------------
