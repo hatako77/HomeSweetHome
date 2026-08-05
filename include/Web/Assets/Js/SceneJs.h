@@ -78,9 +78,37 @@ function createSceneCard(scene)
             </div>
         </div>
         <div class="card-body">
-            <div>
-                Actions :
-                ${scene.actionCount}
+            <div class="scene-info">
+            
+                <div class="scene-status">
+                    ${
+                        scene.running
+                        ? `<span class="status running">
+                                <i class="fa-solid fa-circle"></i>
+                                Running
+                           </span>`
+                        : `<span class="status idle">
+                                Idle
+                           </span>`
+                    }
+                </div>
+            
+                <div class="scene-progress">
+                    <div class="scene-progress-track">
+                        <div class="scene-progress-bar"
+                             style="width:${scene.progress ?? 0}%">
+                        </div>
+                    </div>
+            
+                    <small>
+                        ${scene.progress ?? 0}%
+                    </small>
+                </div>
+            
+                <div class="scene-actions-count">
+                    Actions : ${scene.actionCount}
+                </div>
+            
             </div>
             <div>
                 ${scene.enabled ? "Enabled" : "Disabled"}
