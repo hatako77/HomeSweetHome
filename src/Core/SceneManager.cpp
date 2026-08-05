@@ -42,6 +42,30 @@ void SceneManager::update()
                 break;
             }
         }
+        static uint32_t lastProgressUpdate = 0;
+        if (millis() - lastProgressUpdate >= 500)
+        {
+            lastProgressUpdate = millis();        
+            updateProgress();        
+            Notifier::sceneProgressChanged();
+        }
+    }
+}
+//===========================================================================
+void SceneManager::updateProgress()
+{
+    uint32_t now = millis();
+    for (auto &rt : runtimes)
+    {
+        if (!rt.active) continue;
+        uint32_t elapsed = now - rt.startTime;
+        if (elapsed >= rt.totalDuration)
+        {
+            rt.progress = 100;
+            rt.active = false;
+            continue;
+        }
+        rt.progress = (elapsed * 100) / rt.totalDuration;
     }
 }
 //===========================================================================
