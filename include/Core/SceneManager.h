@@ -64,7 +64,6 @@ private:
     SceneTimer timers[MAX_TIMERS];
     RunningScene runningScenes[MAX_RUNNING_SCENES];
     Scene scenes[MAX_SCENES];
-    static constexpr uint8_t MAX_TIMERS = 32;
     uint16_t sceneCount = 0;
     uint16_t nextId = 1;
 };
