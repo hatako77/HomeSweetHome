@@ -30,8 +30,9 @@ void ApiScene::registerRoutes(WebServerService& server)
             doc["enabled"] = scene->enabled;
             doc["notificationSend"] = scene->notificationSend;
             doc["notificationText"] = scene->notificationText;  
-            obj["running"] = sceneManager.getRuntime(scene->id) != nullptr;
-            obj["progress"] = sceneManager.getProgress(scene->id);
+            const RunningScene* rt = sceneManager.getRuntime(scene->id);            
+            doc["running"] = (rt != nullptr);
+            doc["progress"] = sceneManager.getProgress(scene->id);
             JsonArray actions = doc["actions"].to<JsonArray>();  
             for(uint8_t i = 0; i < scene->actionCount; i++)
             {
@@ -61,6 +62,9 @@ void ApiScene::registerRoutes(WebServerService& server)
             obj["enabled"] = scene->enabled;
             obj["notificationSend"] = scene->notificationSend;
             obj["notificationText"] = scene->notificationText;
+            const RunningScene* rt = sceneManager.getRuntime(scene->id);
+            obj["running"] = (rt != nullptr);
+            obj["progress"] = sceneManager.getProgress(scene->id);
             obj["actionCount"] = scene->actionCount;
         }  
         String json;
