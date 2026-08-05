@@ -42,6 +42,8 @@ void setup()
     roomManager.begin();
     ioManager.begin();
     //DemoData::create();
+    sceneManager.begin();
+
     web.begin();
     Serial.println("System Ready");
 }
