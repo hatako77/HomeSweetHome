@@ -15,6 +15,24 @@ async function initScenes()
     renderScenes();
 }
 //==============================================================
+function updateSceneCard(scene)
+{
+    const card = document.querySelector(`[data-scene-id="${scene.id}"]`);
+    if(!card)return;
+    const progress =card.querySelector(".scene-progress-bar");
+    if(progress)progress.style.width =scene.progress + "%";
+    const text =card.querySelector(".scene-progress-text");
+    if(text)text.textContent =scene.progress + "%";
+    const status =card.querySelector(".scene-status");
+    if(status)
+    {
+        status.classList.toggle("running",scene.running);
+        status.innerHTML = scene.running
+            ? `<i class="fa-solid fa-circle"></i> Running`
+            : "Idle";
+    }
+}
+//==============================================================
 function showScenes()
 {
     $("content").innerHTML = `
