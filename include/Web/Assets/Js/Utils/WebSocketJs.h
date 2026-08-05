@@ -59,50 +59,46 @@ function connectWebSocket()
         {
             //--------------------------------------------------
             // CHANNEL
-            //--------------------------------------------------
-            
+            //--------------------------------------------------            
             case "channel":
                 handleChannelMessage(msg);            
                 break;
             //--------------------------------------------------
             // ROOM
             //--------------------------------------------------
-
             case "room":
-            handleRoomMessage(msg);
-        
+            handleRoomMessage(msg);        
             break;
             //--------------------------------------------------
             // OTA
             //--------------------------------------------------
-
             case "ota":
-
-                if(msg.data && typeof updateOTA === "function")
-                    updateOTA(msg.data);
-
+                if(msg.data && typeof updateOTA === "function")  updateOTA(msg.data);
                 break;
-
             //--------------------------------------------------
             // SYSTEM
             //--------------------------------------------------
-
             case "system":
-
-                if(msg.action === "reload")
-                    location.reload();
-
+                if(msg.action === "reload") location.reload();
                 break;
-
+            //--------------------------------------------------
+            // sceneProgress
+            //--------------------------------------------------
+            case "sceneProgress":            
+                for(const item of msg.items)
+                {
+                    const scene = findScene(item.id);            
+                    if(!scene) continue;            
+                    scene.running = item.running;
+                    scene.progress = item.progress;            
+                    updateSceneCard(scene);
+                }            
+                break;
             //--------------------------------------------------
             // NOTIFICATION
             //--------------------------------------------------
-
             case "notification":
-
-                if(msg.data?.text)
-                    toastInfo(msg.data.text);
-
+                if(msg.data?.text) toastInfo(msg.data.text);
                 break;
         }
     };
