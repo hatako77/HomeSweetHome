@@ -4,13 +4,34 @@
 #include "Web/Message.h"
 
 extern WebSocketService websocket;
-
+//==================================================================
 void Notifier::reload()
 {
     Message msg("system", "reload");
-
     websocket.send(msg);
 }
+//==================================================================
+void Notifier::sceneProgressChanged()
+{
+    JsonDocument doc;
+    doc["type"] = "sceneProgress";
+    JsonArray items = doc["items"].to<JsonArray>();
+    for(uint16_t i = 0; i < sceneManager.count(); i++)
+    {
+        const Scene* scene = sceneManager.getAt(i);
+        if(!scene)continue;
+        const RunningScene* rt = sceneManager.getRuntime(scene->id);
+        if(rt == nullptr)continue;
+        JsonObject obj = items.add<JsonObject>();
+        obj["id"] = scene->id;
+        obj["running"] = rt->active;
+        obj["progress"] = rt->progress;
+    }
+    String json;
+    serializeJson(doc,json);
+    websocket.broadcast(json);
+}
+//==================================================================
 static void sendChannel(const char* action, const IOChannel& channel)
 {    
     Message msg("channel", action);
@@ -29,77 +50,68 @@ static void sendChannel(const char* action, const IOChannel& channel)
     msg.data["connected"] = channel.connected;
     websocket.send(msg);
 }
+//==================================================================
 void Notifier::channelCreated(const IOChannel& channel)
 {
     sendChannel("created", channel);
 }
-
+//==================================================================
 void Notifier::channelUpdated(const IOChannel& channel)
 {
     sendChannel("updated", channel);
 }
-
+//==================================================================
 void Notifier::channelDeleted(uint16_t id)
 {
     Message msg("channel", "deleted");
-
     msg.data["id"] = id;
-
     websocket.send(msg);
 }
+//==================================================================
 void Notifier::sceneAdded(const Scene& scene)
 {
     Message msg("scene", "added");
-
     msg.data["id"]       = scene.id;
     msg.data["name"]     = scene.name;
     msg.data["icon"]     = scene.icon;
     msg.data["favorite"] = scene.favorite;
     msg.data["enabled"]  = scene.enabled;
-
     websocket.send(msg);
 }
-
+//==================================================================
 void Notifier::sceneUpdated(const Scene& scene)
 {
     Message msg("scene", "updated");
-
     msg.data["id"]       = scene.id;
     msg.data["name"]     = scene.name;
     msg.data["icon"]     = scene.icon;
     msg.data["favorite"] = scene.favorite;
     msg.data["enabled"]  = scene.enabled;
-
     websocket.send(msg);
 }
-
+//==================================================================
 void Notifier::sceneRemoved(uint16_t id)
 {
     Message msg("scene", "removed");
-
     msg.data["id"] = id;
-
     websocket.send(msg);
 }
-
+//==================================================================
 void Notifier::roomsChanged()
 {
     Message msg("room","changed");
     websocket.send(msg);
 }
-
+//==================================================================
 void Notifier::sceneExecuted(uint16_t id)
 {
     Message msg("scene", "executed");
-
     msg.data["id"] = id;
-
     websocket.send(msg);
 }
-
+//==================================================================
 void Notifier::channelChanged(const IOChannel& channel)
 {
-
     Serial.println(">>>>>>>> NOTIFIER channelChanged");
     Message msg("channel", "changed");
     msg.data["connected"] = channel.connected;
@@ -112,37 +124,25 @@ void Notifier::channelChanged(const IOChannel& channel)
     msg.data["activeLow"] = channel.activeLow;
     msg.data["type"]      = (uint8_t)channel.type;
     msg.data["icon"]      = channel.icon;
-    Serial.printf(
-        "WS SEND -> id=%d state=%d\n",
-        channel.id,
-        channel.state
-    );
+    Serial.printf("WS SEND -> id=%d state=%d\n",channel.id,channel.state);
     websocket.send(msg);
 }
-
-void Notifier::otaStatus(
-    const OTAStatus& status,
-    const String& current,
-    const String& remote)
+//==================================================================
+void Notifier::otaStatus(const OTAStatus& status,const String& current,const String& remote)
 {
     Message msg("ota", "status");
-
     msg.data["running"]    = status.running;
     msg.data["finished"]   = status.finished;
     msg.data["success"]    = status.success;
-
     msg.data["downloaded"] = status.downloaded;
     msg.data["total"]      = status.total;
-
     msg.data["percent"]    = status.percent;
     msg.data["speed"]      = status.speedKB;
     msg.data["eta"]        = status.eta;
-
     msg.data["state"]      = status.state;
     msg.data["error"]      = status.error;
-
     msg.data["current"]    = current;
     msg.data["remote"]     = remote;
-
     websocket.send(msg);
 }
+//==================================================================
