@@ -4,7 +4,32 @@
 #include <pgmspace.h>
 
 const char BASE_CSS[] PROGMEM=R"rawliteral(
+.scene-progress
+{
+    width:100%;
+    height:5px;
 
+    margin-top:8px;
+
+    background:#2d2d2d;
+
+    border-radius:3px;
+
+    overflow:hidden;
+
+    display:none;
+}
+
+.scene-progress-bar
+{
+    width:0%;
+
+    height:100%;
+
+    background:#36d64d;
+
+    transition:width .4s linear;
+}
 *{
 	box-sizing:border-box;
 	margin:0;
