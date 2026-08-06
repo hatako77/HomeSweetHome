@@ -7,7 +7,7 @@ const char TOAST_CSS[] PROGMEM=R"rawliteral(
 
 #toastContainer{
 	position:fixed;
-	top:20px;
+	bottom:70px;
 	left:20px;
 	display:flex;
 	flex-direction:column;
@@ -61,7 +61,7 @@ const char TOAST_CSS[] PROGMEM=R"rawliteral(
 
 	#toastContainer{
 		left:10px;
-		top:10px;
+		bottom:70px;
 	}
 
 	.toast{
