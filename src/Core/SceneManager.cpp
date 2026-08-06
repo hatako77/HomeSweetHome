@@ -91,7 +91,7 @@ void SceneManager::update()
 
         updateProgress();
 
-        Notifier::sceneProgressChanged();
+        //Notifier::sceneProgressChanged();
     }
 
 
