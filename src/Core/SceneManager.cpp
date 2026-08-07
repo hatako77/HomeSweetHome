@@ -92,21 +92,30 @@ void SceneManager::update()
     updateRuntime();
 }
 //===========================================================================
-void SceneManager::updateProgress()
+bool SceneManager::updateProgress()
 {
+    bool changed = false;
     uint32_t now = millis();
-    for (auto &rt : runningScenes)
+    for (auto& rt : runningScenes)
     {
-        if (!rt.active)  continue;
+        if (!rt.active)continue;
         uint32_t elapsed = now - rt.startedAt;
+        uint8_t newProgress;
         if (elapsed >= rt.totalDuration)
         {
-            rt.progress = 100;
-            rt.active = false;
-            continue;
+            newProgress = 100;
         }
-        rt.progress = (elapsed * 100UL) / rt.totalDuration;
+        else
+        {
+            newProgress = (elapsed * 100UL) / rt.totalDuration;
+        }
+        if (newProgress != rt.progress)
+        {
+            rt.progress = newProgress;
+            changed = true;
+        }
     }
+    return changed;
 }
 //===========================================================================
 void SceneManager::addTimer(uint16_t channelId,bool targetState,bool previousState,uint32_t delayMs,uint32_t durationMs)
