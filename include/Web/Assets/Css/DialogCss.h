@@ -53,7 +53,13 @@ const char DIALOG_CSS[] PROGMEM=R"rawliteral(
 	font-weight:600;
 	color:#f8fafc;
 }
-
+.scene-action-row{
+    padding: 2rem;
+    border-bottom-style: solid;
+}
+.time-column{
+    display: flex;
+}
 .dialog-close{
 	width:36px;
 	height:36px;
