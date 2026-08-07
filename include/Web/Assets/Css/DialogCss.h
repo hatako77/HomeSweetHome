@@ -59,6 +59,7 @@ const char DIALOG_CSS[] PROGMEM=R"rawliteral(
 }
 .time-column{
     display: flex;
+    gap: 1rem;
 }
 .dialog-close{
 	width:36px;
