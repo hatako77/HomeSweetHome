@@ -94,14 +94,15 @@ function updateSceneCard(scene)
 function showScenes()
 {
     $("content").innerHTML = `
-        <h2>Scenes</h2>
-        <div class="toolbar">
-            <button class="btn primary"
+            <button class="btn primary" style="z-index: 999;border-radius: 5rem;position: fixed;bottom: 2rem;left: 2rem;height: 4rem;width: 4rem;"
                     onclick="newScene()">
-                <i class="fa-solid fa-plus"></i>
-                New Scene
+                    <span class="svg-icon" style="width:24px;height:24px">                                
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14"></path>
+                            <path d="M5 12h14"></path>
+                        </svg>
+                    </span>
             </button>
-        </div>
         <div id="sceneList" style="margin-bottom: 6rem;" class="card-list"></div>
     `;
     initScenes();
