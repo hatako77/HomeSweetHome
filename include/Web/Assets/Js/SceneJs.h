@@ -102,7 +102,7 @@ function showScenes()
                 New Scene
             </button>
         </div>
-        <div id="sceneList" class="card-list"></div>
+        <div id="sceneList" style="margin-bottom: 6rem;" class="card-list"></div>
     `;
     initScenes();
 }
