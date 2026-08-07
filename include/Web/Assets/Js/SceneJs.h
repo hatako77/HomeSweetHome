@@ -334,6 +334,8 @@ function renderSceneActions()
             </option>
         `).join("");
         row.innerHTML = `
+            
+        <div style="display: flex">
             <select class="textbox actionChannel"> ${options} </select>
             <select class="textbox actionState">
                 <option value="1" ${action.state?"selected":""}>
@@ -343,16 +345,19 @@ function renderSceneActions()
                     OFF
                 </option>
             </select>
-
+        </div>
+        <div style="display: grid;gap: 1rem;margin-bottom: 1rem;">
             <div class="time-column">
-                <small>Delay</small>
+                <small>تاخیر</small>
                 <input class="textbox actionDelay" type="number" min="0" value="${action.delayMs}">            
             </div>
 
             <div class="time-column">
-                <small>Duration</small>
+                <small>مدت</small>
                 <input class="textbox actionDuration" type="number" min="0" value="${action.durationMs}">
             </div>
+        </div>
+
 
             <button class="btn danger actionDelete"> ${icon("delete",30)} </button>
         `;
