@@ -24,6 +24,7 @@ async function initScenes()
     if(!Array.isArray(data)) return;
     scenes = data;
     renderScenes();
+    updateRunningScenesBar();
 }
 //==============================================================
 function updateSceneCard(scene)
