@@ -26,20 +26,19 @@ void SceneManager::update()
 {
     uint32_t now = millis();
 
-    // ==========================
+    //==========================
     // Timer Processing
-    // ==========================
+    //==========================
 
-    for(auto& timer : timers)
+    for (auto& timer : timers)
     {
-        if(!timer.active)
+        if (!timer.active)
             continue;
 
-        if((int32_t)(now - timer.expiresAt) < 0)
+        if ((int32_t)(now - timer.expiresAt) < 0)
             continue;
 
-
-        switch(timer.stage)
+        switch (timer.stage)
         {
             case SceneTaskStage::Waiting:
             {
@@ -48,8 +47,7 @@ void SceneManager::update()
                     timer.targetState,
                     true);
 
-
-                if(timer.durationMs == 0)
+                if (timer.durationMs == 0)
                 {
                     timer.active = false;
                 }
@@ -62,7 +60,6 @@ void SceneManager::update()
                 break;
             }
 
-
             case SceneTaskStage::Restoring:
             {
                 ioManager.write(
@@ -71,31 +68,27 @@ void SceneManager::update()
                     true);
 
                 timer.active = false;
-
                 break;
             }
         }
     }
 
-
-    // ==========================
+    //==========================
     // Scene Progress
-    // ==========================
+    //==========================
 
     static uint32_t lastProgressUpdate = 0;
 
-
-    if(now - lastProgressUpdate >= 500)
+    if (now - lastProgressUpdate >= 500)
     {
         lastProgressUpdate = now;
 
-        updateProgress();
+        bool changed = updateProgress();
 
-        Notifier::sceneProgressChanged();
+        if (changed)
+            Notifier::sceneProgressChanged();
     }
 
-
-    // پایان Scene ها
     updateRuntime();
 }
 //===========================================================================
