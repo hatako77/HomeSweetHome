@@ -354,7 +354,7 @@ function renderSceneActions()
                 <input class="textbox actionDuration" type="number" min="0" value="${action.durationMs}">
             </div>
 
-            <button class="btn danger actionDelete"> <i class="fa-solid fa-trash"></i> </button>
+            <button class="btn danger actionDelete"> ${icon("delete",30)} </button>
         `;
 
         row.querySelector(".actionChannel").oninput=e=>
