@@ -4,6 +4,58 @@
 #include <pgmspace.h>
 
 const char BASE_CSS[] PROGMEM=R"rawliteral(
+
+
+
+.running-scenes
+{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.running-scene
+{
+    width:42px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.running-scene-icon
+{
+    width:34px;
+    height:34px;
+
+    border-radius:8px;
+
+    background:#2d2d2d;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#fff;
+}
+.running-scene-progress
+{
+    width:100%;
+    height:3px;
+
+    margin-top:3px;
+
+    background:#444;
+    border-radius:3px;
+
+    overflow:hidden;
+}
+.running-scene-fill
+{
+    height:100%;
+    width:0%;
+
+    background:#4caf50;
+
+    transition:width .4s linear;
+}
 .scene-progress
 {
     width:100%;
