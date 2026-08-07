@@ -113,7 +113,7 @@ async function showRooms()
         <button class="btn btn-primary" style="z-index: 999;border-radius: 5rem;position: fixed;bottom: 2rem;left: 2rem;height: 4rem;width: 4rem;" onclick="addRoom()">
             ${icon("plus",24)}
         </button>
-        <div id="roomsContainer"></div>
+        <div id="roomsContainer" style="margin-bottom: 6rem;"></div>
     `;
 
     await initRooms();
