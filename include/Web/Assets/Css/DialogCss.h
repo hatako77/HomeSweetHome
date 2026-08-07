@@ -36,7 +36,7 @@ const char DIALOG_CSS[] PROGMEM=R"rawliteral(
 }
 
 #dialogOverlay.show .dialog{
-	transform:scale(1);
+
 }
 
 .dialog-header{
