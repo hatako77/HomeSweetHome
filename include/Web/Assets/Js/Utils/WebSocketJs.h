@@ -12,7 +12,45 @@ function initWebSocket()
 {
     connectWebSocket();
 }
+function updateRunningScenesBar()
+{
+    const bar = $("runningScenesBar");
 
+    if(!bar)
+        return;
+
+    bar.innerHTML = "";
+
+    scenes
+        .filter(x => x.running)
+        .forEach(scene =>
+        {
+            bar.appendChild(createRunningScene(scene));
+        });
+}
+function createRunningScene(scene)
+{
+    const div = document.createElement("div");
+
+    div.className = "running-scene";
+
+    div.dataset.id = scene.id;
+
+    div.innerHTML = `
+        <div class="running-scene-icon">
+            ${icon(scene.icon,20)}
+        </div>
+
+        <div class="running-scene-progress">
+            <div
+                class="running-scene-fill"
+                style="width:${scene.progress}%">
+            </div>
+        </div>
+    `;
+
+    return div;
+}
 function connectWebSocket()
 {
     if(socket)
@@ -94,6 +132,7 @@ function connectWebSocket()
                     scene.running = item.running;
                     scene.progress = item.progress;            
                     updateSceneCard(scene);
+                    updateRunningScenesBar();
                 }            
                 break;
             }
