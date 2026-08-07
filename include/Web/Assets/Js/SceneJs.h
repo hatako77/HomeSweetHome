@@ -346,7 +346,7 @@ function renderSceneActions()
                 </option>
             </select>
         </div>
-        <div style="display: grid;gap: 1rem;margin-bottom: 1rem;">
+        <div style="display: grid;gap: 1rem;margin: 1rem 0;">
             <div class="time-column">
                 <small>تاخیر</small>
                 <input class="textbox actionDelay" type="number" min="0" value="${action.delayMs}">            
