@@ -384,7 +384,7 @@ async function showChannels()
     await initChannels();
     const app = $("content");
     app.innerHTML = `
-        <div class="page">
+        <div class="page" style="margin-bottom: 6rem;">
             <div class="page-header">
                 <button class="btn primary" style="z-index: 999;border-radius: 5rem;position: fixed;bottom: 2rem;left: 2rem;height: 4rem;width: 4rem;"
                         onclick="showChannelDialog()">
