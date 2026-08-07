@@ -337,7 +337,7 @@ function renderSceneActions()
             
         <div style="display: flex">
             <select class="textbox actionChannel"> ${options} </select>
-            <select class="textbox actionState">
+            <select style="width: auto; margin-right: 1rem;" class="textbox actionState">
                 <option value="1" ${action.state?"selected":""}>
                     ON
                 </option>
@@ -359,7 +359,7 @@ function renderSceneActions()
         </div>
 
 
-            <button class="btn danger actionDelete"> ${icon("delete",30)} </button>
+            <button class="btn btn-danger actionDelete"> ${icon("delete",30)} </button>
         `;
 
         row.querySelector(".actionChannel").oninput=e=>
