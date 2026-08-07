@@ -19,7 +19,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <body>
 
 <header class="topbar">
-    ...
+    <div id="runningScenesBar" class="running-scenes"></div>
 </header>
 
 <div class="layout">
