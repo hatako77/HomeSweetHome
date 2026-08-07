@@ -244,18 +244,12 @@ async function showSceneDialog(scene = null)
     {
         title: scene ? "Edit Scene" : "New Scene",
         content: `
-            <div class="form-group">
+            <div class="form-group" style="flex-direction: row;">
                 <label>Name</label>
                 <input
                     id="sceneName"
                     class="textbox"
                     value="${scene?.name ?? ""}">
-            </div>
-            <div class="form-group">
-                <label>Icon</label>
-                <div id="sceneIconPicker"
-                     class="icon-picker">
-                </div>
             </div>
             <label class="checkbox">
                 <input
@@ -273,29 +267,32 @@ async function showSceneDialog(scene = null)
                 Favorite
             </label>
 
-            <hr>
 
-            <label class="checkbox">
-                <input
-                    id="sceneNotification"
-                    type="checkbox"
-                    ${scene?.notificationSend ? "checked" : ""}>
-                Send Notification
-            </label>
+            <div style="display: flex;gap: 1rem;">
+                <label class="checkbox">
+                    <input id="sceneNotification" type="checkbox" ${scene?.notificationSend ? "checked" : ""}>اعلان
+                </label>
+                <input id="sceneNotificationText" class="textbox" maxlength="63" value="${scene?.notificationText ?? ""}">
+            </div>
 
             <div class="form-group">
-                <label>Notification Text</label>
-
-                <input
-                    id="sceneNotificationText"
-                    class="textbox"
-                    maxlength="63"
-                    value="${scene?.notificationText ?? ""}">
+                <label>Icon</label>
+                <div id="sceneIconPicker"
+                     class="icon-picker">
+                </div>
             </div>
+
             <hr>
-            <h3>Actions</h3>
+            <div style="display: flex;align-items: center;justify-content: space-between;padding: 1rem;">
+                <h3>اکشن ها</h3>
+                <button class="btn" id="btnAddAction" style="border-radius: 5rem;height: 4rem;width: 4rem;"> 
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14"></path>
+                    <path d="M5 12h14"></path>
+                    </svg>
+                </button>
+            </div>
             <div id="sceneActions"></div>
-            <button class="btn" id="btnAddAction"> <i class="fa-solid fa-plus"></i> Add Action </button>
         `,
 
         onSave: async () => { return await saveScene(scene?.id); }
