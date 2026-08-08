@@ -59,7 +59,7 @@ public:
 private:
     static constexpr uint8_t MAX_TIMERS = 32;
     static constexpr uint8_t MAX_RUNNING_SCENES = MAX_SCENES;
-
+    bool hasRunningScenes() const;
     bool updateProgress();
     SceneTimer timers[MAX_TIMERS];
     RunningScene runningScenes[MAX_RUNNING_SCENES];
