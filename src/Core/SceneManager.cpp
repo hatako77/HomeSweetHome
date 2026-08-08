@@ -11,6 +11,7 @@ void SceneManager::begin()
 {
     load();
 }
+//===========================================================================
 uint8_t SceneManager::runtimeCount() const
 {
     return MAX_RUNNING_SCENES;
@@ -32,21 +33,13 @@ void SceneManager::update()
 
     for (auto& timer : timers)
     {
-        if (!timer.active)
-            continue;
-
-        if ((int32_t)(now - timer.expiresAt) < 0)
-            continue;
-
+        if (!timer.active) continue;
+        if ((int32_t)(now - timer.expiresAt) < 0) continue;
         switch (timer.stage)
         {
             case SceneTaskStage::Waiting:
             {
-                ioManager.write(
-                    timer.channelId,
-                    timer.targetState,
-                    true);
-
+                ioManager.write(timer.channelId,timer.targetState,true);
                 if (timer.durationMs == 0)
                 {
                     timer.active = false;
@@ -56,17 +49,11 @@ void SceneManager::update()
                     timer.stage = SceneTaskStage::Restoring;
                     timer.expiresAt = now + timer.durationMs;
                 }
-
                 break;
             }
-
             case SceneTaskStage::Restoring:
             {
-                ioManager.write(
-                    timer.channelId,
-                    timer.previousState,
-                    true);
-
+                ioManager.write(timer.channelId,timer.previousState,true);
                 timer.active = false;
                 break;
             }
@@ -78,17 +65,15 @@ void SceneManager::update()
     //==========================
 
     static uint32_t lastProgressUpdate = 0;
-
-    if (now - lastProgressUpdate >= 500)
+    if(hasRunningScenes())
     {
-        lastProgressUpdate = now;
-
-        bool changed = updateProgress();
-
-        if (changed)
-            Notifier::sceneProgressChanged();
+        if (now - lastProgressUpdate >= 500)
+        {
+            lastProgressUpdate = now;    
+            bool changed = updateProgress();    
+            if (changed) Notifier::sceneProgressChanged();
+        }
     }
-
     updateRuntime();
 }
 //===========================================================================
@@ -398,6 +383,7 @@ void SceneManager::updateRuntime()
     uint32_t now = millis();
     for(auto& s : runningScenes)
     {
+        if(!s.active) rt.progress = 0;
         if(!s.active) continue;
         if(now - s.startedAt >= s.totalDuration) s.active = false;
     }
