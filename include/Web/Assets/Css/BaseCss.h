@@ -60,13 +60,13 @@ const char BASE_CSS[] PROGMEM=R"rawliteral(
 .scene-progress
 {
     width:100%;
-    height:5px;
+    height:1.2rem;
 
     margin-top:8px;
 
     background:#2d2d2d;
 
-    border-radius:3px;
+    border-radius:1rem;
 
     overflow:hidden;
 
