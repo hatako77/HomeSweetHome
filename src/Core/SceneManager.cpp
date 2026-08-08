@@ -383,7 +383,7 @@ void SceneManager::updateRuntime()
     uint32_t now = millis();
     for(auto& s : runningScenes)
     {
-        if(!s.active) rt.progress = 0;
+        if(!s.active) s.progress = 0;
         if(!s.active) continue;
         if(now - s.startedAt >= s.totalDuration)
         {
