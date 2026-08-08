@@ -22,6 +22,7 @@ const char BASE_CSS[] PROGMEM=R"rawliteral(
 }
 .running-scene-icon
 {
+	fill: white;
     width:34px;
     height:34px;
 
