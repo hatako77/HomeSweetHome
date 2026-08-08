@@ -60,10 +60,8 @@ const char BASE_CSS[] PROGMEM=R"rawliteral(
 .scene-progress
 {
     width:100%;
-    height:1.2rem;
-
+    height:0.8rem;
     margin-top:8px;
-
     background:#2d2d2d;
 
     border-radius:1rem;
@@ -187,6 +185,7 @@ h6{
     display:flex;
     flex-direction:column;
     gap:8px;
+    margin-bottom: 1rem;
 }
 
 .scene-progress
@@ -208,16 +207,6 @@ h6{
     overflow:hidden;
 }
 
-.scene-progress-bar
-{
-    height:100%;
-
-    background:#22c55e;
-
-    width:0;
-
-    transition:width .35s;
-}
 
 .status.running
 {
