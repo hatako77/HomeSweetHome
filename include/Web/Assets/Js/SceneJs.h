@@ -180,7 +180,7 @@ function createSceneCard(scene)
             
             </div>
 
-                ${scene.enabled ? "" : "<div style="color: rgb(255 125 0);">Disabled</div>"}
+                ${scene.enabled? "": `<div style="color: rgb(255, 125, 0);">Disabled</div>`}
 
         </div>
                 <button class="btn btn-secondary" onclick="executeScene(${scene.id})">
