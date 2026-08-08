@@ -177,14 +177,11 @@ function createSceneCard(scene)
 
                     </div>
             
-                <div class="scene-actions-count">
-                    Actions : ${scene.actionCount}
-                </div>
             
             </div>
-            <div>
-                ${scene.enabled ? "Enabled" : "Disabled"}
-            </div>
+
+                ${scene.enabled ? "" : "<div style="color: rgb(255 125 0);">Disabled</div>"}
+
         </div>
                 <button class="btn btn-secondary" onclick="executeScene(${scene.id})">
                     اجرای سناریو
