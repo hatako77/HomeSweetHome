@@ -174,9 +174,7 @@ function createSceneCard(scene)
                         </div>
                     </div>
             
-                        <small class="scene-progress-text">
-                            ${scene.progress ?? 0}%
-                        </small>
+
                     </div>
             
                 <div class="scene-actions-count">
