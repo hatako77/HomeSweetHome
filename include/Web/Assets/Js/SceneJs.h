@@ -142,11 +142,10 @@ function createSceneCard(scene)
                 <span>${scene.name}</span>
             </div>
             <div class="card-actions">
-                <button class="icon-btn"
-                        onclick="editScene(${scene.id})">
+                <button style="background-color: #00000000;" class="icon-btn" onclick="editScene(${scene.id})">
                     ${icon("edit",20)}
                 </button>
-                <button class="icon-btn danger"
+                <button style="background-color: #00000000;" class="icon-btn danger"
                         onclick="deleteScene(${scene.id})">
                     ${icon("delete",20)}
                 </button>
