@@ -421,3 +421,12 @@ uint8_t SceneManager::getProgress(uint16_t sceneId) const
     if(elapsed >= s->totalDuration) return 100;
     return (elapsed * 100UL) / s->totalDuration;
 }
+//===========================================================================
+bool SceneManager::hasRunningScenes() const
+{
+    for(const auto& rt : runningScenes)
+    {
+        if(rt.active) return true;
+    }
+    return false;
+}
