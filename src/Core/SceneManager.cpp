@@ -385,7 +385,12 @@ void SceneManager::updateRuntime()
     {
         if(!s.active) rt.progress = 0;
         if(!s.active) continue;
-        if(now - s.startedAt >= s.totalDuration) s.active = false;
+        if(now - s.startedAt >= s.totalDuration)
+        {
+            s.active = false;
+            s.progress=100;
+            Notifier::sceneProgressChanged();
+        }
     }
 }
 //===========================================================================
